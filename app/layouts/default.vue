@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p>Some default layout content shared across all pages</p>
+    <Header/>
     <slot />
   </div>
 </template>
+
+<script setup lang="ts">
+import Header from '../components/Header.vue'
+</script>
