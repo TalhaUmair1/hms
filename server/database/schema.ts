@@ -32,3 +32,38 @@ export const patients = sqliteTable('patients', {
   gender: text('gender'),
   medical_history: text('medical_history'),
 })
+
+export const appointments = sqliteTable('appointments', {
+  id: integer('id').primaryKey(),
+  patient_id: integer('patient_id'),
+  doctor_id: integer('doctor_id'),
+  date: integer('date'),
+  time: integer('time'),
+  status: text('status', { enum: ['pending', 'confirmed', 'cancelled'] }),
+})
+
+export const prescriptions = sqliteTable('prescriptions', {
+  id: integer('id').primaryKey(),
+  appointment_id: integer('appointment_id'),
+  doctor_id: integer('doctor_id'),
+  patient_id: integer('patient_id'),
+  medicine_list: text('medicine_list'),
+  notes: text('notes'),
+})
+
+export const billing = sqliteTable('billing', {
+  id: integer('id').primaryKey(),
+  appointment_id: integer('appointment_id'),
+  patient_id: integer('patient_id'),
+  amount: real('amount'),
+  status: text('status'),
+  payment_method: text('payment_method'),
+})
+
+export const products = sqliteTable('products', {
+  id: integer('id').primaryKey(),
+  name: text('name'),
+  quantity: integer('quantity'),
+  price: real('price'),
+  expiry_date: integer('expiry_date'),
+})

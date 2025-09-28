@@ -15,6 +15,13 @@
       "when": 1759038315385,
       "tag": "0001_elite_goliath",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1759039302675,
+      "tag": "0002_hot_peter_parker",
+      "breakpoints": true
     }
   ]
 }
