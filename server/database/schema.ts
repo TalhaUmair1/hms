@@ -28,7 +28,7 @@ export const doctors = sqliteTable('doctors', {
 export const patients = sqliteTable('patients', {
   id: integer('id').primaryKey(),
   user_id: integer('user_id'),
-  dob: integer('dob'),
+  dob: text('dob'),
   gender: text('gender'),
   medical_history: text('medical_history'),
 })
@@ -37,9 +37,10 @@ export const appointments = sqliteTable('appointments', {
   id: integer('id').primaryKey(),
   patient_id: integer('patient_id'),
   doctor_id: integer('doctor_id'),
-  date: integer('date'),
-  time: integer('time'),
-  status: text('status', { enum: ['pending', 'confirmed', 'cancelled'] }),
+  date: text('date').notNull(),
+  status: text('status', {
+    enum: ['pending', 'confirmed', 'completed', 'canceled'],
+  }).default('pending'),
 })
 
 export const prescriptions = sqliteTable('prescriptions', {
@@ -60,10 +61,10 @@ export const billing = sqliteTable('billing', {
   payment_method: text('payment_method'),
 })
 
-export const products = sqliteTable('products', {
-  id: integer('id').primaryKey(),
-  name: text('name'),
-  quantity: integer('quantity'),
-  price: real('price'),
-  expiry_date: integer('expiry_date'),
+export const pharmacy = sqliteTable('pharmacy', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  quantity: integer('quantity').notNull(),
+  price: integer('price').notNull(),
+  expiryDate: text('expiry_date'), // ISO date string
 })
