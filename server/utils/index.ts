@@ -13,8 +13,15 @@ const db = createDatabase(
 
 const drizzleDb = drizzle(db)
 
-export const useDb = () => drizzleDb
+export const useDatabase = () => drizzleDb
 
 export const tables = schema
 
-// export type Todo = typeof tables.todos.$inferSelect
+export type User = typeof tables.users.$inferSelect
+export type Doctor = typeof tables.doctors.$inferSelect
+export type Patient = typeof tables.patients.$inferSelect
+export type Appointment = typeof tables.appointments.$inferSelect
+export type Prescription = typeof tables.prescriptions.$inferSelect
+export type Billing = typeof tables.billing.$inferSelect
+export type Role = User['role']
+export type Pharmacy = typeof tables.pharmacy.$inferSelect
