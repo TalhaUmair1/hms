@@ -1,12 +1,22 @@
 import { sql } from 'drizzle-orm/sql'
-import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core'
+import {
+  sqliteTable,
+  integer,
+  text,
+  real,
+  primaryKey,
+  unique,
+  foreignKey,
+} from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull(),
   password: text('password').notNull(),
-  role: text('role', { enum: ['admin', 'user', 'manager'] }).notNull(),
+  role: text('role', {
+    enum: ['admin', 'manager', 'doctor', 'patient'],
+  }).notNull(),
   phone: text('phone'),
   address: text('address'),
   created_at: text('created_at')
@@ -16,6 +26,28 @@ export const users = sqliteTable('users', {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 })
+
+export const credentials = sqliteTable(
+  'credentials',
+  {
+    userId: integer('userId').notNull(),
+    id: text('id').notNull(),
+    publicKey: text('publicKey').notNull(),
+    counter: integer('counter').notNull(),
+    backedUp: integer('backedUp').notNull(),
+    transports: text('transports').notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.id] }),
+    unique('credentials_id_unique').on(table.id),
+    foreignKey(() => ({
+      columns: [table.userId],
+      foreignColumns: [users.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
 export const doctors = sqliteTable('doctors', {
   id: integer('id').primaryKey(),
