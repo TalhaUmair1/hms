@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm/sql'
-import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
@@ -15,4 +15,20 @@ export const users = sqliteTable('users', {
   updated_at: text('updated_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+})
+
+export const doctors = sqliteTable('doctors', {
+  id: integer('id').primaryKey(),
+  user_id: integer('user_id'),
+  specialization: text('specialization'),
+  fees: real('fees'),
+  availability: text('availability'),
+})
+
+export const patients = sqliteTable('patients', {
+  id: integer('id').primaryKey(),
+  user_id: integer('user_id'),
+  dob: integer('dob'),
+  gender: text('gender'),
+  medical_history: text('medical_history'),
 })
