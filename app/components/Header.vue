@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
@@ -41,10 +43,10 @@ const items = computed<NavigationMenuItem[]>(() => [
       </div>
     </template>
 
-    <UNavigationMenu :items="items" />
+    <!-- <UNavigationMenu :items="items" /> -->
 
     <template #right>
-      <UColorModeButton />
+ <!-- <UColorModeButton /> -->
     </template>
   </UHeader>
 </template>

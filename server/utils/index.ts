@@ -5,9 +5,10 @@ import * as schema from '../database/schema'
 
 // Initialize DB instance
 // You can use any other available connector
+console.log('env url', process.env.DB_FILE_NAME)
 const db = createDatabase(
   sqlite({
-    path: process.env.DB_CONNECTION,
+    path: process.env.DB_FILE_NAME,
   })
 )
 
