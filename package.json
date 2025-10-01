@@ -11,14 +11,16 @@
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
+    "@nuxt/ui": "^4.0.0",
     "better-sqlite3": "^12.4.1",
     "db0": "^0.3.2",
     "drizzle-orm": "^0.44.5",
+    "h3-zod": "^0.5.3",
     "nuxt": "^4.1.2",
-    "@nuxt/ui": "^4.0.0",
     "nuxt-auth-utils": "^0.5.25",
     "vue": "^3.5.21",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.5",

@@ -1,15 +1,14 @@
-import { z } from 'zod'
+import { zh, z } from 'h3-zod';
 
 export default eventHandler(async (event) => {
-  const body = await readValidatedBody(
+  const body = await zh.useValidatedBody(
     event,
     z.object({
-      // title: z.string().min(1).max(100),
       specialization: z.string().min(3).max(100),
-      user_id: z.int(),
+      user_id: z.number().int(),
       fees: z.number(),
       availability: z.string(),
-    }).parse
+    })
   )
   const { specialization, user_id, fees, availability } = body
 

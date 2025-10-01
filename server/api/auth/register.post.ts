@@ -1,14 +1,14 @@
-import { z } from 'zod'
+import { zh, z } from 'h3-zod'
 
 export default defineEventHandler(async (event) => {
   const db = useDatabase()
-  const { name, email, password } = await readValidatedBody(
+  const { name, email, password } = await zh.useValidatedBody(
     event,
     z.object({
       name: z.string().min(2),
       email: z.string().email(),
       password: z.string().min(8),
-    }).parse
+    })
   )
 
   const hashedPassword = await hashPassword(password)

@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm'
-import { z } from 'zod'
+import { zh, z } from 'h3-zod'
 
 interface DBUser {
   id: number
@@ -16,12 +16,12 @@ const invalidCredentialsError = createError({
 export default defineEventHandler(async (event) => {
   const db = useDatabase()
 
-  const { email, password } = await readValidatedBody(
+  const { email, password } = await zh.useValidatedBody(
     event,
     z.object({
       email: z.string().email(),
       password: z.string().min(8),
-    }).parse
+    })
   )
 
   const user = await db
