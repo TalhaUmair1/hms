@@ -39,7 +39,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     <template #title>
       <div class="flex items-center space-x-2 text-lg font-bold">
         <UIcon name="i-lucide-hospital" class="w-6 h-6" />
-        <span>Shoukat Khanam Hospital</span>
+        <span class="text-primary font-semibold text-xl">Shoukat Khanam Hospital</span>
       </div>
     </template>
 
