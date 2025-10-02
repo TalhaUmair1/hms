@@ -39,6 +39,7 @@ export default eventHandler(async (event) => {
   const updatedBill = await db
     .update(tables.billing)
     .set({
+      id,
       appointment_id,
       patient_id,
       amount,
