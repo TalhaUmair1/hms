@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { zh, z } from 'h3-zod'
-import { useDatabase } from './../../utils/index'
+import { canUpdateDoctor } from '~~/shared/abilities/doctors'
 
 const notFoundError = createError({
   statusCode: 404,
@@ -45,7 +45,8 @@ export default defineEventHandler(async (event) => {
   if (!existingDoctor) {
     throw notFoundError
   }
-
+  const result = await authorize(event, canUpdateDoctor, existingDoctor)
+  console.log('authorize result', result)
   const updatedDoctor = await db
     .update(tables.doctors)
     .set({
@@ -64,7 +65,7 @@ export default defineEventHandler(async (event) => {
         name: name ?? existingDoctor.name,
         email: email ?? existingDoctor.email,
       })
-      .where(eq(tables.users.id, existingDoctor.user_id))
+      .where(eq(tables.users.id, existingDoctor.user_id ?? 0))
   }
 
   return updatedDoctor

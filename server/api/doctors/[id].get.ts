@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { zh, z } from 'h3-zod'
+import { canReadDoctor } from '~~/shared/abilities/doctors'
 
 const invalidCredentialsError = createError({
   statusCode: 404,
@@ -13,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const { id } = await zh.useValidatedParams(event, {
     id: zh.intAsString,
   })
-
+  await authorize(event, canReadDoctor)
   const doctor = await db
     .select({
       id: tables.doctors.id,
