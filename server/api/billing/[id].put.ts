@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 import z from 'zod'
+import { canUpdateBilling } from '~~/shared/abilities/billig'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -35,6 +36,7 @@ export default eventHandler(async (event) => {
       statusMessage: 'Bill not found',
     })
   }
+  await authorize(event, canUpdateBilling)
 
   const updatedBill = await db
     .update(tables.billing)

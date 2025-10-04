@@ -45,8 +45,8 @@ export default defineEventHandler(async (event) => {
   if (!existingDoctor) {
     throw notFoundError
   }
-  const result = await authorize(event, canUpdateDoctor, existingDoctor)
-  console.log('authorize result', result)
+  await authorize(event, canUpdateDoctor, existingDoctor)
+
   const updatedDoctor = await db
     .update(tables.doctors)
     .set({

@@ -1,5 +1,6 @@
 import { zh, z } from 'h3-zod'
 import { id } from 'zod/locales'
+import { canCreateBilling } from '~~/shared/abilities/billig'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -15,6 +16,8 @@ export default eventHandler(async (event) => {
   )
   const { id, appointment_id, patient_id, amount, status, payment_method } =
     body
+
+  await authorize(event, canCreateBilling)
 
   const billing = await useDatabase()
     .insert(tables.billing)

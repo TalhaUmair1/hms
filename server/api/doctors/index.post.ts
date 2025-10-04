@@ -1,4 +1,5 @@
-import { zh, z } from 'h3-zod';
+import { zh, z } from 'h3-zod'
+import { canCreateDoctor } from '~~/shared/abilities/doctors'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -12,6 +13,7 @@ export default eventHandler(async (event) => {
   )
   const { specialization, user_id, fees, availability } = body
 
+  await authorize(event, canCreateDoctor)
   // Insert todo for the current user
   const doctor = await useDatabase()
     .insert(tables.doctors)
