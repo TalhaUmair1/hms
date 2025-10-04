@@ -2,6 +2,8 @@ import { zh } from 'h3-zod'
 import { id } from 'zod/locales'
 import { eq } from 'drizzle-orm'
 
+import { canReadPersonalppointments } from './../../../shared/abilities/appointments'
+
 export default eventHandler(async (event) => {
   const db = useDatabase()
 
@@ -13,6 +15,7 @@ export default eventHandler(async (event) => {
   const { id } = await zh.useValidatedParams(event, {
     id: zh.intAsString,
   })
+  await authorize(event, canReadPersonalppointments)
 
   const appointment = await db
     .select()

@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
+import { canDeletepresception } from '~~/shared/abilities/prescriptions'
 
 export default eventHandler(async (event) => {
   const db = await useDatabase()
@@ -14,6 +15,7 @@ export default eventHandler(async (event) => {
     id: zh.intAsString,
   })
 
+  await authorize(event, canDeletepresception)
   const apoinment = await db
     .delete(tables.appointments)
     .where(eq(tables.appointments.id, id))

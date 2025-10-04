@@ -1,4 +1,5 @@
 import { zh, z } from 'h3-zod'
+import { canCreatePharmacy } from '~~/shared/abilities/pharmacy'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -12,6 +13,7 @@ export default eventHandler(async (event) => {
     })
   )
   const { id, name, quantity, price, expiryDate } = body
+  await authorize(event, canCreatePharmacy)
 
   const medicine = await useDatabase()
     .insert(tables.pharmacy)

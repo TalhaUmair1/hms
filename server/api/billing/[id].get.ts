@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
-import { canReadBilling } from '~~/shared/abilities/billig'
+import { canReadPersonalBilling } from '~~/shared/abilities/billig'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -10,7 +10,7 @@ export default eventHandler(async (event) => {
     id: zh.intAsString, // ensures string param gets cast to int
   })
 
-  await authorize(event, canReadBilling)
+  await authorize(event, canReadPersonalBilling)
   // Query billing by id
   const billing = await db
     .select()

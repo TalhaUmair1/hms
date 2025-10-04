@@ -13,9 +13,17 @@ export const canCreateBilling = defineAbility((user: any) => {
 export const canReadBilling = defineAbility((user: any, Billing?: any) => {
   if (!user) return false
   if (user.role === 'admin') return true
-  if (user.role === 'patient') return true // can read all Billings (like directory)
   return false
 })
+
+export const canReadPersonalBilling = defineAbility(
+  (user: any, Billing?: any) => {
+    if (!user) return false
+    if (user.role === 'admin') return true
+    if (user.role === 'patient') return true // can read all Billings (like directory)
+    return false
+  }
+)
 
 export const canUpdateBilling = defineAbility((user: any, Billing?: any) => {
   if (!user) return false

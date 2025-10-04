@@ -1,5 +1,6 @@
 import { zh } from 'h3-zod'
 import z from 'zod'
+import { canCreatepresception } from '~~/shared/abilities/prescriptions'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -13,7 +14,7 @@ export default eventHandler(async (event) => {
     })
   )
   const { appointment_id, doctor_id, patient_id, medicine_list, notes } = body
-
+  await authorize(event, canCreatepresception)
   const prescription = await useDatabase()
     .insert(tables.prescriptions)
     .values({

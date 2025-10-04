@@ -1,6 +1,8 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 
+import { canDeleteappointments } from './../../../shared/abilities/appointments'
+
 export default eventHandler(async (event) => {
   const db = useDatabase()
 
@@ -12,6 +14,8 @@ export default eventHandler(async (event) => {
   const { id } = await zh.useValidatedParams(event, {
     id: zh.intAsString,
   })
+
+  await authorize(event, canDeleteappointments)
 
   const appointment = await db
     .delete(tables.appointments)

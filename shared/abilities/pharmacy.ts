@@ -19,7 +19,7 @@ export const canReadPharmacy = defineAbility((user: any, pharmacy?: any) => {
   return true
 })
 
-export const canUpdatePatients = defineAbility((user: any, patient?: any) => {
+export const canUpdatePharmacy = defineAbility((user: any, patient?: any) => {
   if (!user) return false
 
   if (user.role === 'admin') return true
@@ -27,7 +27,7 @@ export const canUpdatePatients = defineAbility((user: any, patient?: any) => {
   return false
 })
 
-export const canDeletePatients = defineAbility((user: any, patient?: any) => {
+export const canDeletePharmacy = defineAbility((user: any, patient?: any) => {
   if (!user) return false
   return user.role === 'admin'
 })

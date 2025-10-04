@@ -1,6 +1,8 @@
 import { z, zh } from 'h3-zod'
 import { eq } from 'drizzle-orm'
 
+import { canUpdatePatients } from './../../../shared/abilities/patients'
+
 export default eventHandler(async (event) => {
   const db = useDatabase()
 
@@ -29,6 +31,7 @@ export default eventHandler(async (event) => {
   if (!existingPatient) {
     throw notFoundError
   }
+  await authorize(event, canUpdatePatients, existingPatient)
   const updatedPatient = await db
     .update(tables.patients)
     .set({

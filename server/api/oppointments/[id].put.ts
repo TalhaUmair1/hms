@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 import z from 'zod'
+import { canUpdateappointments } from '~~/shared/abilities/appointments'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -18,6 +19,8 @@ export default eventHandler(async (event) => {
     })
   )
   const { doctor_id, patient_id, date } = body
+
+  await authorize(event, canUpdateappointments)
 
   const appointment = await db
     .update(tables.appointments)

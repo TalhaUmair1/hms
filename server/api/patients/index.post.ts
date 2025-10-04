@@ -1,4 +1,5 @@
 import { zh, z } from 'h3-zod'
+import { canCreatePatients } from './../../../shared/abilities/patients'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -11,6 +12,8 @@ export default eventHandler(async (event) => {
     })
   )
   const { user_id, dob, gender, medical_history } = body
+
+  await authorize(event, canCreatePatients)
 
   const patient = await useDatabase()
     .insert(tables.patients)

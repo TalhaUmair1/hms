@@ -7,7 +7,8 @@ import { defineAbility } from 'nuxt-authorization/utils'
  */
 export const canCreateappointments = defineAbility((user: any) => {
   if (!user) return false
-  return user.role === 'admin'
+  if (user.role === 'admin') return true
+  if (user.role === 'doctor') return true
 })
 
 export const canReadappointments = defineAbility(
@@ -15,7 +16,17 @@ export const canReadappointments = defineAbility(
     if (!user) return false
     if (user.role === 'admin') return true
     if (user.role === 'doctor') return true
-    if (user.role === 'appointments') return true // can read all appointmentss (like directory)
+    // can read all appointmentss (like directory)
+    return false
+  }
+)
+
+export const canReadPersonalppointments = defineAbility(
+  (user: any, appointments?: any) => {
+    if (!user) return false
+    if (user.role === 'admin') return true
+    if (user.role === 'doctor') return true
+    if (user.role === 'patient') return true // can read all appointmentss (like directory)
     return false
   }
 )
@@ -26,9 +37,6 @@ export const canUpdateappointments = defineAbility(
 
     if (user.role === 'admin') return true
     if (user.role === 'doctor') return true
-    if (user.role === 'appointments' && appointments) {
-      return user.id === appointments.id // only update own profile
-    }
     return false
   }
 )

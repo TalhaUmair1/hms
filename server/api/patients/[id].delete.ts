@@ -1,5 +1,6 @@
 import { zh } from 'h3-zod'
 import { eq } from 'drizzle-orm'
+import { canDeletePatients } from '../../../shared/abilities/patients'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -7,6 +8,8 @@ export default eventHandler(async (event) => {
   const { id } = await zh.useValidatedParams(event, {
     id: zh.intAsString,
   })
+
+  await authorize(event, canDeletePatients)
 
   const patient = await db
     .delete(tables.patients)
