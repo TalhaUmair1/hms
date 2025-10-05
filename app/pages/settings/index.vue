@@ -21,6 +21,10 @@ type ProfileSchema = z.output<typeof profileSchema>
 
   })
 
+  const { user: u } = useUserSession()
+  console.log(u.value);
+  
+
 const { data, pending, error, refresh } = useFetch<ProfileSchema>('/api/auth/profile')
 console.log(data.value);
 

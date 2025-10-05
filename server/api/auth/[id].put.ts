@@ -46,6 +46,7 @@ export default eventHandler(async (event) => {
     })
     .where(eq(tables.users.id, id))
     .returning({
+      id: tables.users.id,
       name: tables.users.name,
       email: tables.users.email,
       phone: tables.users.phone,
@@ -53,5 +54,15 @@ export default eventHandler(async (event) => {
     })
     .get()
 
+  // set user session if the updated user is the current user
+  await setUserSession(event, {
+    user: {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: user.role,
+    },
+    loggedInAt: Date.now(),
+  })
   return updatedUser
 })

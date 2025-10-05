@@ -14,7 +14,13 @@ export default defineEventHandler(async (event) => {
   const db = useDatabase()
 
   const updatedUser = await db
-    .select()
+    .select({
+      id: tables.users.id,
+      name: tables.users.name,
+      email: tables.users.email,
+      phone: tables.users.phone,
+      address: tables.users.address,
+    })
     .from(tables.users)
     .where(eq(tables.users.id, Number(user.id)))
     .get()
