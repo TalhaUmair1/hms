@@ -1,126 +1,126 @@
 <script setup lang="ts">
-import { z } from 'zod'
+import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { useFetch } from 'nuxt/app'
-import { ref } from 'vue'
 
-// ✅ Zod schema for validation
 const profileSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().optional(),
-  address: z.string().optional()
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email'),
+  address: z.string().min(1, 'Address is required'),
+  phone: z.string().min(1, 'Phone is required'),
 })
-
 type ProfileSchema = z.output<typeof profileSchema>
 
-// ✅ Fetch existing profile
-const { data: profile, pending, error, refresh } = useFetch('/api/auth/profile')
+  const profile = ref<ProfileSchema>({
+    id: '',
+    name: '',
+    email: '',
+   address: '',
+   phone: '',
 
-// ✅ Local state so we can edit safely
-const state = ref<ProfileSchema>({
-  name: '',
-  email: '',
-  phone: '',
-  address: ''
-})
-
-watchEffect(() => {
-  if (profile.value) {
-    state.value = { ...profile.value }
-  }
-})
-
-const toast = useToast()
-
-// ✅ Submit updates
-async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-  await $fetch('/api/auth/profile', {
-    method: 'PUT',
-    body: event.data
   })
 
+const { data, pending, error, refresh } = useFetch<ProfileSchema>('/api/auth/profile')
+console.log(data.value);
+
+profile.value= data.value || profile.value
+
+
+
+const toast = useToast()
+async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
   toast.add({
     title: 'Success',
-    description: 'Your profile has been updated.',
+    description: 'Your settings have been updated.',
     icon: 'i-lucide-check',
     color: 'success'
   })
-
-  refresh() // refresh profile after save
+  console.log(event.data)
 }
+
+
 </script>
 
 <template>
-  <div>
-    <UForm
-      id="settings"
-      :schema="profileSchema"
-      :state="state"
-      @submit="onSubmit"
+  <UForm
+    id="settings"
+    :schema="profileSchema"
+    :state="profile"
+    @submit="onSubmit"
+  >
+    <UPageCard
+      title="Profile"
+      description="These informations will be displayed publicly."
+      variant="naked"
+      orientation="horizontal"
+      class="mb-4"
     >
-      <UPageCard
-        title="Profile"
-        description="These informations will be displayed publicly."
-        variant="naked"
-        orientation="horizontal"
-        class="mb-4"
+      <UButton
+        form="settings"
+        label="Save changes"
+        color="neutral"
+        type="submit"
+        class="w-fit lg:ms-auto"
+      />
+    </UPageCard>
+
+    <UPageCard variant="subtle">
+      <UFormField
+        name="name"
+        label="Name"
+        description="Will appear on receipts, invoices, and other communication."
+        required
+        class="flex max-sm:flex-col justify-between items-start gap-4"
       >
-        <UButton
-          form="settings"
-          label="Save changes"
-          color="neutral"
-          type="submit"
-          class="w-fit lg:ms-auto"
+        <UInput
+          v-model="profile.name"
+          autocomplete="off"
         />
-      </UPageCard>
-
-      <UPageCard variant="subtle">
-        <UFormField
-          name="name"
-          label="Name"
-          description="Will appear on receipts, invoices, and other communication."
-          required
-          class="flex max-sm:flex-col justify-between items-start gap-4"
-        >
-          <UInput v-model="state.name" autocomplete="off" />
-        </UFormField>
-
-        <USeparator />
-
-        <UFormField
-          name="email"
-          label="Email"
-          description="Used to sign in, for email receipts and product updates."
-          required
-          class="flex max-sm:flex-col justify-between items-start gap-4"
-        >
-          <UInput v-model="state.email" type="email" autocomplete="off" />
-        </UFormField>
-
-        <USeparator />
-
-        <UFormField
-          name="phone"
-          label="Phone"
-          description="Your unique phone number."
-          class="flex max-sm:flex-col justify-between items-start gap-4"
-        >
-          <UInput v-model="state.phone" type="text" autocomplete="off" />
-        </UFormField>
-
-        <USeparator />
-
-        <UFormField
-          name="address"
-          label="Address"
-          description="Brief description Address for your profile."
-          class="flex max-sm:flex-col justify-between items-start gap-4"
-          :ui="{ container: 'w-full' }"
-        >
-          <UTextarea v-model="state.address" :rows="4" autoresize class="w-full" />
-        </UFormField>
-      </UPageCard>
-    </UForm>
-  </div>
+      </UFormField>
+      <USeparator />
+      <UFormField
+        name="email"
+        label="Email"
+        description="Used to sign in, for email receipts and product updates."
+        required
+        class="flex max-sm:flex-col justify-between items-start gap-4"
+      >
+        <UInput
+          v-model="profile.email"
+          type="email"
+          autocomplete="off"
+        />
+      </UFormField>
+      <USeparator />
+      <UFormField
+        name="Phone"
+        label="Phone"
+        description="Your unique phone number. Used for logging in and your profile URL."
+        required
+        class="flex max-sm:flex-col justify-between items-start gap-4"
+      >
+        <UInput
+          v-model="profile.phone"
+          type="username"
+          autocomplete="off"
+        />
+      </UFormField>
+      <USeparator />
+   
+      <UFormField
+        name="address"
+        label="Address"
+        description="Brief description Address for your profile."
+        class="flex max-sm:flex-col justify-between items-start gap-4"
+        :ui="{ container: 'w-full' }"
+      >
+        <UTextarea
+          v-model="profile.address"
+          :rows="4"
+          autoresize
+          class="w-full"
+        />
+      </UFormField>
+    </UPageCard>
+  </UForm>
 </template>
