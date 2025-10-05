@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 import z from 'zod'
+import { canUpdateUser } from '~~/shared/abilities/user'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -12,13 +13,13 @@ export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
     event,
     z.object({
-      name: z.string().optional(),
-      email: z.string().email().optional(),
+      name: z.string(),
+      email: z.string().email(),
       phone: z.string().optional(),
       address: z.string().optional(),
     })
   )
-  const { name, email, phone, password } = body
+  const { name, email, phone, address } = body
 
   const user = await db
     .select()
@@ -32,6 +33,7 @@ export default eventHandler(async (event) => {
       statusMessage: 'User not found',
     })
   }
+  await authorize(event, canUpdateUser, user)
 
   const updatedUser = await db
     .update(tables.users)
@@ -40,10 +42,15 @@ export default eventHandler(async (event) => {
       name,
       email,
       phone,
-      password,
+      address,
     })
     .where(eq(tables.users.id, id))
-    .returning()
+    .returning({
+      name: tables.users.name,
+      email: tables.users.email,
+      phone: tables.users.phone,
+      address: tables.users.address,
+    })
     .get()
 
   return updatedUser

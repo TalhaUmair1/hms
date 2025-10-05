@@ -4,10 +4,11 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import { useFetch } from 'nuxt/app'
 
 const profileSchema = z.object({
+  id: z.int().min(1, 'ID is required'),
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
-  address: z.string().min(1, 'Address is required'),
   phone: z.string().min(1, 'Phone is required'),
+  address: z.string().min(1, 'Address is required'),
 })
 type ProfileSchema = z.output<typeof profileSchema>
 
@@ -29,13 +30,12 @@ profile.value= data.value || profile.value
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-  toast.add({
-    title: 'Success',
-    description: 'Your settings have been updated.',
-    icon: 'i-lucide-check',
-    color: 'success'
+  console.log('Submitted', event.data)
+  const { data, pending, error } = await useFetch('/api/auth/' + profile.value.id, {
+    method: 'PUT',
+    body: event.data,
   })
-  console.log(event.data)
+  console.log(data)
 }
 
 
@@ -62,6 +62,8 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
         type="submit"
         class="w-fit lg:ms-auto"
       />
+
+      
     </UPageCard>
 
     <UPageCard variant="subtle">
