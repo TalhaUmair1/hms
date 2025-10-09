@@ -21,16 +21,20 @@ export default defineEventHandler(async (event) => {
       specialization: tables.doctors.specialization,
       fees: tables.doctors.fees,
       availability: tables.doctors.availability,
+      user_id: tables.doctors.user_id,
       name: tables.users.name,
       email: tables.users.email,
     })
     .from(tables.doctors)
     .leftJoin(tables.users, eq(tables.doctors.user_id, tables.users.id))
     .where(eq(tables.doctors.id, id))
+    .get()
 
   if (!doctor) {
     throw invalidCredentialsError
   }
+
+  console.log('api doctor', doctor)
 
   return doctor
 })

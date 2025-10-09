@@ -98,14 +98,14 @@ const columns: TableColumn<Doctor>[] = [
                 label: 'Details',
                 icon: 'i-lucide-copy',
                 onSelect() {
-                  navigateTo(`/doctors/${row.original.id}`)
+                  navigateTo(`/doctors/details/${row.original.id}`)
                 },
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
                 onSelect() {
-                  navigateTo(`/doctors/${row.original.id}/edit`)
+                  navigateTo(`/doctors/${row.original.id}`)
                 },
               },
               {

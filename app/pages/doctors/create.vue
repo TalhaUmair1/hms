@@ -24,7 +24,5 @@
 </template>
 
 <script setup>
-import CreateForm from '~/components/doctors/CreateForm.vue';
-
-           
+import CreateForm from '~/components/doctors/CreateForm.vue'; 
 </script>

@@ -1,8 +1,4 @@
-<template>
-    <div>
-   <doctors-create-form />
-    </div>
-</template>
+
 
 <script setup>
 const route = useRoute()
@@ -11,12 +7,45 @@ console.log(id);
 
 
 
-const { data: doctor, pending, error, refresh } = useFetch('/api/doctors/' + id, {
+const { data, pending, error, refresh } = useFetch('/api/doctors/' + id, {
   key: 'typicode-doctor',
   'method': 'GET',
+  transform: (data) => ({ ...data, user: { id: data.user_id, name: data.name } }),
   lazy: true
 })
-console.log(doctor);
+console.log(data.value);
+</script>
+
+
+<template>
+    <UDashboardPanel id="customers">
+    <template #header>
+      <UDashboardNavbar title="Customers">
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+
+        <UDashboardToolbar>
+        <template #left>
+    
+        </template>
+      </UDashboardToolbar>
+        <template #right>
+          <CustomersAddModal />
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+    <div>
+   <doctors-create-form :doctor="data" :key="data?.id" />
+    </div>
+    </template>
+  </UDashboardPanel>
+</template>
+
+<script setup>
 
 </script>
+
 
