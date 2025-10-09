@@ -131,9 +131,29 @@ const columns: TableColumn<Doctor>[] = [
   }
 ]
 </script>
-
 <template>
-     <UContainer class="flex flex-col">
+    <UDashboardPanel id="Doctors">
+    <template #header>
+      <UDashboardNavbar title="DoctorsList">
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+
+        <UDashboardToolbar>
+        <template #left>
+    
+        </template>
+      </UDashboardToolbar>
+        <template #right>
+         <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/doctors/create">
+            Create Doctor
+          </ULink>
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+  <UContainer class="flex flex-col">
  <div class="m-6">
         <UInput
         v-model="search"
@@ -158,6 +178,10 @@ const columns: TableColumn<Doctor>[] = [
       :id="selectedDoctor.id"
       @deleted="refresh"
     />
-
+    </template>
+  </UDashboardPanel>
 </template>
+
+
+
 

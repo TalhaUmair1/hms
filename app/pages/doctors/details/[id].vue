@@ -135,9 +135,6 @@ const { data: doctor, pending, error } =  useFetch(`/api/doctors/${doctorId}`)
             </span>
           </div>
         </UStack>
-
-        <!-- Action Buttons -->
-       
       </div>
     </UCard>
   </UContainer>

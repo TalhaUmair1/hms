@@ -1,7 +1,7 @@
 <template>
-    <UDashboardPanel id="CreateDoctor">
+    <UDashboardPanel id="CreatePatients">
     <template #header>
-      <UDashboardNavbar title="CreateDoctor">
+      <UDashboardNavbar title="CreatePatients">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -12,17 +12,17 @@
         </template>
       </UDashboardToolbar>
         <template #right>
-        <UColorModeButton />
+          <ULink to="/patients/createPatients" class=" font-semibold bg-primary px-2 py-1 text-white rounded-sm">Create Patient</ULink>
         </template>
       </UDashboardNavbar>
     </template>
 
     <template #body>
-     <CreateForm />
+
     </template>
   </UDashboardPanel>
 </template>
 
 <script setup>
-import CreateForm from '~/components/doctors/CreateForm.vue'; 
+
 </script>

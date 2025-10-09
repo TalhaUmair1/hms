@@ -28,7 +28,25 @@ const links = [[{
   onSelect: () => {
     open.value = false
   }
-}, {
+},
+{
+  label: 'Doctors',
+  icon: 'i-lucide-stethoscope',
+  to: '/doctors',
+  onSelect: () => {
+    open.value = false
+  }
+},
+
+{
+  label: 'Patients',
+  icon: 'i-lucide-person-standing',
+  to: '/patients',
+  onSelect: () => {
+    open.value = false
+  }
+},
+ {
   label: 'Settings',
   to: '/settings',
   icon: 'i-lucide-settings',
