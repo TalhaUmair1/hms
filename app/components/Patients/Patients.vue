@@ -1,101 +1,187 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
-import { useRouter } from 'vue-router'
-import { h, resolveComponent } from 'vue'
+import { navigateTo, useFetch } from '#app'
+import { ref, computed, h, resolveComponent } from 'vue'
+import patientsDeleteModal from '~/components/patients/DeleteModal.vue'
 
-const UDropdownMenu = resolveComponent('UDropdownMenu')
+const UAvatar = resolveComponent('UAvatar')
 const UButton = resolveComponent('UButton')
-const router = useRouter()
+const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-type MedicalRecord = {
+type Doctor = {
   id: number
-  user_id: number
-  dob: string
-  gender: string
-  medical_history: string
+  name: string
+  email: string
+  specialization: string
+  availability: string
+  fees: number
+  avatar?: { alt: string }
 }
 
-// 🧠 Mock data — replace with your real API call
-const { data, status } = await useFetch<MedicalRecord[]>('/api/patients', {
-  key: 'medical-records',
-  lazy: true,
-  default: () => [
-    {
-      id: 1,
-      user_id: 10,
-      dob: '1990-03-15',
-      gender: 'Male',
-      medical_history: 'Allergic to penicillin'
-    },
-    {
-      id: 2,
-      user_id: 12,
-      dob: '1995-07-22',
-      gender: 'Female',
-      medical_history: 'Diabetic, under control'
-    }
-  ]
+const isDeleteModalOpen = ref(false)
+const selectedDoctor = ref<Doctor | null>(null)
+
+// fetch patients
+const { data: patients, status, refresh } = await useFetch<Doctor[]>('/api/patients', {
+  key: 'table-patients',
+  transform: (data) => {
+    return (
+      data?.map((doc) => ({
+        ...doc,
+        avatar: { alt: `${doc.name} avatar` }
+      })) || []
+    )
+  },
+  lazy: true
 })
 
-// 🧱 Table columns
-const columns: TableColumn<MedicalRecord>[] = [
-  { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'user_id', header: 'User ID' },
-  { accessorKey: 'dob', header: 'Date of Birth' },
-  { accessorKey: 'gender', header: 'Gender' },
+// search state
+const search = ref('')
+
+// computed filtered data
+const filteredPatients = computed(() => {
+  if (!search.value) return patients.value || []
+  return (patients.value || []).filter((doc) =>
+    doc.name.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
+const columns: TableColumn<Doctor>[] = [
   {
-    accessorKey: 'medical_history',
-    header: 'Medical History',
-    cell: ({ row }) =>
-      h('span', { class: 'truncate block max-w-[180px]' }, row.original.medical_history)
+    accessorKey: 'id',
+    header: 'ID'
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ row }) => {
+      return h('div', { class: 'flex items-center gap-3' }, [
+        h(UAvatar, {
+          ...row.original.avatar,
+          size: 'lg'
+        }),
+        h('div', undefined, [
+          h('p', { class: 'font-medium text-highlighted' }, row.original.name)
+        ])
+      ])
+    }
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email'
+  },
+  {
+    accessorKey: 'dob',
+    header: 'Date of Birth'
+  },
+  {
+    accessorKey: 'gender',
+    header: 'Gender'
+  },
+  {
+    accessorKey: 'madical_history',
+    header: 'Madical History'
   },
   {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) =>
-      h(
-        UDropdownMenu,
-        {
-          items: [
-            [
+      h('div', { class: 'flex items-center gap-3' },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: 'end'
+            },
+            items: [
               {
-                label: 'View Details',
-                icon: 'i-heroicons-eye',
-                click: () => router.push(`/records/${row.original.id}`)
+                label: 'Details',
+                icon: 'i-lucide-copy',
+                onSelect() {
+                  navigateTo(`/patients/details/${row.original.id}`)
+                },
               },
               {
-                label: 'Edit Record',
-                icon: 'i-heroicons-pencil-square',
-                click: () => router.push(`/records/${row.original.id}/edit`)
-              }
+                label: 'Edit',
+                icon: 'i-lucide-edit',
+                onSelect() {
+                  navigateTo(`/patients/${row.original.id}`)
+                },
+              },
+              {
+                label: 'Delete',
+                icon: 'i-lucide-trash',
+                color: 'error',
+                onSelect() {
+                  selectedDoctor.value = row.original
+                  isDeleteModalOpen.value = true
+                },
+              },
             ]
-          ],
-          class: 'flex justify-center'
-        },
-        {
-          default: () =>
-            h(
-              UButton,
-              {
-                icon: 'i-heroicons-ellipsis-vertical',
-                variant: 'ghost',
-                size: 'sm'
-              },
-              {}
-            )
-        }
+          },
+          () =>
+            h(UButton, {
+              icon: 'i-lucide-ellipsis-vertical',
+              color: 'neutral',
+              variant: 'ghost',
+              class: 'ml-auto'
+            })
+        )
       )
   }
 ]
 </script>
-
 <template>
-  <div class="p-6">
-    <UTable
-      :data="data"
-      :columns="columns"
-      :loading="status === 'pending'"
-      class="w-full "
+    <UDashboardPanel id="patients">
+    <template #header>
+      <UDashboardNavbar title="patientsList">
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+
+        <UDashboardToolbar>
+        <template #left>
+    
+        </template>
+      </UDashboardToolbar>
+        <template #right>
+         <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/patients/createPatients">
+            Create Patients
+          </ULink>
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+  <UContainer class="flex flex-col">
+ <div class="m-6">
+        <UInput
+        v-model="search"
+        placeholder="Search by name..."
+        class="max-w-xs"
+        icon="i-heroicons-magnifying-glass-20-solid"
+      />
+      </div>
+
+      <!-- Table -->
+      <UTable
+        :data="filteredPatients"
+        :columns="columns"
+        :loading="status === 'pending'"
+        class="w-full"
+      />
+     </UContainer>
+  
+      <patientsDeleteModal
+      v-if="selectedDoctor"
+      v-model:open="isDeleteModalOpen"
+      :id="selectedDoctor.id"
+      @deleted="refresh"
     />
-  </div>
+    </template>
+  </UDashboardPanel>
 </template>
+
+
+
+

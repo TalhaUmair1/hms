@@ -1,68 +1,78 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { useFetch, useToast } from '#imports'
+import { reactive } from 'vue'
+import { useFetch } from '#app'
+import { useToast } from '#imports'
+
+const props = defineProps({
+  patient: {
+    type: Object,
+    default: null
+  }
+})
 
 const { data: users, pending } = useFetch('/api/users', {
   key: 'users-list',
   lazy: true
-  
-  
 })
 
-const toast = useToast()
-
-// 🧩 Validation schema
 const schema = z.object({
-  user_id: z.number({ required_error: 'User ID is required' }).int(),
+  user_id: z.coerce.number().min(1, 'User ID is required'),
   dob: z.string().min(1, 'Date of Birth is required'),
   gender: z.string().min(1, 'Gender is required'),
-  medical_history: z.string().min(1, 'Medical history is required')
+  medical_history: z.string().min(1, 'Medical history is required'),
+  id: z.number().optional()
 })
 
-// 🌱 Reactive state
-const state = reactive({
+type Schema = z.output<typeof schema>
+
+const initialState: Partial<Schema> = {
   user_id: undefined,
   dob: '',
   gender: '',
-  medical_history: ''
-})
-
-// 🧍 Gender options
-const gender = ref(['Male', 'Female', 'Other'])
-
-// 🚀 Submit handler
-async function onSubmit(event: FormSubmitEvent<typeof schema>) {
-  console.log('Submitted:', state)
-  await useFetch('/api/patients', { method: 'POST', body: state })
-  toast.add({
-    title: 'Success',
-    description: 'Patient data submitted successfully!',
-    color: 'primary'
-  })
-
-  // ✅ Reset all fields
-  state.user_id = undefined
-  state.dob = ''
-  state.gender = ''
-  state.medical_history = ''
+  medical_history: '',
+  id: undefined
 }
+
+const state = reactive<Partial<Schema>>(props.patient || { ...initialState })
+const toast = useToast()
+
+// 🚀 Handle create / update
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  const url = state.id ? `/api/patients/${state.id}` : '/api/patients'
+  const method = state.id ? 'PUT' : 'POST'
+  const { error } = await useFetch(url, { method, body: event.data })
+
+  if (error.value) {
+    toast.add({ title: 'Error', description: error.value.message })
+  } else {
+    toast.add({
+      title: state.id ? 'Updated' : 'Created',
+      description: `Patient ${state.id ? 'updated' : 'created'} successfully!`
+    })
+  }
+
+  Object.assign(state, initialState)
+}
+
+const resetForm = () => Object.assign(state, initialState)
+
+const genderOptions = [
+  { id: 1, name: 'Male' },
+  { id: 2, name: 'Female' },
+  { id: 3, name: 'Other' }
+]
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4">
-    <UCard class="w-full max-w-md p-6 space-y-4">
-      <h2 class="text-2xl font-semibold text-center text-secondary mb-4">
-        Patient Registration
-      </h2>
+  <div class="flex justify-center items-center min-h-screen">
+    <div class="w-full max-w-md p-8">
+      <h1 class="text-2xl font-bold mb-6 text-center">
+        {{ state.id ? 'Edit Patient' : 'Create Patient' }}
+      </h1>
 
-      <UForm
-        :schema="schema"
-        :state="state"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
+      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField label="User" name="user_id">
           <USelectMenu
             v-model="state.user_id"
@@ -76,39 +86,37 @@ async function onSubmit(event: FormSubmitEvent<typeof schema>) {
           />
         </UFormField>
 
-        <UFormField label="Date of Birth" name="dob" label-class="text-secondary">
-          <UInput
-            v-model="state.dob"
-            type="date"
-            size="xl"
-            class="w-full max-w-md"
-          />
+        <UFormField label="Date of Birth" name="dob">
+          <UInput v-model="state.dob" type="date" size="xl" class="w-full" />
         </UFormField>
 
-        <UFormField label="Gender" name="gender" label-class="text-secondary">
-          <USelect
+        <UFormField label="Gender" name="gender">
+          <USelectMenu
             v-model="state.gender"
-            :items="gender"
+            :items="genderOptions"
+            value-key="name"
+            label-key="name"
             placeholder="Select gender"
             size="xl"
-            class="w-full max-w-md"
+            class="w-full"
           />
         </UFormField>
 
-        <UFormField label="Medical History" name="medical_history" label-class="text-secondary">
+        <UFormField label="Medical History" name="medical_history">
           <UTextarea
             v-model="state.medical_history"
             placeholder="Enter medical history details"
             :rows="4"
             size="xl"
-            class="w-full max-w-md"
+            class="w-full"
           />
         </UFormField>
 
-        <UButton type="submit" block size="lg" color="primary" class="mt-4">
-          Submit
-        </UButton>
+        <div class="flex justify-end gap-3 pt-4">
+          <UButton label="Reset" color="error" variant="ghost" @click="resetForm" />
+          <UButton :label="state.id ? 'Update Patient' : 'Create Patient'" type="submit" size="lg" />
+        </div>
       </UForm>
-    </UCard>
+    </div>
   </div>
 </template>
