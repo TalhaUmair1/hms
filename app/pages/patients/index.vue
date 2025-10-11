@@ -18,11 +18,11 @@
     </template>
 
     <template #body>
-
+  <Patients/>
     </template>
   </UDashboardPanel>
 </template>
 
 <script setup>
-
+import Patients from '~/components/Patients/Patients.vue'; 
 </script>
