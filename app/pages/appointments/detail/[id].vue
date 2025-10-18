@@ -46,55 +46,56 @@ const { data: appointment, pending, error } = await useFetch(`/api/oppointments/
 
     <!-- Appointment Details -->
     <UCard
-      v-else-if="appointment"
-      class="max-w-md w-full shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700 p-6"
+  v-else-if="appointment"
+  class="max-w-md w-full shadow-xl rounded-2xl border border-secondary p-6"
+>
+  <div class="text-center mb-6">
+    <h2 class="text-3xl font-semibold text-primary">Appointment Details</h2>
+    <p class="text-secondary mt-1">View the full information below</p>
+  </div>
+
+  <div class="divide-y divide-secondary/50">
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">ID:</span>
+      <span>{{ appointment.id }}</span>
+    </div>
+
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Patient ID:</span>
+      <span>{{ appointment.patient_id }}</span>
+    </div>
+
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Doctor ID:</span>
+      <span>{{ appointment.doctor_id }}</span>
+    </div>
+
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Date:</span>
+      <span>{{ appointment.date }}</span>
+    </div>
+
+    <div class="flex justify-between items-center py-3">
+      <span class="font-medium text-secondary">Status:</span>
+      <UBadge color="primary" variant="subtle" size="lg" class="capitalize">
+        {{ appointment.status }}
+      </UBadge>
+    </div>
+  </div>
+
+  <div class="mt-8 flex justify-center">
+    <UButton
+      color="primary"
+      icon="i-heroicons-arrow-left"
+      variant="soft"
+      size="lg"
+      @click="navigateTo('/appointments')"
     >
-      <div class="text-center mb-6">
-        <h2 class="text-3xl font-semibold text-primary">Appointment Details</h2>
-        <p class="text-gray-500 mt-1">View the full information below</p>
-      </div>
+      Back to Appointments
+    </UButton>
+  </div>
+</UCard>
 
-      <div class="divide-y divide-gray-200 dark:divide-gray-700">
-        <div class="flex justify-between py-3">
-          <span class="font-medium text-gray-600">ID:</span>
-          <span>{{ appointment.id }}</span>
-        </div>
-
-        <div class="flex justify-between py-3">
-          <span class="font-medium text-gray-600">Patient ID:</span>
-          <span>{{ appointment.patient_id }}</span>
-        </div>
-
-        <div class="flex justify-between py-3">
-          <span class="font-medium text-gray-600">Doctor ID:</span>
-          <span>{{ appointment.doctor_id }}</span>
-        </div>
-
-        <div class="flex justify-between py-3">
-          <span class="font-medium text-gray-600">Date:</span>
-          <span>{{ appointment.date }}</span>
-        </div>
-
-        <div class="flex justify-between items-center py-3">
-          <span class="font-medium text-gray-600">Status:</span>
-          <UBadge :color="getStatusColor(appointment.status)" variant="subtle" size="lg" class="capitalize">
-            {{ appointment.status }}
-          </UBadge>
-        </div>
-      </div>
-
-      <div class="mt-8 flex justify-center">
-        <UButton
-          color="primary"
-          icon="i-heroicons-arrow-left"
-          variant="soft"
-          size="lg"
-          @click="navigateTo('/appointments')"
-        >
-          Back to Appointments
-        </UButton>
-      </div>
-    </UCard>
   </div>
     </template>
   </UDashboardPanel>
