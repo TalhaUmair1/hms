@@ -16,14 +16,14 @@ const isOpen = computed({
   set: (value) => emit('update:open', value)
 })
 
-async function deleteDoctor() {
+async function deleteAppoinments() {
   if (!props.id) return
   try {
-    await $fetch(`/api/doctors/${props.id}`, { method: 'DELETE' })
+    await $fetch(`/api/oppointments/${props.id}`, { method: 'DELETE' })
     emit('deleted')
     isOpen.value = false
   } catch (error) {
-    console.error('Error deleting doctor:', error)
+    console.error('Error deleting Appoinment:', error)
   }
 }
 </script>
@@ -31,8 +31,8 @@ async function deleteDoctor() {
 <template>
   <UModal
     v-model:open="isOpen"
-    title="Delete Doctor"
-    description="Are you sure you want to delete this doctor? This action cannot be undone."
+    title="Delete Appoinment"
+    description="Are you sure you want to delete this Appoinment? This action cannot be undone."
   >
     <div class="p-4">
       <slot />
@@ -50,7 +50,7 @@ async function deleteDoctor() {
           label="Delete"
           color="error"
           variant="solid"
-          @click="deleteDoctor"
+          @click="deleteAppoinments"
         />
       </div>
     </template>

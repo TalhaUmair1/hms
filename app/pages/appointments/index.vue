@@ -2,6 +2,10 @@
 import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
+import DeleteOppointments from '~/components/appointments/DeleteOppointments.vue'
+
+
+const UAvatar = resolveComponent('UAvatar')
 
 
 const UButton = resolveComponent('UButton')
@@ -79,7 +83,7 @@ const columns: TableColumn<Appointment>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/appointments/details/${row.original.id}`),
+                onSelect: () => navigateTo(`/appointments/detail/${row.original.id}`),
               },
               {
                 label: 'Edit',
@@ -153,7 +157,7 @@ const columns: TableColumn<Appointment>[] = [
       </UContainer>
 
       <!-- 🗑 Delete Modal -->
-      <DeleteAppointments
+      <DeleteOppointments
         v-if="selectedAppointment"
         v-model:open="isDeleteModalOpen"
         :id="selectedAppointment.id"
