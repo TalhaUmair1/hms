@@ -62,6 +62,14 @@ const links = [[{
     open.value = false
   }
 },
+{
+  label: 'Billing',
+  icon: 'i-lucide-circle-dollar-sign',
+  to: '/billing',
+  onSelect: () => {
+    open.value = false
+  }
+},
  {
   label: 'Settings',
   to: '/settings',
