@@ -39,6 +39,14 @@ const links = [[{
 },
 
 {
+  label: 'Appointments',
+  icon: 'i-lucide-watch',
+  to: '/appointments',
+  onSelect: () => {
+    open.value = false
+  }
+},
+{
   label: 'Patients',
   icon: 'i-lucide-person-standing',
   to: '/patients',

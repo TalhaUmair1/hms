@@ -2,64 +2,70 @@
 import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
-import DeletePatients from '~/components/Patients/DeletePatients.vue'
 
-const UAvatar = resolveComponent('UAvatar')
+
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-type Patient = {
+type Appointment = {
   id: number
-  name: string
-  dob: string
-  gender: string
-  medical_history: string
-  avatar?: { alt: string }
+  patient_id: number
+  doctor_id: number
+  date: string
+  status: 'pending' | 'confirmed' | 'completed' | 'canceled'
 }
 
+// 🗑 Modal
 const isDeleteModalOpen = ref(false)
-const selectedPatient = ref<Patient | null>(null)
+const selectedAppointment = ref<Appointment | null>(null)
 
-// 🩺 Fetch patients
-const { data: patients, status, refresh } = await useFetch<Patient[]>('/api/patients', {
-  key: 'table-patients',
-  transform: (data) =>
-    data?.map((p) => ({
-      ...p,
-      avatar: { alt: `${p.name} avatar` },
-    })) || [],
-  lazy: true,
-})
-console.log(patients.value);
+// 📦 Fetch appointments (moved inside onMounted or setup function)
+const { data: appointments, status, refresh } = useFetch<Appointment[]>(
+  '/api/oppointments',
+  {
+    key: 'table-appointments',
+    lazy: true,
+  },
+)
+console.log(appointments.value,"data is fetching");
 
-// 🔍 Search state
+// 🔍 Search
 const search = ref('')
 
-// 🔢 Computed filtered data (by ID)
-const filteredPatients = computed(() => {
-  if (!search.value) return patients.value || []
-  return (patients.value || []).filter((p) =>
-    p.id.toString().includes(search.value.trim())
+// 🔢 Filtered data
+const filteredAppointments = computed(() => {
+  if (!search.value) return appointments.value || []
+  return (appointments.value || []).filter((a) =>
+    a.id.toString().includes(search.value.trim())
   )
 })
 
 // 🧩 Table columns
-const columns: TableColumn<Patient>[] = [
+const columns: TableColumn<Appointment>[] = [
   { accessorKey: 'id', header: 'ID' },
+  { accessorKey: 'patient_id', header: 'Patient ID' },
+  { accessorKey: 'doctor_id', header: 'Doctor ID' },
+  { accessorKey: 'date', header: 'Date' },
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: 'status',
+    header: 'Status',
     cell: ({ row }) =>
-      h('div', { class: 'flex items-center gap-3' }, [
-        h(UAvatar, { ...row.original.avatar, size: 'lg' }),
-        h('div', undefined, [
-          h('p', { class: 'font-medium text-highlighted' }, row.original.name),
-        ]),
-      ]),
+      h(
+        'span',
+        {
+          class: `px-2 py-1 rounded-full text-sm font-medium ${
+            row.original.status === 'confirmed'
+              ? 'bg-green-100 text-green-700'
+              : row.original.status === 'completed'
+              ? 'bg-blue-100 text-blue-700'
+              : row.original.status === 'canceled'
+              ? 'bg-red-100 text-red-700'
+              : 'bg-yellow-100 text-yellow-700'
+          }`,
+        },
+        row.original.status
+      ),
   },
-  { accessorKey: 'dob', header: 'Date of Birth' },
-  { accessorKey: 'gender', header: 'Gender' },
-  { accessorKey: 'medical_history', header: 'Medical History' },
   {
     id: 'actions',
     header: 'Actions',
@@ -73,19 +79,19 @@ const columns: TableColumn<Patient>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/patients/details/${row.original.id}`),
+                onSelect: () => navigateTo(`/appointments/details/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/patients/${row.original.id}`),
+                onSelect: () => navigateTo(`/appointments/${row.original.id}`),
               },
               {
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
                 onSelect: () => {
-                  selectedPatient.value = row.original
+                  selectedAppointment.value = row.original
                   isDeleteModalOpen.value = true
                 },
               },
@@ -105,20 +111,20 @@ const columns: TableColumn<Patient>[] = [
 </script>
 
 <template>
-  <UDashboardPanel id="patients">
+  <UDashboardPanel id="appointments">
     <!-- 🧭 Header -->
     <template #header>
-      <UDashboardNavbar title="Patients List">
+      <UDashboardNavbar title="Appointments List">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
 
         <template #right>
           <ULink
-            to="/patients/createPatients"
+            to="/appointments/create"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
-            Create Patient
+            Create Appointment
           </ULink>
         </template>
       </UDashboardNavbar>
@@ -139,7 +145,7 @@ const columns: TableColumn<Patient>[] = [
 
         <!-- 🧾 Table -->
         <UTable
-          :data="filteredPatients"
+          :data="filteredAppointments"
           :columns="columns"
           :loading="status === 'pending'"
           class="w-full"
@@ -147,10 +153,10 @@ const columns: TableColumn<Patient>[] = [
       </UContainer>
 
       <!-- 🗑 Delete Modal -->
-      <DeletePatients
-        v-if="selectedPatient"
+      <DeleteAppointments
+        v-if="selectedAppointment"
         v-model:open="isDeleteModalOpen"
-        :id="selectedPatient.id"
+        :id="selectedAppointment.id"
         @deleted="refresh"
       />
     </template>

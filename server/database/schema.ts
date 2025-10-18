@@ -72,7 +72,7 @@ export const appointments = sqliteTable('appointments', {
   date: text('date').notNull(),
   status: text('status', {
     enum: ['pending', 'confirmed', 'completed', 'canceled'],
-  }).default('pending'),
+  }).notNull(),
 })
 
 export const prescriptions = sqliteTable('prescriptions', {

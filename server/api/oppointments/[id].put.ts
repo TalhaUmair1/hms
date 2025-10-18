@@ -16,15 +16,16 @@ export default eventHandler(async (event) => {
       doctor_id: z.number().int(),
       patient_id: z.number().int(),
       date: z.string(),
+      status: z.enum(['pending', 'confirmed', 'completed', 'canceled']),
     })
   )
-  const { doctor_id, patient_id, date } = body
+  const { doctor_id, patient_id, date, status } = body
 
   await authorize(event, canUpdateappointments)
 
   const appointment = await db
     .update(tables.appointments)
-    .set({ doctor_id, patient_id, date })
+    .set({ doctor_id, patient_id, date, status })
     .where(eq(tables.appointments.id, id))
     .returning()
     .get()
