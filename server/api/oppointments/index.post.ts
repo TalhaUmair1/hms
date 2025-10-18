@@ -9,10 +9,9 @@ export default eventHandler(async (event) => {
       doctor_id: z.number().int(),
       patient_id: z.number().int(),
       date: z.string(),
-      status: z.enum(['pending', 'confirmed', 'completed', 'canceled']),
     })
   )
-  const { doctor_id, patient_id, date, status } = body
+  const { id, doctor_id, patient_id, date, status } = body
 
   // Insert todo for the current user
   await authorize(event, canCreateappointments)
@@ -22,7 +21,6 @@ export default eventHandler(async (event) => {
       doctor_id,
       patient_id,
       date,
-      status,
     })
     .returning()
     .get()

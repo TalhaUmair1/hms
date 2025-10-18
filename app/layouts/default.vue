@@ -54,6 +54,14 @@ const links = [[{
     open.value = false
   }
 },
+{
+  label: 'prescriptions',
+  icon: 'i-lucide-scroll',
+  to: '/prescriptions',
+  onSelect: () => {
+    open.value = false
+  }
+},
  {
   label: 'Settings',
   to: '/settings',
