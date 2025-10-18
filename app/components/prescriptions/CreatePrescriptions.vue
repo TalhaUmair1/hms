@@ -51,7 +51,7 @@ const initialState: Partial<Schema> = {
   notes: ''
 }
 
-const state = reactive<Partial<Schema>>(props.record || { ...initialState })
+const state = reactive<Partial<Schema>>(props.prescriptions || { ...initialState })
 const toast = useToast()
 
 // ✅ Submit handler

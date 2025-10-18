@@ -138,7 +138,7 @@ const columns: TableColumn<Prescription>[] = [
                 label: 'Details',
                 icon: 'i-lucide-copy',
                 onSelect: () =>
-                  navigateTo(`/prescriptions/detail/${row.original.id}`),
+                  navigateTo(`/prescriptions/details/${row.original.id}`),
               },
               {
                 label: 'Edit',

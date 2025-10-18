@@ -1,6 +1,6 @@
 import { zh, z } from 'h3-zod'
 import { eq } from 'drizzle-orm'
-import { canUpdatepresception } from '~~/shared/abilities/prescriptions'
+import { canUpdatePrescription } from '~~/shared/abilities/prescriptions'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
@@ -34,7 +34,7 @@ export default eventHandler(async (event) => {
     throw notFoundError
   }
 
-  authorize(event, canUpdatepresception, existingPrescription)
+  authorize(event, canUpdatePrescription, existingPrescription)
   // Update prescription
   const updatedPrescription = await db
     .update(tables.prescriptions)

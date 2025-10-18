@@ -5,22 +5,22 @@ import { defineAbility } from 'nuxt-authorization/utils'
  * - Doctor: can read all doctors, update only their own profile
  * - Patient: no access
  */
-export const canCreatepresception = defineAbility((user: any) => {
+export const canCreatePrescription = defineAbility((user: any) => {
   if (!user) return false
   return user.role === 'admin'
 })
 
-export const canReadpresception = defineAbility(
-  (user: any, presception?: any) => {
+export const canReadPrescription = defineAbility(
+  (user: any, prescription?: any) => {
     if (!user) return false
     if (user.role === 'admin') return true
-    // can read all presceptions (like directory)
+    // can read all prescriptions (like directory)
     return false
   }
 )
 
-export const canUpdatepresception = defineAbility(
-  (user: any, presception?: any) => {
+export const canUpdatePrescription = defineAbility(
+  (user: any, prescription?: any) => {
     if (!user) return false
 
     if (user.role === 'admin') return true
@@ -29,7 +29,7 @@ export const canUpdatepresception = defineAbility(
   }
 )
 
-export const canDeletepresception = defineAbility((user: any) => {
+export const canDeletePrescription = defineAbility((user: any) => {
   if (!user) return false
   return user.role === 'admin'
 })

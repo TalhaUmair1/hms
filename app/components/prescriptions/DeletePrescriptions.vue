@@ -18,12 +18,14 @@ const isOpen = computed({
 
 async function deletePrescriptions() {
   if (!props.id) return
+  console.log('Deleting prescription with id:', props.id)
   try {
-    await $fetch(`/api/prescriptions/${props.id}`, { method: 'DELETE' })
+    const response = await $fetch(`/api/prescriptions/${props.id}`, { method: 'DELETE' })
+    console.log('Deletion response:', response)
     emit('deleted')
     isOpen.value = false
   } catch (error) {
-    console.error('Error deleting Appoinment:', error)
+    console.error('Error deleting prescription:', error)
   }
 }
 </script>

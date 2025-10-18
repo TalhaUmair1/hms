@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
-import { canDeletepresception } from '~~/shared/abilities/prescriptions'
+import { canDeletePrescription } from '~~/shared/abilities/prescriptions'
 
 export default eventHandler(async (event) => {
   const db = await useDatabase()
@@ -8,21 +8,22 @@ export default eventHandler(async (event) => {
   const error = createError({
     statusCode: 404,
 
-    message: 'Appointment not found',
+    message: 'Prescription not found',
   })
 
   const { id } = await zh.useValidatedParams(event, {
     id: zh.intAsString,
   })
 
-  await authorize(event, canDeletepresception)
-  const apoinment = await db
-    .delete(tables.appointments)
-    .where(eq(tables.appointments.id, id))
+  await authorize(event, canDeletePrescription)
+  const prescription = await db
+    .delete(tables.prescriptions)
+    .where(eq(tables.prescriptions.id, id))
+    .returning()
 
-  if (!apoinment) {
+  if (prescription.length === 0) {
     throw error
   }
 
-  return apoinment
+  return prescription[0]
 })
