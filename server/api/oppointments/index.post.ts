@@ -9,6 +9,7 @@ export default eventHandler(async (event) => {
       doctor_id: z.number().int(),
       patient_id: z.number().int(),
       date: z.string(),
+      status: z.string(),
     })
   )
   const { id, doctor_id, patient_id, date, status } = body
@@ -21,6 +22,7 @@ export default eventHandler(async (event) => {
       doctor_id,
       patient_id,
       date,
+      status,
     })
     .returning()
     .get()

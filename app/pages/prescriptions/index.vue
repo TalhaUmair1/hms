@@ -1,6 +1,6 @@
 <template>
   <UDashboardPanel id="Prescriptions">
-    <!-- 🧭 Header -->
+  
     <template #header>
       <UDashboardNavbar title="Prescriptions">
         <template #leading>
@@ -32,7 +32,7 @@
 />
         </div>
 
-        <!-- 🧾 Table -->
+       
         <UTable
           :data="filteredPrescriptions"
           :columns="columns"
@@ -58,15 +58,11 @@ import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DeletePrescriptions from '~/components/prescriptions/DeletePrescriptions.vue'
 
-/* -------------------------
-  🧩 Register Nuxt UI components
-------------------------- */
+
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-/* -------------------------
-  🧠 Type Definition
-------------------------- */
+
 type Prescription = {
   id: number
   appointment_id: number
@@ -76,15 +72,11 @@ type Prescription = {
   notes: string
 }
 
-/* -------------------------
-  🗑 Delete Modal
-------------------------- */
+
 const isDeleteModalOpen = ref(false)
 const selectedPrescription = ref<Prescription | null>(null)
 
-/* -------------------------
-  📦 Fetch Prescriptions
-------------------------- */
+
 const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
   '/api/prescriptions',
   {
@@ -93,9 +85,7 @@ const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
   },
 )
 
-/* -------------------------
-  🔍 Search Functionality
-------------------------- */
+
 const search = ref('')
 
 const filteredPrescriptions = computed(() => {
@@ -108,9 +98,7 @@ const filteredPrescriptions = computed(() => {
   )
 })
 
-/* -------------------------
-  📋 Table Columns
-------------------------- */
+
 const columns: TableColumn<Prescription>[] = [
   { accessorKey: 'id', header: 'ID' },
   { accessorKey: 'appointment_id', header: 'Appointment ID' },

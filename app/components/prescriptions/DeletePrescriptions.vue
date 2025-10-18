@@ -23,7 +23,7 @@ async function deletePrescriptions() {
     emit('deleted')
     isOpen.value = false
   } catch (error) {
-    console.error('Error deleting prescriptions:', error)
+    console.error('Error deleting Appoinment:', error)
   }
 }
 </script>

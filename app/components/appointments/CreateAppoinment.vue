@@ -42,7 +42,11 @@ const initialState: Partial<Schema> = {
   id: undefined
 }
 
-const state = reactive<Partial<Schema>>(props.appointment || { ...initialState })
+const state = reactive<Partial<Schema>>({
+  ...initialState,
+  ...props.appointment,
+  status: props.appointment?.status || 'pending'
+})
 const toast = useToast()
 
 // ✅ Submit handler

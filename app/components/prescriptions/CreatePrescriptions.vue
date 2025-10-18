@@ -4,9 +4,10 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 import { reactive } from 'vue'
 import { useFetch } from '#app'
 import { useToast } from '#imports'
+import type { prescriptions } from '~~/server/database/schema'
 
 const props = defineProps({
-  record: { // renamed for clarity
+  prescriptions: { // renamed for clarity
     type: Object,
     default: null
   }
