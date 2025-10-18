@@ -98,5 +98,5 @@ export const pharmacy = sqliteTable('pharmacy', {
   name: text('name').notNull(),
   quantity: integer('quantity').notNull(),
   price: integer('price').notNull(),
-  expiryDate: text('expiry_date'), // ISO date string
+  expiryDate: text('expiry_date').notNull(), // ISO date string
 })

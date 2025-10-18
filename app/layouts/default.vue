@@ -70,6 +70,14 @@ const links = [[{
     open.value = false
   }
 },
+{
+  label: 'Pharmacy',
+  icon: 'i-lucide-pill',
+  to: '/pharmacy',
+  onSelect: () => {
+    open.value = false
+  }
+},
  {
   label: 'Settings',
   to: '/settings',

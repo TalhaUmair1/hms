@@ -9,7 +9,7 @@ export default eventHandler(async (event) => {
       name: z.string().min(1),
       quantity: z.number().min(0),
       price: z.number().min(0),
-      expiryDate: z.string().optional(),
+      expiryDate: z.string(),
     })
   )
   const { id, name, quantity, price, expiryDate } = body
