@@ -1,6 +1,6 @@
 <template>
   <UDashboardPanel id="pharmacy">
-    <!-- 🧭 Header -->
+  
     <template #header>
       <UDashboardNavbar title="Pharmacy">
         <template #leading>
@@ -72,7 +72,7 @@ type Pharmacy = {
   name: string
   quantity: number
   price: number
-  expiryDate: string | null
+  expiry_date: string | null
 }
 
 // 🗑 Delete modal state
@@ -84,6 +84,7 @@ const { data: pharmacy, status, refresh } = useFetch<Pharmacy[]>('/api/pharmacy'
   key: 'table-pharmacy',
   lazy: true,
 })
+console.log(pharmacy.value);
 
 // 🔍 Search
 const search = ref('')
@@ -110,8 +111,8 @@ const columns: TableColumn<Pharmacy>[] = [
     accessorKey: 'expiryDate',
     header: 'Expiry Date',
     cell: ({ row }) =>
-      row.original.expiryDate
-        ? new Date(row.original.expiryDate).toLocaleDateString()
+      row.original.expiry_date
+        ? new Date(row.original.expiry_date).toLocaleDateString()
         : 'N/A',
   },
   {

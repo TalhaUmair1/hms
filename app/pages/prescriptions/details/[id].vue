@@ -48,51 +48,64 @@ const { data: prescription, pending, error } =  useFetch(`/api/prescriptions/${p
     />
 
     <!-- Prescription Details -->
-   <UCard
+ <UCard
   v-else-if="prescription"
-  class="max-w-md w-full shadow-xl rounded-md border border-(neutral-200 dark:neutral-700) p-6"
+  class="max-w-md w-full shadow-xl rounded-2xl border border-secondary p-6"
 >
   <div class="text-center mb-6">
     <h2 class="text-3xl font-semibold text-primary">Prescription Details</h2>
     <p class="text-secondary mt-1">Below is the full prescription information</p>
   </div>
 
-  <div class="divide-y divide-(neutral-200 dark:neutral-700)">
+  <div class="divide-y divide-secondary/50">
     <div class="flex justify-between py-3">
-      <span class="font-medium text-neutral">ID:</span>
-      <span>{{ prescription.id }}</span>
+      <span class="font-medium text-secondary">ID:</span>
+      <span class="text-primary">{{ prescription.id }}</span>
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-neutral">Appointment ID:</span>
-      <span>{{ prescription.appointment_id }}</span>
+      <span class="font-medium text-secondary">Appointment ID:</span>
+      <span class="text-primary">{{ prescription.appointment_id }}</span>
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-neutral">Doctor ID:</span>
-      <span>{{ prescription.doctor_id }}</span>
+      <span class="font-medium text-secondary">Doctor ID:</span>
+      <span class="text-primary">{{ prescription.doctor_id }}</span>
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-neutral">Patient ID:</span>
-      <span>{{ prescription.patient_id }}</span>
+      <span class="font-medium text-secondary">Patient ID:</span>
+      <span class="text-primary">{{ prescription.patient_id }}</span>
     </div>
 
     <div class="py-3">
-      <span class="font-medium text-neutral block mb-1">Medicine List:</span>
+      <span class="font-medium text-secondary block mb-1">Medicine List:</span>
       <p class="text-primary whitespace-pre-line">
         {{ prescription.medicine_list }}
       </p>
     </div>
 
     <div class="py-3">
-      <span class="font-medium text-neutral block mb-1">Notes:</span>
-      <p class="text-secondary whitespace-pre-line">
+      <span class="font-medium text-secondary block mb-1">Notes:</span>
+      <p class="text-primary whitespace-pre-line">
         {{ prescription.notes || 'No additional notes' }}
       </p>
     </div>
   </div>
+
+  <div class="mt-2 flex justify-center">
+    <UButton
+      color="primary"
+      icon="i-heroicons-arrow-left"
+      variant="soft"
+      size="lg"
+      @click="navigateTo('/prescription')"
+    >
+      Back to Prescriptions
+    </UButton>
+  </div>
 </UCard>
+
 
   </div>
     </template>

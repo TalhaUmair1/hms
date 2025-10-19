@@ -57,7 +57,7 @@ const { data: doctor, pending, error } = useFetch(`/api/doctors/${doctorId}`)
         </UCard>
 
         <!-- Doctor Profile -->
-        <UCard v-else class="max-w-2xl mx-auto rounded-2xl overflow-hidden border-0">
+        <UCard v-else class="max-w-2xl mx-auto rounded-2xl overflow-hidden border border-secondary">
           <!-- Header -->
           <div class="p-8 text-center">
             <div class="flex justify-center mb-4">

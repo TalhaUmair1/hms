@@ -41,88 +41,63 @@ const { data: patient, pending, error } = useFetch(`/api/patients/${patientId}`)
         />
 
         <!-- Marriage-style Patient Card -->
-        <UCard
-          v-else
-          class="relative max-w-lg w-full p-10 text-center rounded-xl "
-        >
-          <!-- Decorative Borders -->
-          <div class="absolute top-4 left-4 w-10 h-10 border-t-4 border-l-4 border-primary rounded-tl-3xl"></div>
-          <div class="absolute top-4 right-4 w-10 h-10 border-t-4 border-r-4 border-primary rounded-tr-3xl"></div>
-          <div class="absolute bottom-4 left-4 w-10 h-10 border-b-4 border-l-4 border-primary rounded-bl-3xl"></div>
-          <div class="absolute bottom-4 right-4 w-10 h-10 border-b-4 border-r-4 border-primary rounded-br-3xl"></div>
+      <UCard
+  v-else
+  class="max-w-md w-full shadow-xl rounded-2xl border border-secondary p-6"
+>
+  <div class="text-center mb-6">
+    <h2 class="text-3xl font-semibold text-primary">Patient Details</h2>
+    <p class="text-secondary mt-1">A gentle overview of patient information</p>
+  </div>
 
-          <!-- Title -->
-          <div class="mb-8">
-            <h1 class="text-3xl font-bold text-primary-700 dark:text-primary-400">
-              Patient Details
-            </h1>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">
-              A gentle overview of patient information
-            </p>
-          </div>
+  <div class="divide-y divide-secondary/50">
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Patient ID:</span>
+      <span class="text-primary">{{ patient?.id }}</span>
+    </div>
 
-          <!-- Divider -->
-          <UDivider label="Information" class="my-6 text-primary" />
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">User ID:</span>
+      <span class="text-primary">{{ patient?.user_id }}</span>
+    </div>
 
-          <!-- Fields -->
-          <div class="space-y-5 text-left">
-            <div>
-              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Patient ID
-              </h3>
-              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {{ patient?.id }}
-              </p>
-            </div>
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Date of Birth:</span>
+      <span class="text-primary">{{ patient?.dob }}</span>
+    </div>
 
-            <div>
-              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                User ID
-              </h3>
-              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {{ patient?.user_id }}
-              </p>
-            </div>
+    <div class="flex justify-between items-center py-3">
+      <span class="font-medium text-secondary">Gender:</span>
+      <UBadge
+        :color="patient?.gender === 'Male' ? 'primary' : 'secondary'"
+        size="lg"
+        variant="soft"
+      >
+        {{ patient?.gender }}
+      </UBadge>
+    </div>
 
-            <div>
-              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Date of Birth
-              </h3>
-              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {{ patient?.dob }}
-              </p>
-            </div>
+    <div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Medical History:</span>
+      <span class="text-primary text-right whitespace-pre-line">
+        {{ patient?.medical_history }}
+      </span>
+    </div>
+  </div>
 
-            <div>
-              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Gender
-              </h3>
-              <UBadge
-                :color="patient?.gender === 'Male' ? 'blue' : 'pink'"
-                size="lg"
-                variant="soft"
-              >
-                {{ patient?.gender }}
-              </UBadge>
-            </div>
+  <div class="mt-8 flex justify-center">
+    <UButton
+      color="primary"
+      icon="i-heroicons-arrow-left"
+      variant="soft"
+      size="lg"
+      @click="navigateTo('/patients')"
+    >
+      Back to Patients
+    </UButton>
+  </div>
+</UCard>
 
-            <div>
-              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Medical History
-              </h3>
-              <p class="text-base leading-relaxed text-gray-800 dark:text-gray-200 whitespace-pre-line">
-                {{ patient?.medical_history }}
-              </p>
-            </div>
-          </div>
-
-          <UDivider class="my-8" />
-
-          <!-- Footer -->
-          <p class="text-sm text-gray-500 dark:text-gray-400 italic">
-            “Wishing for their healthy and joyful life ahead.”
-          </p>
-        </UCard>
       </div>
     </template>
   </UDashboardPanel>
