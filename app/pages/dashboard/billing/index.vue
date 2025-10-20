@@ -58,6 +58,12 @@ import { ref, computed, h, resolveComponent } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import DeleteBill from '~/components/billing/DeleteBill.vue'
 
+
+definePageMeta({
+   middleware: 'auth'
+})
+
+
 // 🔗 Nuxt UI components
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')

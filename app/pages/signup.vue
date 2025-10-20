@@ -59,16 +59,47 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
+    const {ready,fetch, loggedIn} = useUserSession()
+  onMounted(async () => {
+    if(loggedIn.value){
+      navigateTo('/dashboard')
+    }
+  })
+
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
     console.log('Submitted', payload)
  const { data, pending, error } = await useFetch('/api/auth/register', {
   method: 'POST',
   body: payload.data,
 })
+ if (error.value) {
+    toast.add({
+      title: 'Error',
+      description: error.value?.data?.message || 'Login failed',
+      icon: 'i-lucide-alert-circle',
+      color: 'error'
+    })
+  } else {
+    toast.add({
+      title: 'Success',
+      description: 'You are now logged in',
+      icon: 'i-lucide-check',
+      color: 'success'
+    })
+    // Redirect to dashboard or home page
+
+    await fetch()
+    if(ready.value){
+      navigateTo('/dashboard')
+    }
+
+  }
 }
 </script>
 
 <template>
+   <div class="min-h-screen flex flex-col justify-center items-center ">
+
     <div class="w-full max-w-md px-6 mt-5">
   <UAuthForm
     :fields="fields"
@@ -98,4 +129,5 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     </template>
   </UAuthForm>
     </div>
+   </div>
 </template>

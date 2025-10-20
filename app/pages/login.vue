@@ -56,18 +56,28 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
+  const {ready,fetch, loggedIn} = useUserSession()
+  onMounted(async () => {
+    if(loggedIn.value){
+      navigateTo('/dashboard')
+    }
+  })
+
+
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
     console.log('Submitted', payload)
- const { data, pending, error } = await useFetch('/api/auth/login', {
+ const results = await $fetch('/api/auth/login', {
   method: 'POST',
   body: payload.data,
 })
-  if (error.value) {
+console.log(results);
+
+  if (results?.error) {
     toast.add({
       title: 'Error',
-      description: error.value?.data?.message || 'Login failed',
+      description: results?.error.value?.data?.message || 'Login failed',
       icon: 'i-lucide-alert-circle',
-      color: 'danger'
+      color: 'error'
     })
   } else {
     toast.add({
@@ -77,12 +87,17 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       color: 'success'
     })
     // Redirect to dashboard or home page
-    navigateTo('/')
+    await fetch()
+    if(ready.value){
+
+      navigateTo('/dashboard') 
+    }
   }
 }
 </script>
 
 <template>
+ <div class="min-h-screen flex flex-col justify-center items-center ">
   <div class="flex flex-col justify-center items-center mt-5">
   <UAuthForm
     :fields="fields"
@@ -128,4 +143,5 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     </template>
   </UAuthForm>
   </div>
+ </div>
 </template>

@@ -2,7 +2,7 @@
 import { useUserSession } from '#imports';
 import type { DropdownMenuItem } from '@nuxt/ui'
 
-const {user} =  useUserSession()
+const {user,clear} =  useUserSession()
 console.log( 'login er',user.value);
 
 defineProps<{
@@ -25,8 +25,10 @@ const neutrals = ['slate', 'gray', 'zinc', 'neutral', 'stone']
 
 const items = computed<DropdownMenuItem[][]>(() => ([[{
   type: 'label',
-  // label: user.value.name,
-  // avatar: user.value.avatar
+  label: user.value?.name,
+  avatar:{
+    alt: user.value?.name,
+  }
 }], [{
   label: 'Profile',
   icon: 'i-lucide-user'
@@ -111,7 +113,11 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
 }],
  [ {
   label: 'Log out',
-  icon: 'i-lucide-log-out'
+  icon: 'i-lucide-log-out',
+  onSelect: () => {
+    clear()
+    navigateTo('/login')
+  }
 }]]))
 </script>
 
