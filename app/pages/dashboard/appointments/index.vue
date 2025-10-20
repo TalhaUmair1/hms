@@ -83,12 +83,12 @@ const columns: TableColumn<Appointment>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/appointments/detail/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/appointments/detail/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/appointments/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/appointments/${row.original.id}`),
               },
               {
                 label: 'Delete',
@@ -125,7 +125,7 @@ const columns: TableColumn<Appointment>[] = [
 
         <template #right>
           <ULink
-            to="/appointments/create"
+            to="/dashboard/appointments/create"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
             Create Appointment

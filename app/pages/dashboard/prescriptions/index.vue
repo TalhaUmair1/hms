@@ -10,7 +10,7 @@
         <template #right>
           <ULink
             class="bg-primary px-2 py-1 text-white rounded-sm"
-            to="/prescriptions/create"
+            to="/dashboard/prescriptions/create"
           >
             Create Prescription
           </ULink>
@@ -138,13 +138,13 @@ const columns: TableColumn<Prescription>[] = [
                 label: 'Details',
                 icon: 'i-lucide-copy',
                 onSelect: () =>
-                  navigateTo(`/prescriptions/details/${row.original.id}`),
+                  navigateTo(`/dashboard/prescriptions/details/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
                 onSelect: () =>
-                  navigateTo(`/prescriptions/${row.original.id}`),
+                  navigateTo(`/dashboard/prescriptions/${row.original.id}`),
               },
               {
                 label: 'Delete',

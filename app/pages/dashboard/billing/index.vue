@@ -9,7 +9,7 @@
 
         <template #right>
           <ULink
-            to="/billing/create"
+            to="/dashboard/billing/create"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
             Create Bill
@@ -144,12 +144,12 @@ const columns: TableColumn<Bill>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/billing/details/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/billing/details/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/billing/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/billing/${row.original.id}`),
               },
               {
                 label: 'Delete',

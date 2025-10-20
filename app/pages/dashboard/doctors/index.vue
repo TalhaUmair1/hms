@@ -98,14 +98,14 @@ const columns: TableColumn<Doctor>[] = [
                 label: 'Details',
                 icon: 'i-lucide-copy',
                 onSelect() {
-                  navigateTo(`/doctors/details/${row.original.id}`)
+                  navigateTo(`/dashboard/doctors/details/${row.original.id}`)
                 },
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
                 onSelect() {
-                  navigateTo(`/doctors/${row.original.id}`)
+                  navigateTo(`/dashboard/doctors/${row.original.id}`)
                 },
               },
               {
@@ -145,7 +145,7 @@ const columns: TableColumn<Doctor>[] = [
         </template>
       </UDashboardToolbar>
         <template #right>
-         <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/doctors/create">
+         <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/dashboard/doctors/create">
             Create Doctor
           </ULink>
         </template>

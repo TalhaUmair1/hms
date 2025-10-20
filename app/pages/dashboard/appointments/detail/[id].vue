@@ -89,7 +89,7 @@ const { data: appointment, pending, error } = await useFetch(`/api/oppointments/
       icon="i-heroicons-arrow-left"
       variant="soft"
       size="lg"
-      @click="navigateTo('/appointments')"
+      @click="navigateTo('/dashboard/appointments')"
     >
       Back to Appointments
     </UButton>

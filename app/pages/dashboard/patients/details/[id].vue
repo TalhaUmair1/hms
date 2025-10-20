@@ -91,7 +91,7 @@ const { data: patient, pending, error } = useFetch(`/api/patients/${patientId}`)
       icon="i-heroicons-arrow-left"
       variant="soft"
       size="lg"
-      @click="navigateTo('/patients')"
+      @click="navigateTo('/dashboard/patients')"
     >
       Back to Patients
     </UButton>

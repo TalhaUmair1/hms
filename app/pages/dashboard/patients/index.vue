@@ -73,12 +73,12 @@ const columns: TableColumn<Patient>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/patients/details/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/patients/details/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/patients/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/patients/${row.original.id}`),
               },
               {
                 label: 'Delete',
@@ -115,7 +115,7 @@ const columns: TableColumn<Patient>[] = [
 
         <template #right>
           <ULink
-            to="/patients/createPatients"
+            to="/dashboard/patients/createPatients"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
             Create Patient

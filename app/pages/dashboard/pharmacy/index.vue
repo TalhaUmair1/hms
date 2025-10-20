@@ -13,7 +13,7 @@
 
         <template #right>
           <ULink
-            to="/pharmacy/create"
+            to="/dashboard/pharmacy/create"
             class="bg-primary px-3 py-1.5 text-white rounded-md"
           >
             Create Pharmacy
@@ -128,12 +128,12 @@ const columns: TableColumn<Pharmacy>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/pharmacy/details/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/pharmacy/details/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/pharmacy/${row.original.id}`),
+                onSelect: () => navigateTo(`/dashboard/pharmacy/${row.original.id}`),
               },
               {
                 label: 'Delete',

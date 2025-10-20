@@ -98,7 +98,7 @@ const { data: bill, pending, error } = await useFetch(`/api/billing/${billId}`)
       icon="i-heroicons-arrow-left"
       variant="soft"
       size="lg"
-      @click="navigateTo('/billing')"
+      @click="navigateTo('/dashboard/billing')"
     >
       Back to Billing
     </UButton>

@@ -93,7 +93,7 @@ function getStatusColor(status: string) {
       icon="i-heroicons-arrow-left"
       variant="soft"
       size="lg"
-      @click="navigateTo('/pharmacy')"
+      @click="navigateTo('/dashboard/pharmacy')"
     >
       Back to Pharmacy
     </UButton>

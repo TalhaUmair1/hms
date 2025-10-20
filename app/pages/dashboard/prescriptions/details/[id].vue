@@ -99,7 +99,7 @@ const { data: prescription, pending, error } =  useFetch(`/api/prescriptions/${p
       icon="i-heroicons-arrow-left"
       variant="soft"
       size="lg"
-      @click="navigateTo('/prescription')"
+      @click="navigateTo('/dashboard/prescription')"
     >
       Back to Prescriptions
     </UButton>
