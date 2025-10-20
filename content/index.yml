@@ -1,0 +1,186 @@
+seo:
+  title: Hospital Management System | Streamline Your Healthcare Operations
+  description: Efficiently manage patient records, appointments, billing, and more with our comprehensive Hospital Management System. Improve patient care and optimize hospital workflows.
+title: The Modern Hospital Management System for Enhanced Patient Care
+description: Our all-in-one hospital management platform helps you streamline operations, reduce administrative tasks, and focus on what matters most - providing excellent patient care.
+title: The Intelligent HMS for Next-Generation Patient Care
+description: Our unified hospital management platform empowers you to automate workflows, eliminate administrative overhead, and dedicate more time to what truly matters—delivering exceptional patient outcomes.
+hero:
+  links:
+    - label: Request a Demo
+      icon: i-lucide-arrow-right
+      trailing: true
+      color: primary
+      to: /signup
+      size: xl
+    - label: Sign Up
+      icon: i-lucide-fingerprint
+      size: xl
+      color: neutral
+      variant: outline
+      to: /dashboard
+section:
+  title: '[Streamline]{.text-primary} Your Hospital Operations'
+  description: From patient registration to billing and reporting, our HMS software simplifies every aspect of hospital administration.
+  title: '[Digitize]{.text-primary} Your Entire Hospital Workflow'
+  description: From patient intake to financial reporting, our HMS platform simplifies and automates every facet of hospital administration.
+  images:
+    mobile: '/images/Adobe Express - file.png'
+    desktop: '/images/Adobe Express - file.png'
+  features:
+    - title: Unified Patient Records
+      description: Access comprehensive patient history, treatment plans, and medical records in one secure, centralized location.
+    - title: 360° Patient View
+      description: Instantly access complete patient histories, treatment protocols, and medical data in a single, secure, and centralized hub.
+      class: border-l border-primary pl-4
+    - title: Simplified Appointment Scheduling
+      description: Manage doctor schedules, book patient appointments, and send automated reminders to reduce no-shows.
+    - title: Intelligent Scheduling
+      description: Optimize doctor availability, streamline patient bookings, and send automated reminders to drastically reduce no-shows.
+      class: border-l border-default pt-4 pl-4
+    - title: Automated Billing & Invoicing
+      description: Generate accurate bills, manage insurance claims, and track payments with our integrated billing module.
+    - title: Seamless Revenue Cycle Management
+      description: Generate precise invoices, streamline insurance claims, and monitor payments with our powerful, integrated billing engine.
+      class: border-l border-default pt-4 pl-4
+features:
+  title: Everything you need to run a [successful]{.text-primary} hospital
+  description: Our feature-rich HMS is designed to meet the diverse needs of modern healthcare facilities.
+  features:
+    - title: Electronic Health Records (EHR)
+      description: Securely manage all patient data, from demographics to clinical notes, with our compliant EHR system.
+      icon: i-lucide-file-text
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Appointment Management
+      description: Easily schedule, reschedule, and track patient appointments across multiple departments and doctors.
+      icon: i-lucide-calendar-days
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Billing and Financials
+      description: Automate billing processes, manage invoices, and track financial performance with our robust billing module.
+      icon: i-lucide-dollar-sign
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Prescription Management
+      description: Create and manage electronic prescriptions, reducing errors and improving patient safety.
+      icon: i-lucide-pilcrow
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Laboratory Management
+      description: Integrate with lab equipment, manage test orders, and deliver results efficiently.
+      icon: i-lucide-beaker
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Reporting & Analytics
+      description: Gain valuable insights into your hospital's performance with our advanced reporting and analytics tools.
+      icon: i-lucide-chart-line
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+steps:
+  title: Get started in [3 simple steps]{.text-primary}
+  description: Transitioning to our Hospital Management System is a seamless process.
+onboarding:
+  title: Your [Seamless]{.text-primary} Onboarding Journey
+  description: Transitioning to our Hospital Management System is a smooth and guided experience.
+  items:
+    - title: 1. Consultation & Demo
+      description: Contact us for a free consultation and a personalized demo to see how our HMS can fit your hospital's needs.
+    - title: 1. Discovery & Strategy Session
+      description: We start with a complimentary consultation and a tailored demo to align our HMS with your hospital's unique goals.
+      image:
+        light: '/images/light/connect.svg'
+        dark: '/images/dark/connect.svg'
+    - title: 2. System Configuration & Training
+      description: We'll set up the system based on your specific requirements and provide comprehensive training for your staff.
+    - title: 2. Implementation & Empowerment
+      description: Our experts configure the system to your exact specifications and deliver in-depth training to empower your team.
+      image:
+        light: '/images/light/optimize.svg'
+        dark: '/images/dark/optimize.svg'
+    - title: 3. Go Live & Support
+      description: Go live with confidence. Our dedicated support team is always here to help you get the most out of our system.
+    - title: 3. Launch & Partnership
+      description: Go live with total confidence. Our dedicated success team becomes your long-term partner, ensuring you maximize the system's value.
+      image:
+        light: '/images/light/track.svg'
+        dark: '/images/dark/track.svg'
+pricing:
+  title: Meet Our Qualified [Doctors]{.text-primary}
+  description: Our expert medical team brings years of experience and excellence across multiple specialties to ensure the best patient care.
+  plans:
+    - title: Dr. Ayesha Khan
+      description: Senior Cardiologist with 12+ years of experience in advanced cardiac treatments.
+      price: MBBS, FCPS (Cardiology)
+      billing_period: 12 Years Experience
+      features:
+        - Expertise in complex cardiac procedures
+        - Research contributor in cardiovascular medicine
+        - Member of Pakistan Cardiology Society
+      button:
+        label: View Profile
+        color: neutral
+        variant: outline
+        to: '/doctors/ayesha-khan'
+
+    - title: Dr. Hassan Malik
+      description: Renowned Orthopedic Surgeon specializing in trauma and joint replacement surgeries.
+      price: MBBS, MS (Orthopedics)
+      billing_period: 10 Years Experience
+      highlight: true
+      features:
+        - Expert in advanced orthopedic surgery
+        - Certified in sports injury management
+        - Member of AO Trauma International
+      button:
+        label: View Profile
+        to: '/doctors/hassan-malik'
+
+    - title: Dr. Sara Ahmed
+      description: Pediatric specialist focused on child wellness, nutrition, and growth.
+      price: MBBS, DCH (Pediatrics)
+      billing_period: 9 Years Experience
+      features:
+        - Certified in neonatal care
+        - Focused on child immunization programs
+        - Loved and trusted by parents
+      button:
+        label: View Profile
+        variant: subtle
+        to: '/doctors/sara-ahmed'
+
+testimonials:
+  title: Trusted by [leading]{.text-primary} healthcare providers
+  description: See how our Hospital Management System has transformed operations for hospitals and clinics worldwide.
+  items:
+    - quote: This HMS has revolutionized how we manage our patient data. It's intuitive, secure, and has significantly reduced our administrative workload.
+      user:
+        name: 'Dr. Jane Doe'
+        description: 'Chief Medical Officer, City General Hospital'
+        avatar:
+          src: 'https://i.pravatar.cc/150?u=a042581f4e29026024d'
+    - quote: The appointment scheduling and automated reminders have been a game-changer for us. Our no-show rate has dropped by 30% since we started using the system.
+      user:
+        name: 'John Smith'
+        description: 'Hospital Administrator, County Medical Center'
+        avatar:
+          src: 'https://i.pravatar.cc/150?u=a042581f4e29026704d'
+    - quote: The billing and financial reporting features are incredibly powerful. We now have a clear view of our hospital's financial health at all times.
+      user:
+        name: 'Dr. Emily White'
+        description: 'Head of Surgery, St. Luke’s Hospital'
+        avatar:
+          src: 'https://i.pravatar.cc/150?u=a04258114e29026702d'
+cta:
+  title: Ready to Transform Your Hospital's Efficiency?
+  description: Schedule a personalized demo to see how our Hospital Management System can help you deliver better patient care and streamline your operations.
+  title: Ready to Elevate Your Hospital's Performance?
+  description: Schedule a personalized demo today and discover how our intelligent HMS can revolutionize your patient care and operational efficiency.
+  links:
+    - label: Request a Demo
+      to: '/signup'
+      trailingIcon: i-lucide-arrow-right
+    - label: Contact Sales
+      to: '/contact'
+      variant: subtle
+      icon: i-lucide-phone

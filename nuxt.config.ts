@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     'nuxt-authorization',
     '@vueuse/nuxt',
+    '@nuxt/content'
   ],
   css: ['~/assets/css/main.css'],
   nitro: {
