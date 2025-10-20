@@ -7,18 +7,18 @@ title: The Intelligent HMS for Next-Generation Patient Care
 description: Our unified hospital management platform empowers you to automate workflows, eliminate administrative overhead, and dedicate more time to what truly matters—delivering exceptional patient outcomes.
 hero:
   links:
-    - label: Request a Demo
+    - label: Sign Up
       icon: i-lucide-arrow-right
       trailing: true
       color: primary
       to: /signup
       size: xl
-    - label: Sign Up
+    - label: Login
       icon: i-lucide-fingerprint
       size: xl
       color: neutral
       variant: outline
-      to: /dashboard
+      to: /login
 section:
   title: '[Streamline]{.text-primary} Your Hospital Operations'
   description: From patient registration to billing and reporting, our HMS software simplifies every aspect of hospital administration.

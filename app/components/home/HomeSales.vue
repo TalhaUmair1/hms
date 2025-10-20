@@ -1,112 +1,128 @@
 <script setup lang="ts">
-import { h, resolveComponent } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
-import type { Period, Range, Sale } from '~/types'
+import { navigateTo, useFetch } from '#app'
+import { ref, computed, h, resolveComponent } from 'vue'
 
-const props = defineProps<{
-  period: Period
-  range: Range
-}>()
 
-const UBadge = resolveComponent('UBadge')
+const UAvatar = resolveComponent('UAvatar')
+const UButton = resolveComponent('UButton')
+const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-const sampleEmails = [
-  'james.anderson@example.com',
-  'mia.white@example.com',
-  'william.brown@example.com',
-  'emma.davis@example.com',
-  'ethan.harris@example.com'
-]
+type Doctor = {
+  id: number
+  name: string
+  email: string
+  specialization: string
+  availability: string
+  fees: number
+  avatar?: { alt: string }
+}
 
-const { data } = await useAsyncData('sales', async () => {
-  const sales: Sale[] = []
-  const currentDate = new Date()
 
-  for (let i = 0; i < 5; i++) {
-    const hoursAgo = randomInt(0, 48)
-    const date = new Date(currentDate.getTime() - hoursAgo * 3600000)
 
-    sales.push({
-      id: (4600 - i).toString(),
-      date: date.toISOString(),
-      status: randomFrom(['paid', 'failed', 'refunded']),
-      email: randomFrom(sampleEmails),
-      amount: randomInt(100, 1000)
-    })
-  }
+// fetch patients
+const { data: patients, status, refresh } = await useFetch<Doctor[]>('/api/patients', {
+  key: 'table-patients',
+  transform: (data) => {
+    return (
+      data?.map((doc) => ({
+        ...doc,
+        avatar: { alt: `${doc.name} avatar` }
+      })) || []
+    )
+  },
 
-  return sales.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}, {
-  watch: [() => props.period, () => props.range],
-  default: () => []
+  lazy: true
+})
+console.log(patients.value);
+
+// search state
+const search = ref('')
+
+// computed filtered data
+const filteredPatients = computed(() => {
+  if (!search.value) return patients.value || []
+  return (patients.value || []).filter((doc) =>
+    doc.name.toLowerCase().includes(search.value.toLowerCase())
+  )
 })
 
-const columns: TableColumn<Sale>[] = [
+const columns: TableColumn<Doctor>[] = [
+ 
   {
-    accessorKey: 'id',
-    header: 'ID',
-    cell: ({ row }) => `#${row.getValue('id')}`
-  },
-  {
-    accessorKey: 'date',
-    header: 'Date',
+    accessorKey: 'name',
+    header: 'Name',
     cell: ({ row }) => {
-      return new Date(row.getValue('date')).toLocaleString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      })
+      return h('div', { class: 'flex items-center gap-3' }, [
+        h(UAvatar, {
+          ...row.original.avatar,
+          size: 'lg'
+        }),
+        h('div', undefined, [
+          h('p', { class: 'font-medium text-highlighted' }, row.original.name)
+        ])
+      ])
     }
   },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const color = {
-        paid: 'success' as const,
-        failed: 'error' as const,
-        refunded: 'neutral' as const
-      }[row.getValue('status') as string]
 
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        row.getValue('status')
+  {
+    accessorKey: 'dob',
+    header: 'Date of Birth'
+  },
+  {
+    accessorKey: 'gender',
+    header: 'Gender'
+  },
+  {
+    accessorKey: 'medical_history',
+    header: 'Madical History'
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) =>
+      h('div', { class: 'flex items-center gap-3' },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: 'end'
+            },
+            items: [
+              {
+                label: 'Details',
+                icon: 'i-lucide-copy',
+                onSelect() {
+                  navigateTo(`/patients/details/${row.original.id}`)
+                },
+              },
+            ]
+          },
+          () =>
+            h(UButton, {
+              icon: 'i-lucide-ellipsis-vertical',
+              color: 'neutral',
+              variant: 'ghost',
+              class: 'ml-auto'
+            })
+        )
       )
-    }
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email'
-  },
-  {
-    accessorKey: 'amount',
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
-    cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue('amount'))
-
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'EUR'
-      }).format(amount)
-
-      return h('div', { class: 'text-right font-medium' }, formatted)
-    }
   }
 ]
 </script>
-
 <template>
-  <UTable
-    :data="data"
-    :columns="columns"
-    class="shrink-0"
-    :ui="{
-      base: 'table-fixed border-separate border-spacing-0',
-      thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
-      tbody: '[&>tr]:last:[&>td]:border-b-0',
-      th: 'first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
-      td: 'border-b border-default'
-    }"
-  />
+ <UContainer class="flex flex-col">
+
+      <!-- Table -->
+      <UTable
+        :data="filteredPatients"
+        :columns="columns"
+        :loading="status === 'pending'"
+        class="w-full"
+      />
+     </UContainer>
 </template>
+
+
+
+

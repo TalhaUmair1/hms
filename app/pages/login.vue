@@ -3,7 +3,7 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'public'
 })
 
 useSeoMeta({
@@ -106,7 +106,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   >
     <template #password-hint>
       <ULink
-        to="/"
+        to="/dashboard"
         class="text-primary font-medium"
         tabindex="-1"
       >Forgot password?</ULink>

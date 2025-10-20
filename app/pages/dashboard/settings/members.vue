@@ -11,9 +11,7 @@ const filteredMembers = computed(() => {
     return member.name.search(new RegExp(q.value, 'i')) !== -1 || member.username.search(new RegExp(q.value, 'i')) !== -1
   })
 })
-definePageMeta({
-  middleware: 'auth'
-})
+
 </script>
 
 <template>
