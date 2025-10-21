@@ -30,7 +30,7 @@ const { data: patients, status, refresh } = await useFetch<Patient[]>('/api/pati
     })) || [],
   lazy: true,
 })
-console.log(patients.value);
+console.log('patients with name',patients.value);
 
 // 🔍 Search state
 const search = ref('')
@@ -39,7 +39,7 @@ const search = ref('')
 const filteredPatients = computed(() => {
   if (!search.value) return patients.value || []
   return (patients.value || []).filter((p) =>
-    p.id.toString().includes(search.value.trim())
+    p.name.toString().includes(search.value.trim())
   )
 })
 
@@ -130,10 +130,10 @@ const columns: TableColumn<Patient>[] = [
         <div class="m-6">
           <UInput
             v-model="search"
-            placeholder="Filter by ID"
+            placeholder="Filter by Name"
             class="max-w-xs"
             icon="i-heroicons-magnifying-glass-20-solid"
-            type="number"
+            type="text"
           />
         </div>
 

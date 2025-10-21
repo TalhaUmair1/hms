@@ -69,13 +69,13 @@ const { data: prescription, pending, error } =  useFetch(`/api/prescriptions/${p
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Doctor ID:</span>
-      <span class="text-primary">{{ prescription.doctor_id }}</span>
+      <span class="font-medium text-secondary">Doctor Name:</span>
+      <span class="text-primary">{{ prescription.doctor_name }}</span>
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Patient ID:</span>
-      <span class="text-primary">{{ prescription.patient_id }}</span>
+      <span class="font-medium text-secondary">Patient Name:</span>
+      <span class="text-primary">{{ prescription.patient_name }}</span>
     </div>
 
     <div class="py-3">

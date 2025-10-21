@@ -63,8 +63,8 @@ const { data: bill, pending, error } = await useFetch(`/api/billing/${billId}`)
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Patient ID:</span>
-      <span class="text-primary">{{ bill.patient_id }}</span>
+      <span class="font-medium text-secondary">Patient Name:</span>
+      <span class="text-primary">{{ bill.patient_name }}</span>
     </div>
 
     <div class="flex justify-between py-3">

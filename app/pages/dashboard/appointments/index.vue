@@ -17,6 +17,8 @@ type Appointment = {
   doctor_id: number
   date: string
   status: 'pending' | 'confirmed' | 'completed' | 'canceled'
+  patient_name: string
+  doctor_name: string
 }
 
 // 🗑 Modal
@@ -40,15 +42,16 @@ const search = ref('')
 const filteredAppointments = computed(() => {
   if (!search.value) return appointments.value || []
   return (appointments.value || []).filter((a) =>
-    a.id.toString().includes(search.value.trim())
+    a.patient_name?.toLowerCase().includes(search.value.toLowerCase()) ||
+    a.doctor_name?.toLowerCase().includes(search.value.toLowerCase())
   )
 })
 
 // 🧩 Table columns
 const columns: TableColumn<Appointment>[] = [
   { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'patient_id', header: 'Patient ID' },
-  { accessorKey: 'doctor_id', header: 'Doctor ID' },
+  { accessorKey: 'patient_name', header: 'Patient Name' },
+  { accessorKey: 'doctor_name', header: 'Doctor Name' },
   { accessorKey: 'date', header: 'Date' },
   {
     accessorKey: 'status',
@@ -140,10 +143,10 @@ const columns: TableColumn<Appointment>[] = [
         <div class="m-6">
           <UInput
             v-model="search"
-            placeholder="Filter by ID"
+            placeholder="Filter by name..."
             class="max-w-xs"
             icon="i-heroicons-magnifying-glass-20-solid"
-            type="number"
+            type="text"
           />
         </div>
 

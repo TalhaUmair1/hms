@@ -61,13 +61,13 @@ const { data: appointment, pending, error } = await useFetch(`/api/oppointments/
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Patient ID:</span>
-      <span>{{ appointment.patient_id }}</span>
+      <span class="font-medium text-secondary">Patient Name:</span>
+      <span>{{ appointment.patient_name }}</span>
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Doctor ID:</span>
-      <span>{{ appointment.doctor_id }}</span>
+      <span class="font-medium text-secondary">Doctor Name:</span>
+      <span>{{ appointment.doctor_name }}</span>
     </div>
 
     <div class="flex justify-between py-3">

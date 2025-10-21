@@ -84,6 +84,8 @@ const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
     lazy: true,
   },
 )
+console.log('presdfsa',prescriptions.value);
+
 
 
 const search = ref('')
@@ -102,8 +104,8 @@ const filteredPrescriptions = computed(() => {
 const columns: TableColumn<Prescription>[] = [
   { accessorKey: 'id', header: 'ID' },
   { accessorKey: 'appointment_id', header: 'Appointment ID' },
-  { accessorKey: 'doctor_id', header: 'Doctor ID' },
-  { accessorKey: 'patient_id', header: 'Patient ID' },
+{ accessorKey: 'patient_name', header: 'Patient Name' },
+  { accessorKey: 'doctor_name', header: 'Doctor Name' },
   {
     accessorKey: 'medicine_list',
     header: 'Medicine List',

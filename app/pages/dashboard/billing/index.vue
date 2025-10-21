@@ -105,7 +105,7 @@ const filteredBills = computed(() => {
 const columns: TableColumn<Bill>[] = [
   { accessorKey: 'id', header: 'ID' },
   { accessorKey: 'appointment_id', header: 'Appointment ID' },
-  { accessorKey: 'patient_id', header: 'Patient ID' },
+  { accessorKey: 'patient_name', header: 'Patient Name' },
   {
     accessorKey: 'amount',
     header: 'Amount',
