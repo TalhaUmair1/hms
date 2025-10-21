@@ -19,6 +19,8 @@ export default eventHandler(async (event) => {
       patient_id: tables.prescriptions.patient_id,
       medicine_list: tables.prescriptions.medicine_list,
       notes: tables.prescriptions.notes,
+      date: tables.appointments.date,
+      status: tables.appointments.status,
 
       // ✅ use explicit SQL aliases with the same alias name
       patient_name: sql<string>`patient_user.name as patient_name`,
@@ -39,6 +41,10 @@ export default eventHandler(async (event) => {
     )
     // join → patient_user (via patients.user_id)
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
+    .leftJoin(
+      tables.appointments,
+      eq(tables.prescriptions.appointment_id, tables.appointments.id)
+    )
     .all()
 
   return prescriptions

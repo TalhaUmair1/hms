@@ -7,6 +7,8 @@ const prescriptionId = route.params.id
 
 // ✅ Fetch prescription details
 const { data: prescription, pending, error } =  useFetch(`/api/prescriptions/${prescriptionId}`)
+console.log( 'this is prescription',prescription);
+
 </script>
 
 
@@ -64,8 +66,13 @@ const { data: prescription, pending, error } =  useFetch(`/api/prescriptions/${p
     </div>
 
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Appointment ID:</span>
-      <span class="text-primary">{{ prescription.appointment_id }}</span>
+      <span class="font-medium text-secondary">Appointment Date:</span>
+      <span class="text-primary">{{ prescription.date }}</span>
+    </div>
+
+<div class="flex justify-between py-3">
+      <span class="font-medium text-secondary">Appointment Status:</span>
+      <span class="text-primary">{{ prescription.status }}</span>
     </div>
 
     <div class="flex justify-between py-3">

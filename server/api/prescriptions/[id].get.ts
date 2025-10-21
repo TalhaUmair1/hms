@@ -26,6 +26,8 @@ export default eventHandler(async (event) => {
       patient_id: tables.prescriptions.patient_id,
       medicine_list: tables.prescriptions.medicine_list,
       notes: tables.prescriptions.notes,
+      date: tables.appointments.date,
+      status: tables.appointments.status,
       patient_name: sql<string>`patient_user.name as patient_name`,
       doctor_name: sql<string>`doctor_user.name as doctor_name`,
     })
@@ -43,6 +45,10 @@ export default eventHandler(async (event) => {
     )
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
     .where(eq(tables.prescriptions.id, id))
+    .leftJoin(
+      tables.appointments,
+      eq(tables.prescriptions.appointment_id, tables.appointments.id)
+    )
     .get()
 
   if (!prescription) {

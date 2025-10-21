@@ -52,13 +52,8 @@ const { data: patient, pending, error } = useFetch(`/api/patients/${patientId}`)
 
   <div class="divide-y divide-secondary/50">
     <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">Patient ID:</span>
-      <span class="text-primary">{{ patient?.id }}</span>
-    </div>
-
-    <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">User ID:</span>
-      <span class="text-primary">{{ patient?.user_id }}</span>
+      <span class="font-medium text-secondary">Patient Name:</span>
+      <span class="text-primary">{{ patient?.patient_name }}</span>
     </div>
 
     <div class="flex justify-between py-3">

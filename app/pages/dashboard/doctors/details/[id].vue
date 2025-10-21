@@ -105,18 +105,6 @@ const { data: doctor, pending, error } = useFetch(`/api/doctors/${doctorId}`)
                   {{ doctor?.availability }}
                 </UBadge>
               </div>
-
-              <!-- Doctor ID Card -->
-              <div class="flex items-center justify-between p-4 my-4 bg-secondary/10 rounded-lg border border-secondary/30">
-                <div class="flex items-center gap-3">
-                  <UIcon name="i-heroicons-identification" class="w-6 h-6 text-secondary" />
-                  <div>
-                    <p class="font-semibold">Doctor ID</p>
-                    <p class="text-sm opacity-80">Unique identifier</p>
-                  </div>
-                </div>
-                <span class="text-lg font-mono font-semibold">#{{ doctor?.id }}</span>
-              </div>
             </UStack>
           </div>
         </UCard>

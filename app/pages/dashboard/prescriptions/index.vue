@@ -1,6 +1,5 @@
 <template>
   <UDashboardPanel id="Prescriptions">
-  
     <template #header>
       <UDashboardNavbar title="Prescriptions">
         <template #leading>
@@ -23,16 +22,16 @@
       <UContainer class="flex flex-col">
         <!-- 🔍 Search -->
         <div class="m-6">
-      <UInput
-  v-model="search"
-  placeholder="Search by medicine name"
-  class="max-w-xs"
-  icon="i-heroicons-magnifying-glass-20-solid"
-  type="text"
-/>
+          <UInput
+            v-model="search"
+            placeholder="Search by medicine name"
+            class="max-w-xs"
+            icon="i-heroicons-magnifying-glass-20-solid"
+            type="text"
+          />
         </div>
 
-       
+        <!-- 📋 Table -->
         <UTable
           :data="filteredPrescriptions"
           :columns="columns"
@@ -58,24 +57,24 @@ import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DeletePrescriptions from '~/components/prescriptions/DeletePrescriptions.vue'
 
-
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
-
+const UBadge = resolveComponent('UBadge')
 
 type Prescription = {
   id: number
   appointment_id: number
   doctor_id: number
-  patient_id: number
+  date: string
+  status: string
   medicine_list: string
   notes: string
+  patient_name?: string
+  doctor_name?: string
 }
-
 
 const isDeleteModalOpen = ref(false)
 const selectedPrescription = ref<Prescription | null>(null)
-
 
 const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
   '/api/prescriptions',
@@ -84,9 +83,6 @@ const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
     lazy: true,
   },
 )
-console.log('presdfsa',prescriptions.value);
-
-
 
 const search = ref('')
 
@@ -100,12 +96,49 @@ const filteredPrescriptions = computed(() => {
   )
 })
 
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'completed':
+      return 'primary'
+    case 'cancelled':
+      return 'error'
+    case 'pending':
+      return 'orange'
+    default:
+      return 'gray'
+  }
+}
 
 const columns: TableColumn<Prescription>[] = [
   { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'appointment_id', header: 'Appointment ID' },
-{ accessorKey: 'patient_name', header: 'Patient Name' },
+
+
+  {
+    accessorKey: 'date',
+    header: 'Appointment',
+    cell: ({ row }) => {
+      const item = row.original
+      return h('div', { class: 'flex items-center gap-3' }, [
+        h('div', undefined, [
+          h('p', { class: 'font-medium text-highlighted' }, item.date || '—'),
+          h(
+            UBadge,
+            {
+              label: item.status,
+              color: getStatusColor(item.status),
+              variant: 'subtle',
+              class: 'mt-1 w-fit text-xs capitalize',
+            },
+            {},
+          ),
+        ]),
+      ])
+    },
+  },
+
+  { accessorKey: 'patient_name', header: 'Patient Name' },
   { accessorKey: 'doctor_name', header: 'Doctor Name' },
+
   {
     accessorKey: 'medicine_list',
     header: 'Medicine List',
@@ -126,6 +159,8 @@ const columns: TableColumn<Prescription>[] = [
         row.original.notes || '-',
       ),
   },
+
+  
   {
     id: 'actions',
     header: 'Actions',

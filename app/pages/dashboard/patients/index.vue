@@ -10,7 +10,7 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 type Patient = {
   id: number
-  name: string
+  patient_name: string
   dob: string
   gender: string
   medical_history: string
@@ -30,7 +30,7 @@ const { data: patients, status, refresh } = await useFetch<Patient[]>('/api/pati
     })) || [],
   lazy: true,
 })
-console.log('patients with name',patients.value);
+console.log('patients with namerrr',patients.value);
 
 // 🔍 Search state
 const search = ref('')
@@ -47,13 +47,13 @@ const filteredPatients = computed(() => {
 const columns: TableColumn<Patient>[] = [
   { accessorKey: 'id', header: 'ID' },
   {
-    accessorKey: 'name',
+    accessorKey: 'patient_name',
     header: 'Name',
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-3' }, [
         h(UAvatar, { ...row.original.avatar, size: 'lg' }),
         h('div', undefined, [
-          h('p', { class: 'font-medium text-highlighted' }, row.original.name),
+          h('p', { class: 'font-medium text-highlighted' }, row.original.patient_name),
         ]),
       ]),
   },
