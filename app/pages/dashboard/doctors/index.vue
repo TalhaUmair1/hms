@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DoctorsDeleteModal from '~/components/doctors/DeleteModal.vue'
+import { canCreateDoctor } from '#shared/abilities/doctors'
 
 const UAvatar = resolveComponent('UAvatar')
 const UButton = resolveComponent('UButton')
@@ -145,10 +146,17 @@ const columns: TableColumn<Doctor>[] = [
         </template>
       </UDashboardToolbar>
         <template #right>
-         <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/dashboard/doctors/create">
+
+            <Can
+    :ability="canCreateDoctor"
+    
+  >
+             <ULink class="bg-primary px-2 py-1 text-white rounded-sm" to="/dashboard/doctors/create">
             Create Doctor
           </ULink>
+  </Can>
         </template>
+
       </UDashboardNavbar>
     </template>
 
@@ -181,7 +189,3 @@ const columns: TableColumn<Doctor>[] = [
     </template>
   </UDashboardPanel>
 </template>
-
-
-
-

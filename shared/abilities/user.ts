@@ -6,6 +6,13 @@ import { defineAbility } from 'nuxt-authorization/utils'
  * - Patient: no access
  */
 
+export const canReadUsers = defineAbility((user: any) => {
+  if (!user) return false
+
+  if (user.role === 'admin') return true
+
+  return false
+})
 export const canUpdateUser = defineAbility((user: any, updatedUser?: any) => {
   if (!user) return false
 

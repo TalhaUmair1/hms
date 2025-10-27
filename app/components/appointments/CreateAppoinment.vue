@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { useFetch } from '#app'
 import { useToast } from '#imports'
 
@@ -11,13 +11,17 @@ const props = defineProps({
     default: null
   }
 })
+console.log('yhjgkjhoj',props);
 
-// Fetch patients and doctors lists
+// ✅ Fetch patients and transform data
 const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true
 })
 
+
+
+// ✅ Fetch doctors (no change)
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
   key: 'doctors-list',
   lazy: true
@@ -47,16 +51,16 @@ const state = reactive<Partial<Schema>>({
   ...props.appointment,
   status: props.appointment?.status || 'pending'
 })
+
 const toast = useToast()
 
 // ✅ Submit handler
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log('🟡 Submitted data:', event.data)
 
-  const url = state.id ? `/api/oppointments/${state.id}` : '/api/oppointments' // ✅ fixed typo
+  const url = state.id ? `/api/oppointments/${state.id}` : '/api/oppointments'
   const method = state.id ? 'PUT' : 'POST'
 
-  console.log('Sending to backend:', event.data) // <-- Add this line
   const { error } = await useFetch(url, { method, body: event.data })
 
   if (error.value) {
@@ -78,6 +82,7 @@ const resetForm = () => Object.assign(state, initialState)
 const statuses = ['pending', 'confirmed', 'completed', 'canceled']
 </script>
 
+
 <template>
   <div class="flex justify-center items-center min-h-screen">
     <div class="w-full max-w-md p-8">
@@ -91,7 +96,7 @@ const statuses = ['pending', 'confirmed', 'completed', 'canceled']
           <USelectMenu
             v-model="state.patient_id"
             :items="patients"
-            value-key="id"
+           valueKey="id"
             label-key="name"
             :loading="loadingPatients"
             placeholder="Select patient"

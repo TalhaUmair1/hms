@@ -11,6 +11,7 @@ const props = defineProps({
     default: null
   }
 })
+console.log('docotor is loged',props);
 
 const { data: users, pending } = useFetch('/api/users', {
   key: 'users-list',

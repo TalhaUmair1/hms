@@ -12,10 +12,10 @@ console.log(id);
 const { data, pending, error, refresh } = useFetch('/api/oppointments/' + id, {
   key: 'typicode-doctor',
   'method': 'GET',
-  transform: (data) => ({ ...data, user: { id: data.user_id, name: data.name } }),
+  transform: (data) => ({ ...data, patient: { id: data.patient_id, name: data.patient_name }, doctor: { id: data.doctor_id, name: data.doctor_name } }),
   lazy: true
 })
-console.log(data.value);
+console.log('this is data',data.value);
 </script>
 
 

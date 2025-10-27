@@ -19,6 +19,8 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   lazy: true
 })
 
+
+
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
   key: 'doctors-list',
   lazy: true

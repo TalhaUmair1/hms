@@ -13,7 +13,7 @@ const { data, pending, error, refresh } = useFetch('/api/doctors/' + id, {
   transform: (data) => ({ ...data, user: { id: data.user_id, name: data.name } }),
   lazy: true
 })
-console.log(data.value);
+console.log('appointment data',data.value);
 </script>
 
 

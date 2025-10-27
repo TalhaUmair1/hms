@@ -1,5 +1,4 @@
 import { defineAbility } from 'nuxt-authorization/utils'
-import { id } from 'zod/locales'
 /**
  * Doctor abilities
  * - Admin: can create, read, update, delete any doctor
@@ -13,9 +12,9 @@ export const canCreatePharmacy = defineAbility((user: any) => {
 
 export const canReadPharmacy = defineAbility((user: any, pharmacy?: any) => {
   if (!user) return false
-  //   if (user.role === 'admin') return true
-  //   if (user.role === 'doctor') return true
-  //   if (user.id === pharmacy.id) return true // can read all Patientss (like directory)
+    // if (user.role === 'admin') return true
+    // if (user.role === 'doctor') return true
+    // if (user.id === pharmacy.id) return true // can read all Patientss (like directory)
   return true
 })
 

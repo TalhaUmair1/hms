@@ -16,8 +16,8 @@ export default eventHandler(async (event) => {
       id: tables.appointments.id,
       date: tables.appointments.date,
       status: tables.appointments.status,
-      patient_id: tables.appointments.patient_id,
-      doctor_id: tables.appointments.doctor_id,
+      patient_id: tables.patients.id,
+      doctor_id: tables.doctors.id,
 
       // ✅ Explicit raw SQL aliases — these 100% survive SQLite flattening
       patient_name: sql<string>`patient_user.name as patient_name`,

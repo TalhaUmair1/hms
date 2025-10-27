@@ -9,10 +9,13 @@ import {
   foreignKey,
 } from 'drizzle-orm/sqlite-core'
 
+// =========================
+// USERS
+// =========================
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
   name: text('name').notNull(),
-  email: text('email').notNull(),
+  email: text('email').notNull().unique(),
   password: text('password').notNull(),
   role: text('role', {
     enum: ['admin', 'manager', 'doctor', 'patient'],
@@ -27,6 +30,9 @@ export const users = sqliteTable('users', {
     .default(sql`CURRENT_TIMESTAMP`),
 })
 
+// =========================
+// CREDENTIALS
+// =========================
 export const credentials = sqliteTable(
   'credentials',
   {
@@ -49,50 +55,147 @@ export const credentials = sqliteTable(
   ]
 )
 
-export const doctors = sqliteTable('doctors', {
-  id: integer('id').primaryKey(),
-  user_id: integer('user_id'),
-  specialization: text('specialization'),
-  fees: real('fees'),
-  availability: text('availability'),
-})
+// =========================
+// DOCTORS
+// =========================
+export const doctors = sqliteTable(
+  'doctors',
+  {
+    id: integer('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    specialization: text('specialization'),
+    fees: real('fees'),
+    availability: text('availability'),
+  },
+  (table) => [
+    foreignKey(() => ({
+      columns: [table.user_id],
+      foreignColumns: [users.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
-export const patients = sqliteTable('patients', {
-  id: integer('id').primaryKey(),
-  user_id: integer('user_id'),
-  dob: text('dob'),
-  gender: text('gender'),
-  medical_history: text('medical_history'),
-})
+// =========================
+// PATIENTS
+// =========================
+export const patients = sqliteTable(
+  'patients',
+  {
+    id: integer('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    dob: text('dob'),
+    gender: text('gender'),
+    medical_history: text('medical_history'),
+  },
+  (table) => [
+    foreignKey(() => ({
+      columns: [table.user_id],
+      foreignColumns: [users.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
-export const appointments = sqliteTable('appointments', {
-  id: integer('id').primaryKey(),
-  patient_id: integer('patient_id'),
-  doctor_id: integer('doctor_id'),
-  date: text('date').notNull(),
-  status: text('status', {
-    enum: ['pending', 'confirmed', 'completed', 'canceled'],
-  }).notNull(),
-})
+// =========================
+// APPOINTMENTS
+// =========================
+export const appointments = sqliteTable(
+  'appointments',
+  {
+    id: integer('id').primaryKey(),
+    patient_id: integer('patient_id').notNull(),
+    doctor_id: integer('doctor_id').notNull(),
+    date: text('date').notNull(),
+    status: text('status', {
+      enum: ['pending', 'confirmed', 'completed', 'canceled'],
+    }).notNull(),
+  },
+  (table) => [
+    foreignKey(() => ({
+      columns: [table.patient_id],
+      foreignColumns: [patients.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+    foreignKey(() => ({
+      columns: [table.doctor_id],
+      foreignColumns: [doctors.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
-export const prescriptions = sqliteTable('prescriptions', {
-  id: integer('id').primaryKey(),
-  appointment_id: integer('appointment_id'),
-  doctor_id: integer('doctor_id'),
-  patient_id: integer('patient_id'),
-  medicine_list: text('medicine_list'),
-  notes: text('notes'),
-})
+// =========================
+// PRESCRIPTIONS
+// =========================
+export const prescriptions = sqliteTable(
+  'prescriptions',
+  {
+    id: integer('id').primaryKey(),
+    appointment_id: integer('appointment_id').notNull(),
+    doctor_id: integer('doctor_id').notNull(),
+    patient_id: integer('patient_id').notNull(),
+    medicine_list: text('medicine_list'),
+    notes: text('notes'),
+  },
+  (table) => [
+    foreignKey(() => ({
+      columns: [table.appointment_id],
+      foreignColumns: [appointments.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+    foreignKey(() => ({
+      columns: [table.doctor_id],
+      foreignColumns: [doctors.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+    foreignKey(() => ({
+      columns: [table.patient_id],
+      foreignColumns: [patients.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
-export const billing = sqliteTable('billing', {
-  id: integer('id').primaryKey(),
-  appointment_id: integer('appointment_id'),
-  patient_id: integer('patient_id'),
-  amount: real('amount'),
-  status: text('status'),
-  payment_method: text('payment_method'),
-})
+// =========================
+// BILLING
+// =========================
+export const billing = sqliteTable(
+  'billing',
+  {
+    id: integer('id').primaryKey(),
+    appointment_id: integer('appointment_id').notNull(),
+    patient_id: integer('patient_id').notNull(),
+    amount: real('amount').notNull(),
+    status: text('status'),
+    payment_method: text('payment_method'),
+  },
+  (table) => [
+    foreignKey(() => ({
+      columns: [table.appointment_id],
+      foreignColumns: [appointments.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+    foreignKey(() => ({
+      columns: [table.patient_id],
+      foreignColumns: [patients.id],
+    }))
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ]
+)
 
+// =========================
+// PHARMACY
+// =========================
 export const pharmacy = sqliteTable('pharmacy', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),

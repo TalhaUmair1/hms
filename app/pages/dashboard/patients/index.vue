@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
-import { ref, computed, h, resolveComponent } from 'vue'
+import { ref, computed, h, resolveComponent, onMounted } from 'vue'
 import DeletePatients from '~/components/Patients/DeletePatients.vue'
+import { canDeletePatients, canUpdatePatients } from '~~/shared/abilities/patients'
+
 
 const UAvatar = resolveComponent('UAvatar')
 const UButton = resolveComponent('UButton')
@@ -42,9 +44,25 @@ const filteredPatients = computed(() => {
     p.name.toString().includes(search.value.trim())
   )
 })
-
+ // Resolve permission once and keep as boolean for UI bindings
+ const canDelete = ref(true)
+ const canUpdate = ref(true)
+ onMounted(async () => {
+   try {
+     const deleteResult = await Promise.resolve(denies(canDeletePatients))
+     canDelete.value = Boolean(deleteResult)
+   } catch {
+     canDelete.value = true
+   }
+   try {
+     const updateResult = await Promise.resolve(denies(canUpdatePatients))
+     canUpdate.value = Boolean(updateResult)
+   } catch {
+     canUpdate.value = true
+   }
+ })
 // 🧩 Table columns
-const columns: TableColumn<Patient>[] = [
+const columns =computed<TableColumn<Patient>[]>(() => [
   { accessorKey: 'id', header: 'ID' },
   {
     accessorKey: 'patient_name',
@@ -78,12 +96,14 @@ const columns: TableColumn<Patient>[] = [
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
+                disabled: canUpdate.value,
                 onSelect: () => navigateTo(`/dashboard/patients/${row.original.id}`),
               },
               {
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
+                disabled: canDelete.value,
                 onSelect: () => {
                   selectedPatient.value = row.original
                   isDeleteModalOpen.value = true
@@ -101,7 +121,7 @@ const columns: TableColumn<Patient>[] = [
         ),
       ]),
   },
-]
+])
 </script>
 
 <template>

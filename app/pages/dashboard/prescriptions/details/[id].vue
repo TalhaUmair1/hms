@@ -60,10 +60,7 @@ console.log( 'this is prescription',prescription);
   </div>
 
   <div class="divide-y divide-secondary/50">
-    <div class="flex justify-between py-3">
-      <span class="font-medium text-secondary">ID:</span>
-      <span class="text-primary">{{ prescription.id }}</span>
-    </div>
+    
 
     <div class="flex justify-between py-3">
       <span class="font-medium text-secondary">Appointment Date:</span>
