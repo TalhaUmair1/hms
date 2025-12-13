@@ -5,8 +5,8 @@ import { useCookie } from 'nuxt/app'
 import { ref, computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { canReadDoctor } from '#shared/abilities/doctors'
-import { canReadappointments } from '#shared/abilities/appointments'
-import { canReadBilling } from '#shared/abilities/billig'
+import { canReadPersonalppointments } from '#shared/abilities/appointments'
+import { canReadPersonalBilling } from '#shared/abilities/billig'
 import { canReadPatients } from '#shared/abilities/patients'
 import { canReadPharmacy } from '#shared/abilities/pharmacy'
 import { canReadPrescription } from '#shared/abilities/prescriptions'
@@ -30,25 +30,27 @@ const perms = reactive({
 })
 
 async function resolvePermissions() {
-  const entries: Array<[keyof typeof perms, any]> = [
-    ['users', canReadUsers],
-    ['doctors', canReadDoctor],
-    ['appointments', canReadappointments],
-    ['patients', canReadPatients],
-    ['prescriptions', canReadPrescription],
-    ['billing', canReadBilling],
-    ['pharmacy', canReadPharmacy],
+  const permissionChecks: [keyof typeof perms, () => Promise<boolean>][] = [
+    ['users', () => denies(canReadUsers)],
+    ['doctors', () => denies(canReadDoctor)],
+    ['appointments', () => denies(canReadPersonalppointments)],
+    ['patients', () => denies(canReadPatients)],
+    ['prescriptions', () => denies(canReadPrescription)],
+    ['billing', () => denies(canReadPersonalBilling)],
+    ['pharmacy', () => denies(canReadPharmacy)],
   ]
-  const results = await Promise.all(entries.map(([, ability]) => denies(ability)))
-  entries.forEach(([key], i) => {
+  const results = await Promise.all(permissionChecks.map(([, check]) => check()))
+  permissionChecks.forEach(([key], i) => {
     perms[key] = results[i]!
   })
 }
+console.log(perms.pharmacy, "get from pharmacy");
 
 
 const links = computed(() => [
   [
     {
+      id: 'home',
       label: 'Home',
       icon: 'i-lucide-house',
       to: '/dashboard',
@@ -57,6 +59,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'inbox',
       label: 'Inbox',
       icon: 'i-lucide-inbox',
       to: '/dashboard/inbox',
@@ -66,6 +69,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'customers',
       label: 'Customers',
       icon: 'i-lucide-users',
       to: '/dashboard/customers',
@@ -75,6 +79,7 @@ const links = computed(() => [
       hidden: perms.users,
     },
     {
+      id: 'doctors',
       label: 'Doctors',
       icon: 'i-lucide-stethoscope',
       to: '/dashboard/doctors',
@@ -84,6 +89,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'appointments',
       label: 'Appointments',
       icon: 'i-lucide-watch',
       to: '/dashboard/appointments',
@@ -93,6 +99,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'patients',
       label: 'Patients',
       icon: 'i-lucide-person-standing',
       to: '/dashboard/patients',
@@ -102,6 +109,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'prescriptions',
       label: 'prescriptions',
       icon: 'i-lucide-scroll',
       to: '/dashboard/prescriptions',
@@ -111,6 +119,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'billing',
       label: 'Billing',
       icon: 'i-lucide-circle-dollar-sign',
       to: '/dashboard/billing',
@@ -120,6 +129,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'pharmacy',
       label: 'Pharmacy',
       icon: 'i-lucide-pill',
       to: '/dashboard/pharmacy',
@@ -129,6 +139,7 @@ const links = computed(() => [
       },
     },
     {
+      id: 'settings',
       label: 'Settings',
       to: '/settings',
       icon: 'i-lucide-settings',
@@ -136,6 +147,7 @@ const links = computed(() => [
       type: 'trigger',
       children: [
         {
+          id: 'settings-general',
           label: 'General',
           to: '/dashboard/settings',
           exact: true,
@@ -144,6 +156,7 @@ const links = computed(() => [
           },
         },
         {
+          id: 'settings-members',
           label: 'Members',
           to: '/dashboard/settings/members',
           onSelect: () => {
@@ -151,6 +164,7 @@ const links = computed(() => [
           },
         },
         {
+          id: 'settings-notifications',
           label: 'Notifications',
           to: '/dashboard/settings/notifications',
           onSelect: () => {
@@ -158,6 +172,7 @@ const links = computed(() => [
           },
         },
         {
+          id: 'settings-security',
           label: 'Security',
           to: '/dashboard/settings/security',
           onSelect: () => {
@@ -178,7 +193,7 @@ const groups = computed(() => [
 ])
 
 // Only pass visible items to menus to guarantee hidden entries are not rendered
-const visibleLinks0 = computed(() => links.value[0].filter(l => !l.hidden))
+const visibleLinks0 = computed(() => links.value[0]?.filter(l => !l.hidden) ?? [])
 const visibleLinks1 = computed(() => links.value[1]?.filter(l => !l.hidden) ?? [])
 
 onMounted(async () => {

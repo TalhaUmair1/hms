@@ -16,7 +16,7 @@ export const canReadPatients = defineAbility((user: any, patient?: any) => {
   console.log(user, user.role === 'doctor')
   if (user.role === 'admin') return true
   if (user.role === 'doctor') return true
-  if (user.id === patient.id) return true // can read all Patientss (like directory)
+  if (user.id === patient?.id) return true // can read all Patientss (like directory)
   return false
 })
 

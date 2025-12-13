@@ -13,7 +13,8 @@ export const canCreateDoctor = defineAbility((user: any) => {
 export const canReadDoctor = defineAbility((user: any, doctor?: any) => {
   if (!user) return false
   if (user.role === 'admin') return true
-  if (user.role === 'doctor') return true // can read all doctors (like directory)
+  if (user.role === 'doctor') return true
+   if (user.role === 'patient') return true // can read all doctors (like directory)
   return false
 })
 

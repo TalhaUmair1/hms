@@ -9,6 +9,7 @@ export const canCreateappointments = defineAbility((user: any) => {
   if (!user) return false
   if (user.role === 'admin') return true
   if (user.role === 'doctor') return true
+  if (user.role === 'patient') return true
 })
 
 export const canReadappointments = defineAbility(
@@ -16,6 +17,7 @@ export const canReadappointments = defineAbility(
     if (!user) return false
     if (user.role === 'admin') return true
     if (user.role === 'doctor') return true
+   if (user.role === 'patient') return true
     // can read all appointmentss (like directory)
     return false
   }

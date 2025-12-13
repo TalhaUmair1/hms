@@ -8,16 +8,30 @@ import { useToast } from '#imports'
 const props = defineProps({
   appointment: {
     type: Object,
-    default: null
+    default: () => null
   }
 })
-console.log('yhjgkjhoj',props);
 
-// ✅ Fetch patients and transform data
-const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
+
+const { user: currentUser } = useUserSession()
+const patients = ref([])
+const loadingPatients = ref(false)
+console.log('currentUser',currentUser);
+// @ts-ignore
+if(currentUser.value?.role === 'patient')
+ {
+    patients.value = [currentUser.value as never]
+ }
+ else{
+  // ✅ Fetch patients and transform data
+const { data, pending } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true
 })
+loadingPatients.value = pending as unknown as boolean
+patients.value = (data.value as any) || []
+ }
+
 
 
 
@@ -96,7 +110,7 @@ const statuses = ['pending', 'confirmed', 'completed', 'canceled']
           <USelectMenu
             v-model="state.patient_id"
             :items="patients"
-           valueKey="id"
+          value-key="id"
             label-key="name"
             :loading="loadingPatients"
             placeholder="Select patient"
