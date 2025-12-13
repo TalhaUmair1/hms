@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       name,
       email,
       password: hashedPassword,
-      role: 'doctor', // Default role for new registrations
+      role: 'patient', // Default role for new registrations
     })
     .returning()
     .get()
