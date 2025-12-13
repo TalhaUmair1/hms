@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "studio": "npx drizzle-kit studio"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.68",
@@ -21,17 +22,17 @@
     "better-sqlite3": "^12.4.1",
     "date-fns": "^4.1.0",
     "db0": "^0.3.2",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "^0.45.1",
     "h3-zod": "^0.5.3",
     "nuxt": "^4.1.2",
     "nuxt-auth-utils": "^0.5.25",
     "nuxt-authorization": "^0.3.5",
     "vue": "^3.5.21",
     "vue-router": "^4.5.1",
-    "zod": "^4.1.11"
+    "zod": "^3.21.0"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.5",
+    "drizzle-kit": "^0.31.8",
     "tsx": "^4.20.6"
   }
 }

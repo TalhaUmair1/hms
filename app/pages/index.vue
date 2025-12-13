@@ -31,7 +31,7 @@ useSeoMeta({
 
     <UPageHero
       :description="page.description"
-      :links="page.meta.hero.links"
+      :links="page.hero.links"
       :ui="{
         container: 'md:pt-18 lg:pt-20',
         title: 'max-w-3xl mx-auto'
@@ -50,8 +50,8 @@ useSeoMeta({
     </UPageHero>
 
    <UPageSection
-      :description="page.meta.section.description"
-      :features="page.meta.section.features"
+      :description="page.section.description"
+      :features="page.section.features"
       orientation="horizontal"
       :ui="{
         container: 'lg:px-0 2xl:px-20 mx-0 max-w-none md:mr-10',
@@ -61,18 +61,18 @@ useSeoMeta({
     >
       <template #title>
         <MDC
-          :value="page.meta.section.title"
+          :value="page.section.title"
           class="sm:*:leading-11"
         />
       </template>
       <img
-        :src="page.meta.section.images.desktop"
-        :alt="page.meta.section.title"
+        :src="page.section.images.desktop"
+        :alt="page.section.title"
         class="hidden lg:block 2xl:hidden left-0 w-full max-w-2xl"
       >
       <img
-        :src="page.meta.section.images.mobile"
-        :alt="page.meta.section.title"
+        :src="page.section.images.mobile"
+        :alt="page.section.title"
         class="block lg:hidden 2xl:block 2xl:w-full 2xl:max-w-2xl"
       >
     </UPageSection>
@@ -81,8 +81,8 @@ useSeoMeta({
 
     <UPageSection
       id="features"
-      :description="page.meta.features.description"
-      :features="page.meta.features.features"
+      :description="page.features.description"
+      :features="page.features.features"
       :ui="{
         title: 'text-left @container relative flex',
         description: 'text-left'
@@ -93,7 +93,7 @@ useSeoMeta({
       <div class="absolute rounded-full -right-10 -bottom-10 size-[300px] z-10 bg-primary opacity-30 blur-[200px]" />
       <template #title>
         <MDC
-          :value="page.meta.features.title"
+          :value="page.features.title"
           class="*:leading-9"
         />
         <div class="hidden @min-[1020px]:block">
@@ -110,7 +110,7 @@ useSeoMeta({
 
      <UPageSection
       id="steps"
-      :description="page.meta.steps.description"
+      :description="page.steps.description"
       class="relative overflow-hidden"
     >
       <template #headline>
@@ -121,12 +121,12 @@ useSeoMeta({
         />
       </template>
       <template #title>
-        <MDC :value="page.meta.steps.title" />
+        <MDC :value="page.steps.title" />
       </template>
 
       <template #features>
         <UPageCard
-          v-for="(step, index) in page.meta.steps.items"
+          v-for="(step, index) in page.steps.items"
           :key="index"
           class="group"
           :ui="{ container: 'p-4 sm:p-4', title: 'flex items-center gap-1' }"
@@ -154,13 +154,13 @@ useSeoMeta({
     <UPageSection
       id="pricing"
       class="mb-32 overflow-hidden"
-      :title="page.meta.pricing.title"
-      :description="page.meta.pricing.description"
-      :plans="page.meta.pricing.plans"
+      :title="page.pricing.title"
+      :description="page.pricing.description"
+      :plans="page.pricing.plans"
       :ui="{ title: 'text-left @container relative', description: 'text-left' }"
     >
       <template #title>
-        <MDC :value="page.meta.pricing.title" />
+        <MDC :value="page.pricing.title" />
 
         <div class="hidden @min-[1120px]:block">
           <UColorModeImage
@@ -173,7 +173,7 @@ useSeoMeta({
 
       <UPricingPlans scale>
         <UPricingPlan
-          v-for="(plan, index) in page.meta.pricing.plans"
+          v-for="(plan, index) in page.pricing.plans"
           :key="index"
           :title="plan.title"
           :description="plan.description"
@@ -191,9 +191,9 @@ useSeoMeta({
 
     <UPageSection
       id="testimonials"
-      :title="page.meta.testimonials.title"
-      :description="page.meta.testimonials.description"
-      :items="page.meta.testimonials.items"
+      :title="page.testimonials.title"
+      :description="page.testimonials.description"
+      :items="page.testimonials.items"
     >
       <template #headline>
         <UColorModeImage
@@ -203,13 +203,13 @@ useSeoMeta({
         />
       </template>
       <template #title>
-        <MDC :value="page.meta.testimonials.title" />
+        <MDC :value="page.testimonials.title" />
       </template>
 
       <UContainer>
         <UPageColumns class="xl:columns-3">
           <UPageCard
-            v-for="(testimonial, index) in page.meta.testimonials.items"
+            v-for="(testimonial, index) in page.testimonials.items"
             :key="index"
             variant="subtle"
             :description="testimonial.quote"
@@ -234,7 +234,7 @@ useSeoMeta({
       class="overflow-hidden @container"
     >
       <template #title>
-        <MDC :value="page.meta.cta.title" />
+        <MDC :value="page.cta.title" />
 
         <div class="@max-[1280px]:hidden">
           <UColorModeImage

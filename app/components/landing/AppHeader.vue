@@ -23,6 +23,8 @@ nuxtApp.hooks.hookOnce('page:finish', () => {
     document.querySelector('#testimonials')
   ].filter(Boolean) as Element[])
 })
+
+import TemplateMenu from './TemplateMenu.vue'
 </script>
 
 <template>
