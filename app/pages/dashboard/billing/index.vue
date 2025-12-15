@@ -83,12 +83,35 @@ const isDeleteModalOpen = ref(false)
 const selectedBill = ref<Bill | null>(null)
 
 // 📦 Fetch bills
-const { data: bills, status, refresh } = useFetch<Bill[]>('/api/billing', {
-  key: 'table-billing',
-  lazy: true,
-})
+// const { data: bills, status, refresh } = useFetch<Bill[]>('/api/billing', {
+//   key: 'table-billing',
+//   lazy: true,
+// })
 
-console.log(bills.value, 'Fetched bills')
+// console.log(bills.value, 'Fetched bills')
+
+const { user: currentUser } = useUserSession()
+const bills = ref([])
+const loadingbills = ref(false)
+console.log('currentUser',loadingbills);
+// @ts-ignore
+if(currentUser.value?.role === 'patient')
+ {
+    const { data, pending } = useFetch(`/api/billing/patient/${currentUser.value.id}`, {
+      key: 'table-billing-patient',
+      lazy: true
+    })
+ }
+ else{
+  // ✅ Fetch patients and transform data
+const { data, pending } = useFetch('/api/billing', {
+  key: 'table-billing',
+  lazy: true
+})
+loadingbills.value = pending as unknown as boolean
+bills.value = (data.value as any) || []
+ }
+
 
 // 🔍 Search
 const search = ref('')
