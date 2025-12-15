@@ -97,10 +97,14 @@ console.log('currentUser',loadingbills);
 // @ts-ignore
 if(currentUser.value?.role === 'patient')
  {
-    const { data, pending } = useFetch(`/api/billing/patient/${currentUser.value.id}`, {
+    const { data, pending } = useFetch(`/api/billing/me`, {
       key: 'table-billing-patient',
       lazy: true
     })
+    bills.value = (data.value as any) || []
+    console.log(bills.value,'get from patients bill current');
+    
+    loadingbills.value = pending as unknown as boolean
  }
  else{
   // ✅ Fetch patients and transform data
