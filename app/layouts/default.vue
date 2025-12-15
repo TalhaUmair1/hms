@@ -44,7 +44,7 @@ async function resolvePermissions() {
     perms[key] = results[i]!
   })
 }
-console.log(perms.pharmacy, "get from pharmacy");
+console.log(perms.billing, "get from billing");
 
 
 const links = computed(() => [

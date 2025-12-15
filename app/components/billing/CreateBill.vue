@@ -17,12 +17,18 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true
 })
+console.log(patients, "this get from patients");
 
 const { data: appointments, pending: loadingAppointments } = useFetch('/api/oppointments', {
   key: 'appointments-list',
-  lazy: true
+  lazy: true,
+  transform: (data) =>
+    (data as any[]).map((appt) => ({
+      ...appt,
+      label: `#${appt.id} - ${appt.date} (${appt.patient_name})`
+    }))
 })
-
+console.log(appointments, "this get from appointments");
 // ✅ Validation schema
 const schema = z.object({
   appointment_id: z.coerce.number().min(1, 'Appointment is required'),
@@ -30,7 +36,8 @@ const schema = z.object({
   amount: z.coerce.number().min(1, 'Amount must be greater than 0'),
   status: z.enum(['paid', 'pending', 'failed']),
   payment_method: z.enum(['cash', 'credit_card', 'bank_transfer']),
-  id: z.number().optional()
+  id: z.number().optional(),
+  name: z.string().optional()
 })
 type Schema = z.output<typeof schema>
 
@@ -41,7 +48,8 @@ const initialState: Partial<Schema> = {
   amount: undefined,
   status: 'pending',
   payment_method: undefined,
-  id: undefined
+  id: undefined,
+  name: undefined
 }
 
 const state = reactive<Partial<Schema>>({
@@ -95,7 +103,7 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
             v-model="state.appointment_id"
             :items="appointments"
             value-key="id"
-            label-key="id"
+            label-key="label"
             :loading="loadingAppointments"
             placeholder="Select appointment"
             class="w-full"
@@ -109,7 +117,7 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
             v-model="state.patient_id"
             :items="patients"
             value-key="id"
-            label-key="name"
+            label-key="patient_name"
             :loading="loadingPatients"
             placeholder="Select patient"
             class="w-full"

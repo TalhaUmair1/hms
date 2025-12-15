@@ -90,7 +90,7 @@ const selectedBill = ref<Bill | null>(null)
 
 // console.log(bills.value, 'Fetched bills')
 
-const { user: currentUser } = useUserSession()
+const { user: currentUser } = useUserSession() as any
 const bills = ref([])
 const loadingbills = ref(false)
 console.log('currentUser',loadingbills);

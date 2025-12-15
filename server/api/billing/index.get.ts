@@ -22,7 +22,7 @@ export default eventHandler(async (event) => {
       status: tables.billing.status,
       date: tables.appointments.date,
       payment_method: tables.billing.payment_method,
-      patient_name: sql<string>`patient_user.name`,
+      patient_name: sql<string>`patient_user.name as patient_name`,
     })
     .from(tables.billing)
     .leftJoin(
@@ -37,7 +37,7 @@ export default eventHandler(async (event) => {
       tables.appointments,
       eq(tables.billing.appointment_id, tables.appointments.id)
     )
-    .where(eq(patientUser.id, user.id))
+    .where(eq(tables.patients.user_id, user.id))
 
   return billings
 })
