@@ -68,7 +68,7 @@ import { ref, computed, h, resolveComponent } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import type { TableColumn } from '@nuxt/ui'
 import DeletePharmacy from '~/components/pharmacy/DeletePharmacy.vue'
-import { canCreatePharmacy } from '#shared/abilities/pharmacy'
+import { canCreatePharmacy, canUpdatePharmacy, canDeletePharmacy } from '#shared/abilities/pharmacy'
 
 // Nuxt UI components
 const UButton = resolveComponent('UButton')
@@ -93,6 +93,26 @@ const { data: pharmacy, status, refresh } = useFetch<Pharmacy[]>('/api/pharmacy'
   lazy: true,
 })
 console.log(pharmacy.value);
+
+
+// conditoins from shared abilities
+
+const canDelete = ref(true)
+ const canUpdate = ref(true)
+ onMounted(async () => {
+   try {
+     const deleteResult = await Promise.resolve(denies(canDeletePharmacy))
+     canDelete.value = Boolean(deleteResult)
+   } catch {
+     canDelete.value = true
+   }
+   try {
+     const updateResult = await Promise.resolve(denies(canUpdatePharmacy))
+     canUpdate.value = Boolean(updateResult)
+   } catch {
+     canUpdate.value = true
+   }
+ })
 
 // 🔍 Search
 const search = ref('')
@@ -141,12 +161,14 @@ const columns: TableColumn<Pharmacy>[] = [
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
+                class: { 'hidden': canUpdate.value },
                 onSelect: () => navigateTo(`/dashboard/pharmacy/${row.original.id}`),
               },
               {
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
+                class: { 'hidden': canDelete.value },
                 onSelect: () => {
                   selectedPharmacy.value = row.original
                   isDeleteModalOpen.value = true

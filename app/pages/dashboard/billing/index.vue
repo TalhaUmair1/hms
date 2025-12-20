@@ -61,7 +61,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { ref, computed, h, resolveComponent } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import DeleteBill from '~/components/billing/DeleteBill.vue'
-import { canCreateBilling } from '#shared/abilities/billing'
+import { canCreateBilling,canUpdateBilling,canDeleteBilling } from '#shared/abilities/billing'
 
 
 
@@ -105,6 +105,26 @@ const { data: bills, status, refresh } = useFetch<Bill[]>(() => (currentUser.val
   default: () => []
 })
 console.log(bills.value, 'Fetched bills');
+
+// conditoins from shared abilities
+
+const canDelete = ref(true)
+ const canUpdate = ref(true)
+ onMounted(async () => {
+   try {
+     const deleteResult = await Promise.resolve(denies(canDeleteBilling))
+     canDelete.value = Boolean(deleteResult)
+   } catch {
+     canDelete.value = true
+   }
+   try {
+     const updateResult = await Promise.resolve(denies(canUpdateBilling))
+     canUpdate.value = Boolean(updateResult)
+   } catch {
+     canUpdate.value = true
+   }
+ })
+
 
 
 // 🔍 Search
@@ -166,12 +186,16 @@ const columns: TableColumn<Bill>[] = [
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
+               
+                 class: { 'hidden': canUpdate.value },
                 onSelect: () => navigateTo(`/dashboard/billing/${row.original.id}`),
               },
               {
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
+           
+                class: { 'hidden': canDelete.value },
                 onSelect: () => {
                   selectedBill.value = row.original
                   isDeleteModalOpen.value = true

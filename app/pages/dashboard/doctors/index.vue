@@ -3,7 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DoctorsDeleteModal from '~/components/doctors/DeleteModal.vue'
-import { canCreateDoctor } from '#shared/abilities/doctors'
+import { canUpdateDoctor, canDeleteDoctor, canCreateDoctor } from '#shared/abilities/doctors'
 
 const UAvatar = resolveComponent('UAvatar')
 const UButton = resolveComponent('UButton')
@@ -21,6 +21,26 @@ type Doctor = {
 
 const isDeleteModalOpen = ref(false)
 const selectedDoctor = ref<Doctor | null>(null)
+
+
+// conditoins from shared abilities
+
+const canDelete = ref(true)
+ const canUpdate = ref(true)
+ onMounted(async () => {
+   try {
+     const deleteResult = await Promise.resolve(denies(canDeleteDoctor))
+     canDelete.value = Boolean(deleteResult)
+   } catch {
+     canDelete.value = true
+   }
+   try {
+     const updateResult = await Promise.resolve(denies(canUpdateDoctor))
+     canUpdate.value = Boolean(updateResult)
+   } catch {
+     canUpdate.value = true
+   }
+ })
 
 // fetch doctors
 const { data: doctors, status, refresh } = await useFetch<Doctor[]>('/api/doctors', {
@@ -105,6 +125,8 @@ const columns: TableColumn<Doctor>[] = [
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
+                
+                   class: { 'hidden': canUpdate.value },
                 onSelect() {
                   navigateTo(`/dashboard/doctors/${row.original.id}`)
                 },
@@ -113,6 +135,8 @@ const columns: TableColumn<Doctor>[] = [
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
+              
+                  class: { 'hidden': canDelete.value },
                 onSelect() {
                   selectedDoctor.value = row.original
                   isDeleteModalOpen.value = true
@@ -131,6 +155,8 @@ const columns: TableColumn<Doctor>[] = [
       )
   }
 ]
+
+ 
 </script>
 <template>
     <UDashboardPanel id="Doctors">
