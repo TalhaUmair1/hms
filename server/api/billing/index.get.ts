@@ -1,6 +1,6 @@
 import { eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
-import { canReadPersonalBilling } from '#shared/abilities/billig'
+import { canReadPersonalBilling } from '~~/shared/abilities/billing'
 import { H3Event, EventHandlerRequest, createError } from 'h3'
 
 export default eventHandler(async (event) => {

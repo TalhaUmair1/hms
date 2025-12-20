@@ -1,6 +1,6 @@
 import { zh, z } from 'h3-zod'
 import { id } from 'zod/locales'
-import { canCreateBilling } from '~~/shared/abilities/billig'
+import { canCreateBilling } from '~~/shared/abilities/billing'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(

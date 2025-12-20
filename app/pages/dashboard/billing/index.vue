@@ -8,12 +8,16 @@
         </template>
 
         <template #right>
+          <Can
+            :ability="canCreateBilling"
+          >
           <ULink
             to="/dashboard/billing/create"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
             Create Bill
           </ULink>
+          </Can>
         </template>
       </UDashboardNavbar>
     </template>
@@ -57,6 +61,9 @@ import type { TableColumn } from '@nuxt/ui'
 import { ref, computed, h, resolveComponent } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import DeleteBill from '~/components/billing/DeleteBill.vue'
+import { canCreateBilling } from '#shared/abilities/billing'
+
+
 
 
 definePageMeta({
@@ -90,31 +97,14 @@ const selectedBill = ref<Bill | null>(null)
 
 // console.log(bills.value, 'Fetched bills')
 
-const { user: currentUser } = useUserSession() as any
-const bills = ref([])
-const loadingbills = ref(false)
-console.log('currentUser',loadingbills);
-// @ts-ignore
-if(currentUser.value?.role === 'patient')
- {
-    const { data, pending } = useFetch(`/api/billing/me`, {
-      key: 'table-billing-patient',
-      lazy: true
-    })
-    bills.value = (data.value as any) || []
-    console.log(bills.value,'get from patients bill current');
-    
-    loadingbills.value = pending as unknown as boolean
- }
- else{
-  // ✅ Fetch patients and transform data
-const { data, pending } = useFetch('/api/billing', {
+const { user: currentUser } = useUserSession()
+
+const { data: bills, status, refresh } = useFetch<Bill[]>(() => (currentUser.value as any)?.role === 'patient' ? '/api/billing/me' : '/api/billing', {
   key: 'table-billing',
-  lazy: true
+  lazy: true,
+  default: () => []
 })
-loadingbills.value = pending as unknown as boolean
-bills.value = (data.value as any) || []
- }
+console.log(bills.value, 'Fetched bills');
 
 
 // 🔍 Search

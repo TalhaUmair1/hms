@@ -3,7 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DeleteOppointments from '~/components/appointments/DeleteOppointments.vue'
-
+import { canCreateappointments } from '#shared/abilities/appointments'
 
 const UAvatar = resolveComponent('UAvatar')
 
@@ -27,7 +27,7 @@ const selectedAppointment = ref<Appointment | null>(null)
 
 // 📦 Fetch appointments (moved inside onMounted or setup function)
 const { data: appointments, status, refresh } = useFetch<Appointment[]>(
-  '/api/oppointments',
+  '/api/appointments',
   {
     key: 'table-appointments',
     lazy: true,
@@ -127,12 +127,18 @@ const columns: TableColumn<Appointment>[] = [
         </template>
 
         <template #right>
-          <ULink
+        
+                     <Can
+    :ability="canCreateappointments"
+    
+  >
+        <ULink
             to="/dashboard/appointments/create"
             class="bg-primary text-white px-3 py-1.5 rounded-md"
           >
             Create Appointment
-          </ULink>
+          </ULink>      
+  </Can>
         </template>
       </UDashboardNavbar>
     </template>

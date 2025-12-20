@@ -6,7 +6,7 @@ import { ref, computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { canReadDoctor } from '#shared/abilities/doctors'
 import { canReadPersonalppointments } from '#shared/abilities/appointments'
-import { canReadPersonalBilling } from '#shared/abilities/billig'
+import { canReadPersonalBilling } from '~~/shared/abilities/billing'
 import { canReadPatients } from '#shared/abilities/patients'
 import { canReadPharmacy } from '#shared/abilities/pharmacy'
 import { canReadPrescription } from '#shared/abilities/prescriptions'
@@ -44,7 +44,7 @@ async function resolvePermissions() {
     perms[key] = results[i]!
   })
 }
-console.log(perms.billing, "get from billing");
+
 
 
 const links = computed(() => [

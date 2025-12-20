@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 import z from 'zod'
-import { canUpdateBilling } from '~~/shared/abilities/billig'
+import { canUpdateBilling } from '~~/shared/abilities/billing'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()

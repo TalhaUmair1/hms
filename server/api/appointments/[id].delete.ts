@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { zh } from 'h3-zod'
 
-import { canDeleteappointments } from './../../../shared/abilities/appointments'
+import { canDeleteappointments } from '../../../shared/abilities/appointments'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()

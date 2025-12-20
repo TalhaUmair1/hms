@@ -12,12 +12,19 @@
         </UDashboardToolbar>
 
         <template #right>
-          <ULink
+        
+          
+                              <Can
+    :ability="canCreatePharmacy"
+    
+  >
+     <ULink
             to="/dashboard/pharmacy/create"
             class="bg-primary px-3 py-1.5 text-white rounded-md"
           >
             Create Pharmacy
-          </ULink>
+          </ULink>        
+  </Can>
         </template>
       </UDashboardNavbar>
     </template>
@@ -61,6 +68,7 @@ import { ref, computed, h, resolveComponent } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import type { TableColumn } from '@nuxt/ui'
 import DeletePharmacy from '~/components/pharmacy/DeletePharmacy.vue'
+import { canCreatePharmacy } from '#shared/abilities/pharmacy'
 
 // Nuxt UI components
 const UButton = resolveComponent('UButton')

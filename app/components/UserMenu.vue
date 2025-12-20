@@ -3,7 +3,7 @@ import { useUserSession } from '#imports';
 import type { DropdownMenuItem } from '@nuxt/ui'
 
 const {user,clear} =  useUserSession()
-console.log( 'login er',user.value);
+
 
 defineProps<{
   collapsed?: boolean

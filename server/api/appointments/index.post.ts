@@ -1,6 +1,6 @@
 import { zh, z } from 'h3-zod'
 
-import { canCreateappointments } from './../../../shared/abilities/appointments'
+import { canCreateappointments } from '../../../shared/abilities/appointments'
 
 export default eventHandler(async (event) => {
   const body = await zh.useValidatedBody(
@@ -16,6 +16,7 @@ export default eventHandler(async (event) => {
 
   // Insert todo for the current user
   await authorize(event, canCreateappointments)
+  
   const appointment = await useDatabase()
     .insert(tables.appointments)
     .values({

@@ -1,7 +1,7 @@
 import { eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
 import { zh } from 'h3-zod'
-import { canReadPersonalBilling } from '~~/shared/abilities/billig'
+import { canReadPersonalBilling } from '~~/shared/abilities/billing'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()

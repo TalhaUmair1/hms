@@ -1,6 +1,6 @@
 import { zh } from 'h3-zod'
 import { eq } from 'drizzle-orm'
-import { canDeleteBilling } from '~~/shared/abilities/billig'
+import { canDeleteBilling } from '~~/shared/abilities/billing'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
