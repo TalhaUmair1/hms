@@ -9,7 +9,7 @@ export const canCreateappointments = defineAbility((user: any) => {
   if (!user) return false
   if (user.role === 'admin') return true
   if (user.role === 'doctor') return true
-  if (user.role === 'patient') return true
+ return user.role === 'patient'
 })
 
 export const canReadappointments = defineAbility(

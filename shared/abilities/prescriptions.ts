@@ -14,10 +14,23 @@ export const canReadPrescription = defineAbility(
   (user: any, prescription?: any) => {
     if (!user) return false
     if (user.role === 'admin') return true
+    if  (user.role === 'doctor') return true
     // can read all prescriptions (like directory)
     return false
   }
 )
+
+export const canReadOwnPrescription = defineAbility(
+  (user: any, prescription: any) => {
+    if (!user) return false 
+    if (user.role === 'admin') return true
+    if (user.role === 'patient' )return true
+    return false
+  }
+)
+
+
+
 
 export const canUpdatePrescription = defineAbility(
   (user: any, prescription?: any) => {

@@ -9,7 +9,7 @@ import { canReadPersonalppointments } from '#shared/abilities/appointments'
 import { canReadPersonalBilling } from '~~/shared/abilities/billing'
 import { canReadPatients } from '#shared/abilities/patients'
 import { canReadPharmacy } from '#shared/abilities/pharmacy'
-import { canReadPrescription } from '#shared/abilities/prescriptions'
+import { canReadOwnPrescription } from '#shared/abilities/prescriptions'
 import { canReadUsers } from '#shared/abilities/user'
 
 const route = useRoute()
@@ -35,7 +35,7 @@ async function resolvePermissions() {
     ['doctors', () => denies(canReadDoctor)],
     ['appointments', () => denies(canReadPersonalppointments)],
     ['patients', () => denies(canReadPatients)],
-    ['prescriptions', () => denies(canReadPrescription)],
+    ['prescriptions', () => denies(canReadOwnPrescription)],
     ['billing', () => denies(canReadPersonalBilling)],
     ['pharmacy', () => denies(canReadPharmacy)],
   ]
