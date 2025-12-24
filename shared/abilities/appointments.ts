@@ -18,7 +18,7 @@ export const canReadappointments = defineAbility(
     if (user.role === 'admin') return true
     if (user.role === 'doctor') return true
    if (user.role === 'patient') return true
-    // can read all appointmentss (like directory)
+   
     return false
   }
 )

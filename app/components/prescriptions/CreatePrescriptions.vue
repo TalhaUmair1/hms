@@ -18,6 +18,7 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true
 })
+console.log(patients,'patients in prescription');
 
 
 
@@ -26,11 +27,12 @@ const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
   lazy: true
 })
 
-const { data: appointments, pending: loadingAppointments } =  useFetch('/api/oppointments', {
+const { data: appointments, pending: loadingAppointments } =  useFetch('/api/appointments', {
   key: 'appointments-list',
   lazy: true,
+  transform: (data) => data.map((item: any) => ({ ...item, label: `#${item.id} - ${item.patient_name} - ${item.date}` }))
 })
-console.log(appointments.value);
+console.log(appointments,'appointments in prescription');
 
 // ✅ Zod validation schema
 const schema = z.object({
@@ -96,7 +98,7 @@ const resetForm = () => Object.assign(state, initialState)
             v-model="state.appointment_id"
             :items="appointments"
             value-key="id"
-            label-key="id"
+            label-key="label"
             :loading="loadingAppointments"
             placeholder="Select appointment"
             class="w-full"
@@ -124,7 +126,7 @@ const resetForm = () => Object.assign(state, initialState)
             v-model="state.patient_id"
             :items="patients"
             value-key="id"
-            label-key="name"
+            label-key="patient_name"
             :loading="loadingPatients"
             placeholder="Select patient"
             class="w-full"

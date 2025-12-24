@@ -45,6 +45,7 @@ async function resolvePermissions() {
   })
 }
 
+console.log(perms.prescriptions,'dsaj');
 
 
 const links = computed(() => [

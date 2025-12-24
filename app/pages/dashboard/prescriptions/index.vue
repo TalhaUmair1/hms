@@ -7,12 +7,16 @@
         </template>
 
         <template #right>
+        <Can
+            :ability="canCreatePrescription"
+          >
           <ULink
             class="bg-primary px-2 py-1 text-white rounded-sm"
             to="/dashboard/prescriptions/create"
           >
             Create Prescription
           </ULink>
+          </Can>
         </template>
       </UDashboardNavbar>
     </template>
@@ -56,6 +60,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DeletePrescriptions from '~/components/prescriptions/DeletePrescriptions.vue'
+import { canCreatePrescription } from '#shared/abilities/prescriptions'
 
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
@@ -76,13 +81,20 @@ type Prescription = {
 const isDeleteModalOpen = ref(false)
 const selectedPrescription = ref<Prescription | null>(null)
 
+  const { user: currentUser } = useUserSession()
+
 const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
-  '/api/prescriptions',
+  () => (currentUser.value as any)?.role === 'patient' 
+        ? `/api/prescriptions/${currentUser.value.id}`
+        : '/api/prescriptions',     
   {
-    key: 'table-prescriptions',
+    key: 'table-prescriptions2',
     lazy: true,
-  },
+    default: () => [],
+  }
 )
+
+console.log(prescriptions.value, 'Fetched prescriptions');
 
 const search = ref('')
 
