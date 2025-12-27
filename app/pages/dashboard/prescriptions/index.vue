@@ -60,7 +60,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent } from 'vue'
 import DeletePrescriptions from '~/components/prescriptions/DeletePrescriptions.vue'
-import { canCreatePrescription } from '#shared/abilities/prescriptions'
+import { canCreatePrescription, canUpdatePrescription, canDeletePrescription } from '#shared/abilities/prescriptions'
 
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
@@ -85,7 +85,7 @@ const selectedPrescription = ref<Prescription | null>(null)
 
 const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
   () => (currentUser.value as any)?.role === 'patient' 
-        ? `/api/prescriptions/${currentUser.value.id}`
+        ? `/api/prescriptions/me`
         : '/api/prescriptions',     
   {
     key: 'table-prescriptions2',
@@ -95,6 +95,26 @@ const { data: prescriptions, status, refresh } = useFetch<Prescription[]>(
 )
 
 console.log(prescriptions.value, 'Fetched prescriptions');
+// conditoins from shared abilities
+
+const canDelete = ref(true)
+ const canUpdate = ref(true)
+ onMounted(async () => {
+   try {
+     const deleteResult = await Promise.resolve(denies(canDeletePrescription))
+     canDelete.value = Boolean(deleteResult)
+   } catch {
+     canDelete.value = true
+   }
+   try {
+     const updateResult = await Promise.resolve(denies(canDeletePrescription))
+     canUpdate.value = Boolean(updateResult)
+   } catch {
+     canUpdate.value = true
+   }
+ })
+
+
 
 const search = ref('')
 
@@ -102,14 +122,14 @@ const filteredPrescriptions = computed(() => {
   if (!prescriptions.value) return []
   if (!search.value) return prescriptions.value
 
-  const keyword = search.value.toLowerCase().trim()
-  return prescriptions.value.filter((p) =>
-    p.medicine_list.toLowerCase().includes(keyword)
+  const keyword = search.value?.toLowerCase().trim()
+  return prescriptions.value?.filter((p) =>
+    p.medicine_list?.toLowerCase().includes(keyword)
   )
 })
 
 const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case 'completed':
       return 'primary'
     case 'cancelled':
@@ -192,6 +212,7 @@ const columns: TableColumn<Prescription>[] = [
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
+                class: { 'hidden': canUpdate.value },
                 onSelect: () =>
                   navigateTo(`/dashboard/prescriptions/${row.original.id}`),
               },
@@ -199,6 +220,7 @@ const columns: TableColumn<Prescription>[] = [
                 label: 'Delete',
                 icon: 'i-lucide-trash',
                 color: 'error',
+                class: { 'hidden': canDelete.value },
                 onSelect: () => {
                   selectedPrescription.value = row.original
                   isDeleteModalOpen.value = true

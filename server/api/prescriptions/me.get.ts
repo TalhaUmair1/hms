@@ -10,21 +10,19 @@ export default eventHandler(async (event) => {
   const { user: currentUser } = await requireUserSession(event) as any
   const userId = Number(currentUser.id)
 
-console.log(currentUser,'currentUser in me.get......ts');
-
   // await authorize(event, canReadPrescription)
 
   // ✅ Create table aliases for users
-  const doctorUser = alias(tables.users, 'doctor_user')
   const patientUser = alias(tables.users, 'patient_user')
+  const doctorUser = alias(tables.users, 'doctor_user')
 
   // ✅ Query with joins and aliases
   const prescriptions = await db
     .select({
       id: tables.prescriptions.id,
-      appointment_id: tables.prescriptions.appointment_id,
-      doctor_id: tables.prescriptions.doctor_id,
       patient_id: tables.prescriptions.patient_id,
+      doctor_id: tables.prescriptions.doctor_id,
+      appointment_id: tables.prescriptions.appointment_id,
       medicine_list: tables.prescriptions.medicine_list,
       notes: tables.prescriptions.notes,
       date: tables.appointments.date,
@@ -33,6 +31,7 @@ console.log(currentUser,'currentUser in me.get......ts');
       doctor_name: sql<string>`doctor_user.name as doctor_name`,
     })
     .from(tables.prescriptions)
+    .leftJoin(tables.appointments, eq(tables.prescriptions.appointment_id, tables.appointments.id))
     // join → doctor → user
     .leftJoin(
       tables.doctors,
@@ -44,13 +43,9 @@ console.log(currentUser,'currentUser in me.get......ts');
       tables.patients,
       eq(tables.prescriptions.patient_id, tables.patients.id)
     )
-    .leftJoin(
-      tables.appointments,
-      eq(tables.prescriptions.appointment_id, tables.appointments.id)
-    )
-     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
-    .where(eq(patientUser.id, userId))
+    .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
+    .where(eq(tables.patients.user_id, userId))
     .all()
-
+   console.log(prescriptions,"prescriptions me");
   return prescriptions
 })
