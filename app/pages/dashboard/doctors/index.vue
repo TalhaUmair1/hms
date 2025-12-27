@@ -41,28 +41,37 @@ const canDelete = ref(true)
      canUpdate.value = true
    }
  })
-
+const table = useTemplateRef('table')
+const pagination = ref({
+  page: 1,
+  perPage: 2
+})
 // fetch doctors
-const { data: doctors, status, refresh } = await useFetch<Doctor[]>('/api/doctors', {
+const { data, status, refresh } = await useFetch<{data:Doctor[], pagination: { page: number, perPage: number, total: number, totalPages: number } }>('/api/doctors', {
   key: 'table-doctors',
+  query: {
+    perPage: computed(() => pagination.value.perPage),
+    page: computed(() => pagination.value.page)
+  },
   transform: (data) => {
-    return (
-      data?.map((doc) => ({
-        ...doc,
-        avatar: { alt: `${doc.name} avatar` }
-      })) || []
-    )
+    return {
+      data: data?.data.map((doc) => ({
+          ...doc,
+          avatar: { alt: `${doc.name} avatar` }
+        })) || [],
+      pagination: data?.pagination || { page: 1, perPage: 2, total: 0, totalPages: 0 }
+    }
   },
   lazy: true
 })
-
+console.log(data.value)
 // search state
 const search = ref('')
 
 // computed filtered data
 const filteredDoctors = computed(() => {
-  if (!search.value) return doctors.value || []
-  return (doctors.value || []).filter((doc) =>
+  if (!search.value) return data.value?.data || []
+  return (data.value?.data || []).filter((doc) =>
     doc.name.toLowerCase().includes(search.value.toLowerCase())
   )
 })
@@ -199,11 +208,20 @@ const columns: TableColumn<Doctor>[] = [
 
       <!-- Table -->
       <UTable
+       ref="table"
         :data="filteredDoctors"
-        :columns="columns"
+        :columns="columns as any"
         :loading="status === 'pending'"
         class="w-full"
       />
+        <div class="flex justify-end border-t border-default pt-4 px-4">
+      <UPagination
+        :page="pagination.page"
+        :items-per-page="pagination.perPage"
+        :total="data?.pagination?.total || 0"
+        @update:page="(p: number) => pagination.page = p"
+      />
+    </div>
      </UContainer>
   
       <DoctorsDeleteModal

@@ -172,6 +172,7 @@ const statuses = ['pending', 'confirmed', 'completed', 'canceled']
           <USelectMenu
             v-model="state.status"
             :items="statuses"
+            :disabled="currentUser?.role === 'patient'"
             placeholder="Select status"
             class="w-full"
             size="xl"
