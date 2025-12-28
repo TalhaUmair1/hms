@@ -12,6 +12,8 @@ export default eventHandler(async (event) => {
   // ✅ Alias for users table
   const patientUser = alias(tables.users, 'patient_user')
 
+  console.log('Fetching billing for User ID:', user.id)
+
   // ✅ Query with joins
   const billings = await db
     .select({
@@ -22,7 +24,7 @@ export default eventHandler(async (event) => {
       status: tables.billing.status,
       date: tables.appointments.date,
       payment_method: tables.billing.payment_method,
-      patient_name: sql<string>`patient_user.name as patient_name`,
+      patient_name: patientUser.name,
     })
     .from(tables.billing)
     .leftJoin(
@@ -39,6 +41,7 @@ export default eventHandler(async (event) => {
     )
     .where(eq(tables.patients.user_id, user.id))
 
+    console.log(billings,'getting billing api ');
   return billings
 })
 

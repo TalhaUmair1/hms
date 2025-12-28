@@ -61,6 +61,16 @@ const filteredPatients = computed(() => {
      canUpdate.value = true
    }
  })
+
+ const truncateWords = (text: string, limit = 5) => {
+  if (!text) return ''
+  const words = text.split(' ')
+  return words.length > limit
+    ? words.slice(0, limit).join(' ') + '...'
+    : text
+}
+
+
 // 🧩 Table columns
 const columns =computed<TableColumn<Patient>[]>(() => [
   { accessorKey: 'id', header: 'ID' },
@@ -77,7 +87,17 @@ const columns =computed<TableColumn<Patient>[]>(() => [
   },
   { accessorKey: 'dob', header: 'Date of Birth' },
   { accessorKey: 'gender', header: 'Gender' },
-  { accessorKey: 'medical_history', header: 'Medical History' },
+{
+  accessorKey: 'medical_history',
+  header: 'Medical History',
+  cell: ({ row }) =>
+    h(
+      'p',
+      { class: 'text-sm text-muted leading-relaxed' },
+      truncateWords(row.original.medical_history, 5)
+    ),
+},
+
   {
     id: 'actions',
     header: 'Actions',

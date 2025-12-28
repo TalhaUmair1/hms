@@ -19,7 +19,7 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
 })
 console.log(patients, "this get from patients");
 
-const { data: appointments, pending: loadingAppointments } = useFetch('/api/oppointments', {
+const { data: appointments, pending: loadingAppointments } = useFetch('/api/appointments', {
   key: 'appointments-list',
   lazy: true,
   transform: (data) =>

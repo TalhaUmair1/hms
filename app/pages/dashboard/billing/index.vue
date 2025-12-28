@@ -104,7 +104,7 @@ const { data: bills, status, refresh } = useFetch<Bill[]>(() => (currentUser.val
   lazy: true,
   default: () => []
 })
-console.log(bills.value, 'Fetched bills');
+console.log(bills.value, 'Fetched bills here');
 
 // conditoins from shared abilities
 
