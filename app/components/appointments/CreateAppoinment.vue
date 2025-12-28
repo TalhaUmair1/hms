@@ -23,9 +23,10 @@ const loadingPatients = ref(false)
 
 
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
-  key: 'doctors-list'
+  key: 'table-doctors'
 })
-console.log(doctors.value, 'Doctors List');
+console.log(doctors.value, 'Doctors List  in CreateAppointment.vue');
+const doctorItems = computed(() => doctors.value?.data ?? [])
 
 
 const schema = z.object({
@@ -147,7 +148,7 @@ const statuses = ['pending', 'confirmed', 'completed', 'canceled']
         <UFormField label="Doctor" name="doctor_id">
           <USelectMenu
             v-model="state.doctor_id"
-            :items="doctors"
+            :items="doctorItems"
             value-key="id"
             label-key="name"
             :loading="loadingDoctors"

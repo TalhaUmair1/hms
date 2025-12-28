@@ -23,9 +23,10 @@ console.log(patients,'patients in prescription');
 
 
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
-  key: 'doctors-list',
+  key: 'table-doctors',
   lazy: true
 })
+const doctorItems = computed(() => doctors.value?.data ?? [])
 
 const { data: appointments, pending: loadingAppointments } =  useFetch('/api/appointments', {
   key: 'appointments-list',
@@ -110,7 +111,7 @@ const resetForm = () => Object.assign(state, initialState)
         <UFormField label="Doctor" name="doctor_id">
           <USelectMenu
             v-model="state.doctor_id"
-            :items="doctors"
+            :items="doctorItems"
             value-key="id"
             label-key="name"
             :loading="loadingDoctors"
