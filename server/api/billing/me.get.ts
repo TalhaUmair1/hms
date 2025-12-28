@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
 import { canReadPersonalBilling } from '~~/shared/abilities/billing'
 
@@ -8,7 +8,7 @@ export default eventHandler(async (event) => {
   const { user: currentUser } = await requireUserSession(event) as any
   const userId = Number(currentUser.id)
 
-  // ✅ Authorization
+  // 🔐 Authorization
   await authorize(event, canReadPersonalBilling, currentUser)
 
   // ✅ Alias users table
@@ -22,15 +22,19 @@ export default eventHandler(async (event) => {
       amount: tables.billing.amount,
       status: tables.billing.status,
       payment_method: tables.billing.payment_method,
-      patient_name:sql<string>`patient_user.name as patient_name`,
+
+      // patient
+      patient_name: patientUser.name,
+
+      // appointment
       date: tables.appointments.date,
     })
     .from(tables.billing)
-    .leftJoin(
+    .innerJoin(
       tables.patients,
       eq(tables.billing.patient_id, tables.patients.id)
     )
-    .leftJoin(
+    .innerJoin(
       patientUser,
       eq(tables.patients.user_id, patientUser.id)
     )
@@ -38,8 +42,9 @@ export default eventHandler(async (event) => {
       tables.appointments,
       eq(tables.billing.appointment_id, tables.appointments.id)
     )
-    .where(eq(tables.patients.user_id, userId))
-console.log(billings,'getting from billings');
+    .where(eq(patientUser.id, userId))
+
+  console.log(billings, 'PERSONAL BILLINGS')
 
   return billings
 })
