@@ -11,7 +11,7 @@ export default eventHandler(async (event) => {
   // ✅ Alias users table for patient
   // const patientUser = alias(tables.users, 'patient_user')
 
-  console.log('Fetching ALL billing records')
+  // console.log('Fetching ALL billing records')
 const patientUser = alias(tables.users, 'patient_user')
 console.log(patientUser, 'patients user from billing index');
 
