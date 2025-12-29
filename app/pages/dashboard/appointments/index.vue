@@ -6,8 +6,6 @@ import DeleteOppointments from '~/components/appointments/DeleteOppointments.vue
 import { canCreateappointments } from '#shared/abilities/appointments'
 
 const UAvatar = resolveComponent('UAvatar')
-
-
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
@@ -21,33 +19,46 @@ type Appointment = {
   doctor_name: string
 }
 
-// 🗑 Modal
-const isDeleteModalOpen = ref(false)
-const selectedAppointment = ref<Appointment | null>(null)
+/* ---------------- PAGINATION (Doctors jaisi) ---------------- */
+const pagination = ref({
+  page: 1,
+  perPage: 2
+})
 
-// 📦 Fetch appointments (moved inside onMounted or setup function)
-const { data: appointments, status, refresh } = useFetch<Appointment[]>(
-  '/api/appointments',
-  {
-    key: 'table-appointments',
-    lazy: true,
+const { data, status, refresh } = await useFetch<{
+  data: Appointment[]
+  pagination: {
+    page: number
+    perPage: number
+    total: number
+    totalPages: number
+  }
+}>('/api/appointments', {
+  key: 'table-appointments',
+  query: {
+    page: computed(() => pagination.value.page),
+    perPage: computed(() => pagination.value.perPage)
   },
-)
-console.log(appointments.value,"data is fetching");
+  transform: (data) => ({
+    data: data?.data || [],
+    pagination: data?.pagination || { page: 1, perPage: 2, total: 0, totalPages: 0 }
+  }),
+  lazy: true
+})
+/* ------------------------------------------------------------ */
 
 // 🔍 Search
 const search = ref('')
 
-// 🔢 Filtered data
 const filteredAppointments = computed(() => {
-  if (!search.value) return appointments.value || []
-  return (appointments.value || []).filter((a) =>
+  if (!search.value) return data.value?.data || []
+  return (data.value?.data || []).filter((a) =>
     a.patient_name?.toLowerCase().includes(search.value.toLowerCase()) ||
     a.doctor_name?.toLowerCase().includes(search.value.toLowerCase())
   )
 })
 
-// 🧩 Table columns
+// Columns (UNCHANGED)
 const columns: TableColumn<Appointment>[] = [
   { accessorKey: 'id', header: 'ID' },
   { accessorKey: 'patient_name', header: 'Patient Name' },
@@ -86,12 +97,14 @@ const columns: TableColumn<Appointment>[] = [
               {
                 label: 'Details',
                 icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/dashboard/appointments/detail/${row.original.id}`),
+                onSelect: () =>
+                  navigateTo(`/dashboard/appointments/detail/${row.original.id}`),
               },
               {
                 label: 'Edit',
                 icon: 'i-lucide-edit',
-                onSelect: () => navigateTo(`/dashboard/appointments/${row.original.id}`),
+                onSelect: () =>
+                  navigateTo(`/dashboard/appointments/${row.original.id}`),
               },
               {
                 label: 'Delete',
@@ -119,31 +132,26 @@ const columns: TableColumn<Appointment>[] = [
 
 <template>
   <UDashboardPanel id="appointments">
-    <!-- 🧭 Header -->
+    <!-- Header -->
     <template #header>
       <UDashboardNavbar title="Appointments List">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
-
         <template #right>
-        
-                     <Can
-    :ability="canCreateappointments"
-    
-  >
-        <ULink
-            to="/dashboard/appointments/create"
-            class="bg-primary text-white px-3 py-1.5 rounded-md"
-          >
-            Create Appointment
-          </ULink>      
-  </Can>
+          <Can :ability="canCreateappointments">
+            <ULink
+              to="/dashboard/appointments/create"
+              class="bg-primary text-white px-3 py-1.5 rounded-md"
+            >
+              Create Appointment
+            </ULink>
+          </Can>
         </template>
       </UDashboardNavbar>
     </template>
 
-    <!-- 📄 Body -->
+    <!-- Body -->
     <template #body>
       <UContainer class="flex flex-col">
         <div class="m-6">
@@ -152,20 +160,26 @@ const columns: TableColumn<Appointment>[] = [
             placeholder="Filter by name..."
             class="max-w-xs"
             icon="i-heroicons-magnifying-glass-20-solid"
-            type="text"
           />
         </div>
 
-        <!-- 🧾 Table -->
         <UTable
           :data="filteredAppointments"
           :columns="columns"
           :loading="status === 'pending'"
           class="w-full"
         />
+
+        <div class="flex justify-end border-t pt-4 px-4">
+          <UPagination
+            :page="pagination.page"
+            :items-per-page="pagination.perPage"
+            :total="data?.pagination?.total || 0"
+            @update:page="(p) => (pagination.page = p)"
+          />
+        </div>
       </UContainer>
 
-      <!-- 🗑 Delete Modal -->
       <DeleteOppointments
         v-if="selectedAppointment"
         v-model:open="isDeleteModalOpen"

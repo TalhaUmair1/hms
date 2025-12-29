@@ -5,21 +5,26 @@ import { canReadappointments } from '~~/shared/abilities/appointments'
 export default eventHandler(async (event) => {
   await authorize(event, canReadappointments)
 
-  // Aliases
+  const db = useDatabase()
+
+  // ✅ Pagination defaults
+  const { page = '1', perPage = '2' } = getQuery(event)
+  const currentPage = Number(page)
+  const limit = Number(perPage)
+  const offset = (currentPage - 1) * limit
+
+  // ✅ Aliases
   const patientUser = alias(tables.users, 'patient_user')
   const doctorUser = alias(tables.users, 'doctor_user')
 
-  const db = useDatabase()
-
-  const appointments = await db
+  // ✅ Base query
+  const baseQuery = db
     .select({
       id: tables.appointments.id,
       date: tables.appointments.date,
       status: tables.appointments.status,
       patient_id: tables.appointments.patient_id,
       doctor_id: tables.appointments.doctor_id,
-
-      // ✅ Explicit raw SQL aliases — these 100% survive SQLite flattening
       patient_name: sql<string>`patient_user.name as patient_name`,
       doctor_name: sql<string>`doctor_user.name as doctor_name`,
     })
@@ -34,7 +39,31 @@ export default eventHandler(async (event) => {
       eq(tables.appointments.doctor_id, tables.doctors.id)
     )
     .leftJoin(doctorUser, eq(tables.doctors.user_id, doctorUser.id))
+
+  // ✅ Get paginated data
+  const appointments = await baseQuery
+    .limit(limit)
+    .offset(offset)
     .all()
 
-  return appointments
+  // ✅ Total records count
+  const [{ total }] = await db
+    .select({
+      total: sql<number>`count(${tables.appointments.id}) as total`,
+    })
+    .from(tables.appointments)
+
+  // ✅ Final response
+  const result = {
+    data: appointments,
+    pagination: {
+      page: currentPage,
+      perPage: limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  }
+ console.log(result,'checking result pagination from appointments');
+ 
+  return result
 })

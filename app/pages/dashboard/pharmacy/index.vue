@@ -1,70 +1,5 @@
-<template>
-  <UDashboardPanel id="pharmacy">
-  
-    <template #header>
-      <UDashboardNavbar title="Pharmacy">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-
-        <UDashboardToolbar>
-          <template #left></template>
-        </UDashboardToolbar>
-
-        <template #right>
-        
-          
-                              <Can
-    :ability="canCreatePharmacy"
-    
-  >
-     <ULink
-            to="/dashboard/pharmacy/create"
-            class="bg-primary px-3 py-1.5 text-white rounded-md"
-          >
-            Create Pharmacy
-          </ULink>        
-  </Can>
-        </template>
-      </UDashboardNavbar>
-    </template>
-
-    <!-- 📦 Body -->
-    <template #body>
-      <UContainer class="flex flex-col">
-        <!-- 🔍 Search -->
-        <div class="m-6">
-          <UInput
-            v-model="search"
-            placeholder="Filter by Name"
-            class="max-w-xs"
-            icon="i-heroicons-magnifying-glass-20-solid"
-            type="text"
-          />
-        </div>
-
-        <!-- 💊 Table -->
-        <UTable
-          :data="filteredPharmacy"
-          :columns="columns"
-          :loading="status === 'pending'"
-          class="w-full"
-        />
-
-        <!-- 🗑 Delete Modal -->
-        <DeletePharmacy
-          v-if="selectedPharmacy"
-          v-model:open="isDeleteModalOpen"
-          :id="selectedPharmacy.id"
-          @deleted="refresh"
-        />
-      </UContainer>
-    </template>
-  </UDashboardPanel>
-</template>
-
 <script setup lang="ts">
-import { ref, computed, h, resolveComponent } from 'vue'
+import { ref, computed, h, resolveComponent, onMounted } from 'vue'
 import { navigateTo, useFetch } from '#app'
 import type { TableColumn } from '@nuxt/ui'
 import DeletePharmacy from '~/components/pharmacy/DeletePharmacy.vue'
@@ -74,7 +9,7 @@ import { canCreatePharmacy, canUpdatePharmacy, canDeletePharmacy } from '#shared
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-// 💊 Pharmacy type (based on your schema)
+// 💊 Pharmacy type
 type Pharmacy = {
   id: number
   name: string
@@ -87,40 +22,50 @@ type Pharmacy = {
 const isDeleteModalOpen = ref(false)
 const selectedPharmacy = ref<Pharmacy | null>(null)
 
-// 📦 Fetch pharmacies
-const { data: pharmacy, status, refresh } = useFetch<Pharmacy[]>('/api/pharmacy', {
+// 🔗 Pagination State
+const pagination = ref({
+  page: 1,
+  perPage: 2
+})
+
+// 📦 Fetch pharmacies with pagination
+const { data, status, refresh } = await useFetch<{
+  data: Pharmacy[]
+  pagination: {
+    page: number
+    perPage: number
+    total: number
+    totalPages: number
+  }
+}>('/api/pharmacy', {
   key: 'table-pharmacy',
+  query: {
+    page: computed(() => pagination.value.page),
+    perPage: computed(() => pagination.value.perPage)
+  },
+  transform: (data) => ({
+    data: data?.data || [],
+    pagination: data?.pagination || { page: 1, perPage: 5, total: 0, totalPages: 0 }
+  }),
   lazy: true,
 })
-console.log(pharmacy.value);
 
-
-// conditoins from shared abilities
-
+// Permissions
 const canDelete = ref(true)
- const canUpdate = ref(true)
- onMounted(async () => {
-   try {
-     const deleteResult = await Promise.resolve(denies(canDeletePharmacy))
-     canDelete.value = Boolean(deleteResult)
-   } catch {
-     canDelete.value = true
-   }
-   try {
-     const updateResult = await Promise.resolve(denies(canUpdatePharmacy))
-     canUpdate.value = Boolean(updateResult)
-   } catch {
-     canUpdate.value = true
-   }
- })
+const canUpdate = ref(true)
+onMounted(async () => {
+  try { canDelete.value = Boolean(await Promise.resolve(denies(canDeletePharmacy))) } catch { canDelete.value = true }
+  try { canUpdate.value = Boolean(await Promise.resolve(denies(canUpdatePharmacy))) } catch { canUpdate.value = true }
+})
 
 // 🔍 Search
 const search = ref('')
 
 // 🔢 Filtered Data
 const filteredPharmacy = computed(() => {
-  if (!search.value) return pharmacy.value || []
-  return (pharmacy.value || []).filter((p) =>
+  if (!data.value) return []
+  if (!search.value) return data.value.data
+  return data.value.data.filter((p) =>
     p.name.toLowerCase().includes(search.value.trim().toLowerCase())
   )
 })
@@ -188,3 +133,68 @@ const columns: TableColumn<Pharmacy>[] = [
   },
 ]
 </script>
+
+<template>
+  <UDashboardPanel id="pharmacy">
+    <template #header>
+      <UDashboardNavbar title="Pharmacy">
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+        <UDashboardToolbar>
+          <template #left></template>
+        </UDashboardToolbar>
+        <template #right>
+          <Can :ability="canCreatePharmacy">
+            <ULink
+              to="/dashboard/pharmacy/create"
+              class="bg-primary px-3 py-1.5 text-white rounded-md"
+            >
+              Create Pharmacy
+            </ULink>
+          </Can>
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+      <UContainer class="flex flex-col">
+        <!-- 🔍 Search -->
+        <div class="m-6">
+          <UInput
+            v-model="search"
+            placeholder="Filter by Name"
+            class="max-w-xs"
+            icon="i-heroicons-magnifying-glass-20-solid"
+          />
+        </div>
+
+        <!-- 💊 Table -->
+        <UTable
+          :data="filteredPharmacy"
+          :columns="columns"
+          :loading="status === 'pending'"
+          class="w-full"
+        />
+
+        <!-- Pagination -->
+        <div class="flex justify-end border-t pt-4 px-4">
+          <UPagination
+            :page="pagination.page"
+            :items-per-page="pagination.perPage"
+            :total="data?.pagination?.total || 0"
+            @update:page="(p) => pagination.page = p"
+          />
+        </div>
+
+        <!-- 🗑 Delete Modal -->
+        <DeletePharmacy
+          v-if="selectedPharmacy"
+          v-model:open="isDeleteModalOpen"
+          :id="selectedPharmacy.id"
+          @deleted="refresh"
+        />
+      </UContainer>
+    </template>
+  </UDashboardPanel>
+</template>
