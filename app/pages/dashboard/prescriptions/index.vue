@@ -40,9 +40,11 @@ const { data, status, refresh } = await useFetch<{
     total: number
     totalPages: number
   }
-}>(() => (currentUser.value as any)?.role === 'patient'
-    ? `/api/prescriptions/me`
-    : '/api/prescriptions', {
+}>(() => {
+  const url = (currentUser.value as any)?.role === 'patient' ? `/api/prescriptions/me` : '/api/prescriptions'
+  console.log('Prescriptions API URL:', url)
+  return url
+}, {
   key: 'table-prescriptions2',
   query: {
     page: computed(() => pagination.value.page),

@@ -43,6 +43,34 @@
       "when": 1761212488732,
       "tag": "0005_organic_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1767005856318,
+      "tag": "0006_loving_tempest",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1767006659008,
+      "tag": "0007_real_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1767075057922,
+      "tag": "0008_early_zaran",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1767075267781,
+      "tag": "0009_foamy_valeria_richards",
+      "breakpoints": true
     }
   ]
 }

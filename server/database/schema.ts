@@ -42,6 +42,12 @@ export const credentials = sqliteTable(
     counter: integer('counter').notNull(),
     backedUp: integer('backedUp').notNull(),
     transports: text('transports').notNull(),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.id] }),
@@ -66,6 +72,12 @@ export const doctors = sqliteTable(
     specialization: text('specialization'),
     fees: real('fees'),
     availability: text('availability'),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     foreignKey(() => ({
@@ -88,6 +100,12 @@ export const patients = sqliteTable(
     dob: text('dob'),
     gender: text('gender'),
     medical_history: text('medical_history'),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     foreignKey(() => ({
@@ -112,6 +130,12 @@ export const appointments = sqliteTable(
     status: text('status', {
       enum: ['pending', 'confirmed', 'completed', 'canceled'],
     }).notNull(),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     foreignKey(() => ({
@@ -141,6 +165,12 @@ export const prescriptions = sqliteTable(
     patient_id: integer('patient_id').notNull(),
     medicine_list: text('medicine_list'),
     notes: text('notes'),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     foreignKey(() => ({
@@ -176,6 +206,12 @@ export const billing = sqliteTable(
     amount: real('amount').notNull(),
     status: text('status'),
     payment_method: text('payment_method'),
+    created_at: text('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: text('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     foreignKey(() => ({
@@ -202,4 +238,10 @@ export const pharmacy = sqliteTable('pharmacy', {
   quantity: integer('quantity').notNull(),
   price: integer('price').notNull(),
   expiryDate: text('expiry_date').notNull(), // ISO date string
+  created_at: text('created_at')
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updated_at: text('updated_at')
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
 })

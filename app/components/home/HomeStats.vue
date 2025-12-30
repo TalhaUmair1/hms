@@ -15,40 +15,34 @@ function formatCurrency(value: number): string {
 }
 
 const baseStats = [{
+  key: 'patients',
   title: 'Patients',
-  icon: 'i-lucide-users',
-  minValue: 400,
-  maxValue: 1000,
-  minVariation: -15,
-  maxVariation: 25
+  icon: 'i-lucide-users'
 }, {
+  key: 'doctors',
   title: 'Doctors',
-  icon: 'i-lucide-stethoscope',
-  minValue: 1000,
-  maxValue: 2000,
-  minVariation: -10,
-  maxVariation: 20
+  icon: 'i-lucide-stethoscope'
 }, {
+  key: 'bill',
   title: 'Bill',
   icon: 'i-lucide-circle-dollar-sign',
-  minValue: 200000,
-  maxValue: 500000,
-  minVariation: -20,
-  maxVariation: 30,
   formatter: formatCurrency
 }, {
+  key: 'medicines',
   title: 'Medicines',
-  icon: 'i-lucide-pill',
-  minValue: 100,
-  maxValue: 300,
-  minVariation: -5,
-  maxVariation: 15
+  icon: 'i-lucide-pill'
 }]
 
 const { data: stats } = await useAsyncData<Stat[]>('stats', async () => {
+  const data = await $fetch<Record<string, { value: number, variation: number }>>('/api/stats', {
+    query: {
+      period: props.period,
+      range: props.range
+    }
+  })
+
   return baseStats.map((stat) => {
-    const value = randomInt(stat.minValue, stat.maxValue)
-    const variation = randomInt(stat.minVariation, stat.maxVariation)
+    const { value, variation } = data[stat.key] || { value: 0, variation: 0 }
 
     return {
       title: stat.title,
