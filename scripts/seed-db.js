@@ -1,0 +1,22 @@
+import { execSync } from 'child_process';
+
+console.log('Nuxt Seed Script Runner');
+console.log('=======================');
+console.log();
+console.log('To run the database seed task, you have two options:');
+console.log();
+console.log('OPTION 1 - Using the development server:');
+console.log('  1. Start the development server: npm run dev');
+console.log('  2. Make a POST request to: http://localhost:3000/api/_tasks/seed:database');
+console.log();
+console.log('OPTION 2 - Using Nitro after building:');
+console.log('  1. Build the project: npx nuxi build');
+console.log('  2. Run the task: node .output/server/index.mjs --run-task=seed:database');
+console.log();
+console.log('The seed task will:');
+console.log('  - Run database migrations');
+console.log('  - Clear existing data');
+console.log('  - Insert sample users (admin, doctors, patients)');
+console.log('  - Add sample appointments, prescriptions, billing, and pharmacy items');
+console.log();
+console.log('Make sure your .env file is properly configured with DB_FILE_NAME');
