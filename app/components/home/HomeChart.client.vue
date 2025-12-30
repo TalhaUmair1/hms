@@ -19,18 +19,45 @@ const { width } = useElementSize(cardRef)
 
 const data = ref<DataRecord[]>([])
 
+const fetchDataFromAPI = async () => {
+  try {
+    // Get detailed billing data from API
+    const billingData = await $fetch('/api/billing/details', {
+      params: {
+        period: props.period,
+        range: JSON.stringify(props.range)
+      }
+    })
+    
+    // Use the actual billing data from the API
+    data.value = billingData.map(item => ({
+      date: new Date(item.date), // Convert ISO string back to Date object
+      amount: item.amount
+    }))
+  } catch (error) {
+    console.error('Error fetching data from API:', error)
+    
+    // Fallback to mock data if API call fails
+    const dates = ({
+      daily: eachDayOfInterval,
+      weekly: eachWeekOfInterval,
+      monthly: eachMonthOfInterval
+    } as Record<Period, typeof eachDayOfInterval>)[props.period](props.range)
+    
+    const min = 1000
+    const max = 10000
+    
+    data.value = dates.map(date => ({ date, amount: Math.floor(Math.random() * (max - min + 1)) + min }))
+  }
+}
+
+onMounted(() => {
+  fetchDataFromAPI()
+})
+
 watch([() => props.period, () => props.range], () => {
-  const dates = ({
-    daily: eachDayOfInterval,
-    weekly: eachWeekOfInterval,
-    monthly: eachMonthOfInterval
-  } as Record<Period, typeof eachDayOfInterval>)[props.period](props.range)
-
-  const min = 1000
-  const max = 10000
-
-  data.value = dates.map(date => ({ date, amount: Math.floor(Math.random() * (max - min + 1)) + min }))
-}, { immediate: true })
+  fetchDataFromAPI()
+}, { immediate: false }) // Don't run immediately since onMounted already calls it
 
 const x = (_: DataRecord, i: number) => i
 const y = (d: DataRecord) => d.amount
