@@ -5,7 +5,7 @@ const route = useRoute()
 const appointmentId = route.params.id
 
 // ✅ Fetch appointment details
-const { data: appointment, pending, error } = await useFetch(`/api/oppointments/${appointmentId}`)
+const { data: appointment, pending, error } = await useFetch(`/api/appointments/${appointmentId}`)
 </script>
 
 <template>
