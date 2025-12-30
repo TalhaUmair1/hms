@@ -6,23 +6,19 @@ defineProps<{
 }>()
 
 const teams = ref([{
-  label: 'HMS',
+  label: 'S-K Hospital',
   avatar: {
     icon: 'i-lucide-hospital',
     alt: '/dashboard'
   }
 }, {
-  label: 'NuxtHub',
-  avatar: {
-    src: 'https://github.com/nuxt-hub.png',
-    alt: 'NuxtHub'
-  }
+  label: 'About Us',
+   icon:'i-lucide-newspaper',
+    to: '/dashboard/about'
 }, {
-  label: 'NuxtLabs',
-  avatar: {
-    src: 'https://github.com/nuxtlabs.png',
-    alt: 'NuxtLabs'
-  }
+  label: 'How It’s Sustained',
+   icon:'i-lucide-hand-heart',
+    to: '/dashboard/sustained'
 }])
 const selectedTeam = ref(teams.value[0])
 
@@ -33,13 +29,13 @@ const items = computed<DropdownMenuItem[][]>(() => {
       selectedTeam.value = team
     }
   })), [{
-    label: 'See Doctors',
-    icon: 'i-lucide-stethoscope',
-    to: '/dashboard/doctors'
+    label: 'Medical & Staff',
+    icon: 'i-lucide-store',
+    to: '/dashboard/store'
   }, {
-    label: 'See Pharmacy',
-    icon: 'i-lucide-pill',
-    to: '/dashboard/pharmacies'
+    label: 'Cleaing',
+    icon: 'i-lucide-brush-cleaning',
+    to: '/dashboard/cleaning'
   }]]
 })
 </script>
