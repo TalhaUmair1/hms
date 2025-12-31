@@ -26,7 +26,7 @@ const pagination = ref({
   page: 1,
   perPage: 2
 })
-
+const { user: currentUser } = useUserSession()
 const { data, status, refresh } = await useFetch<{
   data: Patient[]
   pagination: {
@@ -35,7 +35,15 @@ const { data, status, refresh } = await useFetch<{
     total: number
     totalPages: number
   }
-}>('/api/patients', {
+}>(() => {
+  // Dynamic URL based on user role (example, adjust if needed)
+  const url = (currentUser.value as any)?.role === 'patient' 
+    ? `/api/patients/me` 
+    : '/api/patients'
+
+  console.log('Patients dfsd API fetched:', url)
+  return url
+}, {
   key: 'table-patients',
   query: {
     page: computed(() => pagination.value.page),
@@ -46,15 +54,11 @@ const { data, status, refresh } = await useFetch<{
       ...p,
       avatar: { alt: `${p.patient_name} avatar` }
     })) || [],
-    pagination: data?.pagination || {
-      page: 1,
-      perPage: 2,
-      total: 0,
-      totalPages: 0
-    }
+    pagination: data?.pagination || { page: 1, perPage: 2, total: 0, totalPages: 0 }
   }),
-  lazy: true
+  lazy: true,
 })
+
 /* ------------------------------------------------------------ */
 
 // 🔍 Search

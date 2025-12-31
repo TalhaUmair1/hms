@@ -1,17 +1,21 @@
-import { zh } from 'h3-zod'
-import { eq, sql } from 'drizzle-orm'
+import { eq, sql, and } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/sqlite-core'
 
 export default eventHandler(async (event) => {
   const db = useDatabase()
+  const { user: currentUser } = await requireUserSession(event)
+  const user = currentUser as any
 
-  const {user:currentUser} = await requireUserSession(event)
-console.log(currentUser,'current user in me patient');
-  // ✅ Alias users table for clarity
   const patientUser = alias(tables.users, 'patient_user')
 
-  // ✅ Query patient with joined user name
-  const patient = await db
+  // ✅ Get pagination query params from request
+  const { page = '1', perPage = '10' } = getQuery(event)
+  const pageNum = parseInt(page as string, 10)
+  const perPageNum = parseInt(perPage as string, 10)
+  const offset = (pageNum - 1) * perPageNum
+
+  // ✅ Base query
+  let query = db
     .select({
       id: tables.patients.id,
       user_id: tables.patients.user_id,
@@ -22,15 +26,33 @@ console.log(currentUser,'current user in me patient');
     })
     .from(tables.patients)
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
-    .where(eq(tables.patients.user_id, currentUser.id))
-    .get()
-   console.log(patient,'patient in me');
-  if (!patient) {
-    throw createError({
-      statusCode: 404,
-      message: 'Patient not found',
-    })
+
+  // ✅ Optional: filter by current user if role is 'patient'
+  if (user.role === 'patient') {
+    query = query.where(eq(tables.patients.user_id, user.id))
   }
 
-  return patient
+  // ✅ Total count for pagination
+  const total = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(tables.patients)
+    .get()
+    .then(r => r?.count || 0)
+
+  // ✅ Fetch paginated data
+  const patients = await query
+    .limit(perPageNum)
+    .offset(offset)
+    .all()
+
+  return {
+    data: patients,
+    pagination: {
+      page: pageNum,
+      perPage: perPageNum,
+      total,
+      totalPages: Math.ceil(total / perPageNum),
+    }
+  }
 })
+ 
