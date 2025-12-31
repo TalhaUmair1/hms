@@ -38,7 +38,6 @@ export default eventHandler(async (event) => {
   const updatedUser = await db
     .update(tables.users)
     .set({
-      id,
       name,
       email,
       phone,

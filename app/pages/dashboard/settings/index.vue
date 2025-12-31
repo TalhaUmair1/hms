@@ -2,9 +2,10 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { useFetch } from 'nuxt/app'
+import type { Ref } from 'vue'
 
 const profileSchema = z.object({
-  id: z.int().min(1, 'ID is required'),
+  id: z.number().min(1, 'ID is required'),
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
@@ -12,34 +13,75 @@ const profileSchema = z.object({
 })
 type ProfileSchema = z.output<typeof profileSchema>
 
-  const profile = ref<ProfileSchema>({
-    id: '',
-    name: '',
-    email: '',
-   address: '',
-   phone: '',
-
-  })
+const profile = ref<ProfileSchema>({
+  id: 0,
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+})
 
   const { user: u } = useUserSession()
-  console.log(u.value);
-  
+console.log(u.value);
 
-const { data, pending, error, refresh } = useFetch<ProfileSchema>('/api/auth/profile')
+const { data, pending, error, refresh } = await useFetch<ProfileSchema>('/api/auth/profile')
 console.log(data.value);
 
-profile.value= data.value || profile.value
+if (data.value) {
+  profile.value = data.value
+}
 
 
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
   console.log('Submitted', event.data)
-  const { data, pending, error } = await useFetch('/api/auth/' + profile.value.id, {
-    method: 'PUT',
-    body: event.data,
-  })
-  console.log(data)
+  const userSession = useUserSession() as {
+    user: Ref<{ id?: number, name?: string, email?: string, role?: string } | null>
+  }
+  
+  if (!userSession.user?.value?.id) {
+    toast.add({
+      title: 'Error',
+      description: 'User not authenticated',
+      color: 'error',
+    })
+    return
+  }
+  
+  try {
+    const { data: response, error: apiError } = await useFetch(`/api/auth/${userSession.user.value.id}`, {
+      method: 'PUT',
+      body: event.data,
+    })
+    
+    if (apiError.value) {
+      console.error('Update error:', apiError.value)
+      toast.add({
+        title: 'Error',
+        description: 'Failed to update profile',
+        color: 'error',
+      })
+      return
+    }
+    
+    toast.add({
+      title: 'Success',
+      description: 'Profile updated successfully',
+      color: 'success',
+    })
+    
+    // Update the profile with the response data
+    profile.value = response.value as ProfileSchema
+    
+  } catch (err) {
+    console.error('Submission error:', err)
+    toast.add({
+      title: 'Error',
+      description: 'An unexpected error occurred',
+      color: 'error',
+    })
+  }
 }
 
 
