@@ -42,7 +42,7 @@ const { data, status, refresh } = await useFetch<{
   }
 }>(() => {
   const url = (currentUser.value as any)?.role === 'patient' ? `/api/prescriptions/me` : '/api/prescriptions'
-  console.log('Prescriptions API  fetched:', url)
+  console.log('Prescriptions API in the  fetched:', url)
   return url
 }, {
   key: 'table-prescriptions2',

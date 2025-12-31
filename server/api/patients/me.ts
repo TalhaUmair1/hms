@@ -7,6 +7,7 @@ export default eventHandler(async (event) => {
   const user = currentUser as any
 
   const patientUser = alias(tables.users, 'patient_user')
+console.log(patientUser,'this from me patientuser');
 
   // ✅ Get pagination query params from request
   const { page = '1', perPage = '10' } = getQuery(event)
