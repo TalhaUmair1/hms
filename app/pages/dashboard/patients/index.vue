@@ -26,7 +26,9 @@ const pagination = ref({
   page: 1,
   perPage: 2
 })
-const { user: currentUser } = useUserSession()
+const { user: currentUser } = useUserSession() as {
+  user: Ref<{ id?: number, name?: string, email?: string, role?: string } | null>
+}
 const { data, status, refresh } = await useFetch<{
   data: Patient[]
   pagination: {
@@ -37,7 +39,7 @@ const { data, status, refresh } = await useFetch<{
   }
 }>(() => {
   // Dynamic URL based on user role (example, adjust if needed)
-  const url = (currentUser.value as any)?.role === 'patient' 
+  const url = (currentUser?.value as any)?.role === 'patient' 
     ? `/api/patients/me` 
     : '/api/patients'
 

@@ -15,7 +15,7 @@ console.log(patientUser,'this from me patientuser');
   const perPageNum = parseInt(perPage as string, 10)
   const offset = (pageNum - 1) * perPageNum
 
-  // ✅ Base query
+  // ✅ Base query with optional filter
   let query = db
     .select({
       id: tables.patients.id,
@@ -28,17 +28,30 @@ console.log(patientUser,'this from me patientuser');
     .from(tables.patients)
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
 
-  // ✅ Optional: filter by current user if role is 'patient'
+  // Apply filter conditionally
   if (user.role === 'patient') {
     query = query.where(eq(tables.patients.user_id, user.id))
   }
 
-  // ✅ Total count for pagination
-  const total = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(tables.patients)
-    .get()
-    .then(r => r?.count || 0)
+  // ✅ Total count for pagination (with same filter as main query)
+  let total = 0;
+  
+  if (user.role === 'patient') {
+    // If user is a patient, count only their records
+    const totalResult = await db
+      .select({ count: sql<number>`count(*)`.as('count') })
+      .from(tables.patients)
+      .where(eq(tables.patients.user_id, user.id))
+      .get();
+    total = totalResult?.count || 0;
+  } else {
+    // If user is not a patient, count all records
+    const totalResult = await db
+      .select({ count: sql<number>`count(*)`.as('count') })
+      .from(tables.patients)
+      .get();
+    total = totalResult?.count || 0;
+  }
 
   // ✅ Fetch paginated data
   const patients = await query
