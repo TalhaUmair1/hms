@@ -25,8 +25,8 @@ const loadingPatients = ref(false)
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
   key: 'table-doctors'
 })
-console.log(doctors.value, 'Doctors List  in CreateAppointment.vue');
 const doctorItems = computed(() => doctors.value?.data ?? [])
+console.log(doctorItems.value, 'Doctors List  in CreateAppointment.vue');
 
 
 const schema = z.object({
@@ -61,17 +61,17 @@ watchEffect(async () => {
 
   loadingPatients.value = true
 
-  if (currentUser.value.role === 'patient') {
-    const { data } = await useFetch(`/api/patients/me`, {
-      key: `patient-${currentUser.value.id}`
-    })
-    patients.value = data.value ? [data.value] : []
-  } else {
-  
-    const { data } = await useFetch('/api/patients', {
-      key: 'patients-list'
-    })
-    patients.value = data.value || []
+  try {
+    if (currentUser.value.role === 'patient') {
+      const data: any = await $fetch('/api/patients/me')
+      const patient = data?.data || data
+      patients.value = patient ? [patient] : []
+    } else {
+      const data: any = await $fetch('/api/patients')
+      patients.value = data?.data || []
+    }
+  } catch (error) {
+    console.error('Error loading patients:', error)
   }
 
   loadingPatients.value = false

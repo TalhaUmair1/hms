@@ -2,6 +2,7 @@
 import type { TableColumn } from '@nuxt/ui'
 import { navigateTo, useFetch } from '#app'
 import { ref, computed, h, resolveComponent, onMounted } from 'vue'
+import type { Ref } from 'vue'
 import DeletePrescriptions from '~/components/prescriptions/DeletePrescriptions.vue'
 import { canCreatePrescription, canUpdatePrescription, canDeletePrescription } from '#shared/abilities/prescriptions'
 
@@ -24,13 +25,17 @@ type Prescription = {
 const isDeleteModalOpen = ref(false)
 const selectedPrescription = ref<Prescription | null>(null)
 
-const { user: currentUser } = useUserSession()
+const { user: currentUser } = useUserSession() as {
+  user: Ref<{ id?: number, name?: string, email?: string, role?: string } | null>
+}
 
 /* ---------------- PAGINATION (Doctors jaisi) ---------------- */
 const pagination = ref({
   page: 1,
   perPage: 2
 })
+
+console.log('Current user role:', currentUser.value?.role);
 
 const { data, status, refresh } = await useFetch<{
   data: Prescription[]
@@ -41,7 +46,7 @@ const { data, status, refresh } = await useFetch<{
     totalPages: number
   }
 }>(() => {
-  const url = (currentUser.value as any)?.role === 'patient' ? `/api/prescriptions/me` : '/api/prescriptions'
+  const url = currentUser.value?.role === 'patient' ? `/api/prescriptions/me` : '/api/prescriptions'
   console.log('Prescriptions API in the  fetched:', url)
   return url
 }, {
@@ -50,8 +55,8 @@ const { data, status, refresh } = await useFetch<{
     page: computed(() => pagination.value.page),
     perPage: computed(() => pagination.value.perPage)
   },
-  transform: (data) => ({
-    data: data?.data || [],
+  transform: (data: any) => ({
+    data: Array.isArray(data) ? data : (data?.data || []),
     pagination: data?.pagination || { page: 1, perPage: 2, total: 0, totalPages: 0 }
   }),
   lazy: true,

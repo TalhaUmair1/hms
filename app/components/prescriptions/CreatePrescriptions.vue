@@ -16,7 +16,8 @@ const props = defineProps({
 // ✅ Fetch lists (for selection)
 const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
-  lazy: true
+  lazy: true,
+  transform: (res: any) => res.data || []
 })
 console.log(patients,'patients in prescription');
 
@@ -31,7 +32,7 @@ const doctorItems = computed(() => doctors.value?.data ?? [])
 const { data: appointments, pending: loadingAppointments } =  useFetch('/api/appointments', {
   key: 'appointments-list',
   lazy: true,
-  transform: (data) => data.map((item: any) => ({ ...item, label: `#${item.id} - ${item.patient_name} - ${item.date}` }))
+  transform: (res: any) => (res.data || []).map((item: any) => ({ ...item, label: `#${item.id} - ${item.patient_name} - ${item.date}` }))
 })
 console.log(appointments,'appointments in prescription');
 
