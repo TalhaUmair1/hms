@@ -1,8 +1,8 @@
 <template>
-  <UDashboardPanel id="about-shaukat-khanum">
+  <UDashboardPanel id="about-hospital">
     <!-- Header -->
     <template #header>
-      <UDashboardNavbar title="About Shaukat Khanum">
+      <UDashboardNavbar title="About the Hospital">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -12,21 +12,18 @@
     <!-- Body -->
     <template #body>
       <UContainer class="space-y-16 py-6">
-
         <!-- Hero / Intro -->
         <UCard>
           <div class="text-center space-y-4">
             <h1 class="text-3xl font-bold">
               Shaukat Khanum Memorial Cancer Hospital & Research Centre
             </h1>
-            <p class="text-lg text-gray-600">
-              Providing World-Class Cancer Care to All
-            </p>
+            <p class="text-lg text-gray-600">A Comprehensive Cancer Care Institution</p>
             <p class="text-gray-500 max-w-3xl mx-auto">
-              Shaukat Khanum Memorial Cancer Hospital & Research Centre (SKMCH&RC)
-              is a leading tertiary care cancer hospital dedicated to providing
-              high-quality cancer treatment to patients, regardless of their
-              ability to pay.
+              Shaukat Khanum Memorial Cancer Hospital & Research Centre (SKMCH&RC) is a
+              tertiary care cancer institution providing specialized, multidisciplinary
+              oncology services supported by modern medical infrastructure, clinical
+              expertise, and research-driven practices.
             </p>
           </div>
         </UCard>
@@ -36,18 +33,17 @@
           <h2 class="text-2xl font-semibold mb-4">About the Hospital</h2>
           <div class="space-y-4 text-gray-600">
             <p>
-              Shaukat Khanum Memorial Cancer Hospital & Research Centre was
-              established with the mission to offer state-of-the-art cancer care
-              to those who could not otherwise afford it. Inspired by the
-              personal struggle of Imran Khan’s mother with cancer, the hospital
-              was founded to ensure that financial limitations never stand in the
-              way of life-saving treatment.
+              Shaukat Khanum Memorial Cancer Hospital & Research Centre was established as
+              a dedicated cancer care institution with a strong focus on clinical
+              excellence, patient safety, and evidence-based treatment. The hospital
+              integrates advanced diagnostic services, specialized oncology care, and
+              modern treatment modalities under one roof.
             </p>
             <p>
-              Today, SKMCH&RC is Pakistan’s largest and most advanced cancer care
-              institution, equipped with modern medical technology and staffed
-              by highly qualified doctors trained both locally and
-              internationally.
+              Over the years, the hospital has grown into one of Pakistan’s most advanced
+              cancer treatment facilities, supported by a team of highly qualified
+              consultants, surgeons, nurses, and allied health professionals trained both
+              locally and internationally.
             </p>
           </div>
         </UCard>
@@ -57,70 +53,45 @@
           <UCard>
             <h3 class="text-xl font-semibold mb-2">Our Mission</h3>
             <p class="text-gray-600">
-              To provide comprehensive cancer care of the highest standard to
-              all patients, irrespective of their financial means, while
-              advancing medical research, education, and awareness.
+              To deliver comprehensive, high-quality cancer care through clinical
+              excellence, innovation, multidisciplinary collaboration, and continuous
+              improvement in patient outcomes.
             </p>
           </UCard>
 
           <UCard>
             <h3 class="text-xl font-semibold mb-2">Our Vision</h3>
             <p class="text-gray-600">
-              To be a center of excellence in cancer care, research, and
-              education, setting benchmarks in quality, compassion, and
-              transparency.
+              To be a recognized center of excellence in oncology services, research, and
+              education, setting benchmarks in quality, safety, and patient-centered care.
             </p>
           </UCard>
         </div>
 
         <!-- Services -->
         <UCard>
-          <h2 class="text-2xl font-semibold mb-6">Our Services</h2>
+          <h2 class="text-2xl font-semibold mb-6">Clinical Services</h2>
           <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <UCard
-              v-for="service in services"
-              :key="service"
-              class="text-center"
-            >
+            <UCard v-for="service in services" :key="service" class="text-center">
               {{ service }}
             </UCard>
           </div>
         </UCard>
 
-        <!-- Free Care -->
-        <UCard class="bg-primary/5">
-          <h2 class="text-2xl font-semibold mb-4">
-            Free Cancer Care Through Donations
-          </h2>
-          <p class="text-gray-600 mb-4">
-            More than 70% of patients are treated completely free of charge.
-            This is only possible due to generous donations from supporters
-            worldwide.
-          </p>
-          <ul class="list-disc pl-6 text-gray-600 space-y-2">
-            <li>Free treatment for deserving cancer patients</li>
-            <li>Advanced medical equipment</li>
-            <li>Cancer research and clinical trials</li>
-            <li>Training and education of healthcare professionals</li>
-          </ul>
-        </UCard>
-
         <!-- Research & Education -->
-        <UCard>
-          <h2 class="text-2xl font-semibold mb-4">Research & Education</h2>
+        <UCard class="bg-primary/5">
+          <h2 class="text-2xl font-semibold mb-4">Research, Training & Education</h2>
           <p class="text-gray-600">
-            Research is a core pillar of Shaukat Khanum Hospital. The institution
-            actively participates in cancer research, clinical trials, and
-            outcome studies, while also offering postgraduate training programs
-            for doctors, nurses, and allied health professionals.
+            Research and education are integral components of the hospital’s operations.
+            The institution actively participates in clinical research, outcome analysis,
+            and quality improvement initiatives, while offering structured training
+            programs for doctors, nurses, pharmacists, and allied health professionals.
           </p>
         </UCard>
 
         <!-- Why Choose -->
         <UCard>
-          <h2 class="text-2xl font-semibold mb-6">
-            Why Choose Shaukat Khanum Hospital
-          </h2>
+          <h2 class="text-2xl font-semibold mb-6">Why Choose This Hospital</h2>
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <UCard v-for="reason in reasons" :key="reason">
               {{ reason }}
@@ -130,16 +101,13 @@
 
         <!-- Appointments -->
         <UCard class="text-center">
-          <h2 class="text-2xl font-semibold mb-2">
-            Appointments & Patient Care
-          </h2>
+          <h2 class="text-2xl font-semibold mb-2">Appointments & Patient Services</h2>
           <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Our dedicated teams guide patients through every step of diagnosis,
-            treatment, and recovery with care and professionalism.
+            Dedicated patient service teams assist individuals throughout the care
+            journey, from initial consultation to treatment planning and follow-up.
           </p>
-          <UButton to="/dashboard/appointments" size="lg">Book Appointment</UButton>
+          <UButton to="/dashboard/appointments" size="lg"> Book Appointment </UButton>
         </UCard>
-
       </UContainer>
     </template>
   </UDashboardPanel>
@@ -147,22 +115,22 @@
 
 <script setup lang="ts">
 const services = [
-  'Medical Oncology',
-  'Radiation Oncology',
-  'Surgical Oncology',
-  'Pediatric Oncology',
-  'Chemotherapy & Immunotherapy',
-  'Diagnostic Imaging & Pathology',
-  'Bone Marrow Transplant',
-  'Palliative & Supportive Care'
-]
+  "Medical Oncology",
+  "Radiation Oncology",
+  "Surgical Oncology",
+  "Pediatric Oncology",
+  "Chemotherapy & Immunotherapy",
+  "Diagnostic Imaging & Pathology",
+  "Bone Marrow Transplant",
+  "Palliative & Supportive Care",
+];
 
 const reasons = [
-  'Internationally trained cancer specialists',
-  'Advanced diagnostic and treatment technology',
-  'Patient-focused and compassionate care',
-  'Majority of patients treated free of cost',
-  'Transparent and trusted donation system',
-  'Recognized nationally and internationally'
-]
+  "Multidisciplinary cancer care teams",
+  "Advanced diagnostic and treatment technology",
+  "Evidence-based clinical practices",
+  "Strong focus on patient safety and quality",
+  "Integrated research and clinical services",
+  "Recognized oncology expertise",
+];
 </script>

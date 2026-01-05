@@ -1,125 +1,172 @@
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui'
-import { ref, computed, h, resolveComponent, onMounted } from 'vue'
-import { navigateTo, useFetch } from '#app'
-import DeleteBill from '~/components/billing/DeleteBill.vue'
-import { canCreateBilling, canUpdateBilling, canDeleteBilling } from '#shared/abilities/billing'
+import type { TableColumn } from "@nuxt/ui";
+import { ref, computed, h, resolveComponent, onMounted } from "vue";
+import { navigateTo, useFetch } from "#app";
+import DeleteBill from "~/components/billing/DeleteBill.vue";
+import {
+  canCreateBilling,
+  canUpdateBilling,
+  canDeleteBilling,
+} from "#shared/abilities/billing";
 
 definePageMeta({
-  middleware: 'auth'
-})
+  middleware: "auth",
+});
 
-const UButton = resolveComponent('UButton')
-const UDropdownMenu = resolveComponent('UDropdownMenu')
+const UButton = resolveComponent("UButton");
+const UDropdownMenu = resolveComponent("UDropdownMenu");
 
 // 💰 Bill type
 type Bill = {
-  id: number
-  appointment_id: number
-  patient_id: number
-  amount: number
-  status: string
-  payment_method: string
-  date: string
-  name: string
-}
+  id: number;
+  appointment_id: number;
+  patient_id: number;
+  amount: number;
+  status: string;
+  payment_method: string;
+  date: string;
+  name: string;
+};
 
 // 🗑 Delete Modal State
-const isDeleteModalOpen = ref(false)
-const selectedBill = ref<Bill | null>(null)
+const isDeleteModalOpen = ref(false);
+const selectedBill = ref<Bill | null>(null);
 
 // 🔗 Current user
-const { user: currentUser } = useUserSession()
+const { user: currentUser } = useUserSession();
 
 /* ---------------- PAGINATION (Doctors style) ---------------- */
 const pagination = ref({
   page: 1,
-  perPage: 2
-})
+  perPage: 10,
+});
 
 const { data, status, refresh } = await useFetch<{
-  data: Bill[]
+  data: Bill[];
   pagination: {
-    page: number
-    perPage: number
-    total: number
-    totalPages: number
+    page: number;
+    perPage: number;
+    total: number;
+    totalPages: number;
+  };
+}>(
+  () =>
+    (currentUser.value as any)?.role === "patient" ? "/api/billing/me" : "/api/billing",
+  {
+    key: "table-billing",
+    query: {
+      page: computed(() => pagination.value.page),
+      perPage: computed(() => pagination.value.perPage),
+    },
+    transform: (data) => ({
+      data: data?.data || [],
+      pagination: data?.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0 },
+    }),
+    lazy: true,
   }
-}>(() => (currentUser.value as any)?.role === 'patient'
-    ? '/api/billing/me'
-    : '/api/billing', {
-  key: 'table-billing',
-  query: {
-    page: computed(() => pagination.value.page),
-    perPage: computed(() => pagination.value.perPage)
-  },
-  transform: (data) => ({
-    data: data?.data || [],
-    pagination: data?.pagination || { page: 1, perPage: 2, total: 0, totalPages: 0 }
-  }),
-  lazy: true,
-})
+);
 /* ------------------------------------------------------------ */
 
 // Permissions
-const canDelete = ref(true)
-const canUpdate = ref(true)
+const canDelete = ref(true);
+const canUpdate = ref(true);
 onMounted(async () => {
-  try { canDelete.value = Boolean(await Promise.resolve(denies(canDeleteBilling))) } catch { canDelete.value = true }
-  try { canUpdate.value = Boolean(await Promise.resolve(denies(canUpdateBilling))) } catch { canUpdate.value = true }
-})
+  try {
+    canDelete.value = Boolean(await Promise.resolve(denies(canDeleteBilling)));
+  } catch {
+    canDelete.value = true;
+  }
+  try {
+    canUpdate.value = Boolean(await Promise.resolve(denies(canUpdateBilling)));
+  } catch {
+    canUpdate.value = true;
+  }
+});
 
 // 🔍 Search
-const search = ref('')
+const search = ref("");
 const filteredBills = computed(() => {
-  if (!data.value) return []
-  if (!search.value) return data.value.data
+  if (!data.value) return [];
+  if (!search.value) return data.value.data;
   return data.value.data.filter((b) =>
     b.payment_method.toLowerCase().includes(search.value.trim().toLowerCase())
-  )
-})
+  );
+});
 
 // 🧩 Table Columns
 const columns: TableColumn<Bill>[] = [
-  { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'date', header: 'Appointment Date' },
-  { accessorKey: 'name', header: 'Patient Name' },
+  { accessorKey: "id", header: "ID" },
+  { accessorKey: "date", header: "Appointment Date" },
+  { accessorKey: "name", header: "Patient Name" },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
+    accessorKey: "amount",
+    header: "Amount",
     cell: ({ row }) => `Rs. ${row.original.amount.toFixed(2)}`,
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) =>
-      h('span', {
-        class: `px-2 py-1 rounded-full text-sm font-medium ${
-          row.original.status === 'paid'
-            ? 'bg-green-100 text-green-700'
-            : row.original.status === 'pending'
-            ? 'bg-yellow-100 text-yellow-700'
-            : 'bg-red-100 text-red-700'
-        }`,
-      }, row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)),
+      h(
+        "span",
+        {
+          class: `px-2 py-1 rounded-full text-sm font-medium ${
+            row.original.status === "paid"
+              ? "bg-green-100 text-green-700"
+              : row.original.status === "pending"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-red-100 text-red-700"
+          }`,
+        },
+        row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
+      ),
   },
-  { accessorKey: 'payment_method', header: 'Payment Method' },
+  { accessorKey: "payment_method", header: "Payment Method" },
   {
-    id: 'actions',
-    header: 'Actions',
+    id: "actions",
+    header: "Actions",
     cell: ({ row }) =>
-      h('div', { class: 'flex items-center gap-3' }, [
-        h(UDropdownMenu, {
-          content: { align: 'end' },
-          items: [
-            { label: 'Details', icon: 'i-lucide-copy', onSelect: () => navigateTo(`/dashboard/billing/details/${row.original.id}`) },
-            { label: 'Edit', icon: 'i-lucide-edit', class: { 'hidden': canUpdate.value }, onSelect: () => navigateTo(`/dashboard/billing/${row.original.id}`) },
-            { label: 'Delete', icon: 'i-lucide-trash', color: 'error', class: { 'hidden': canDelete.value }, onSelect: () => { selectedBill.value = row.original; isDeleteModalOpen.value = true } },
-          ],
-        }, () => h(UButton, { icon: 'i-lucide-ellipsis-vertical', color: 'neutral', variant: 'ghost', class: 'ml-auto' })),
+      h("div", { class: "flex items-center gap-3" }, [
+        h(
+          UDropdownMenu,
+          {
+            content: { align: "end" },
+            items: [
+              {
+                label: "Details",
+                icon: "i-lucide-copy",
+                onSelect: () =>
+                  navigateTo(`/dashboard/billing/details/${row.original.id}`),
+              },
+              {
+                label: "Edit",
+                icon: "i-lucide-edit",
+                class: { hidden: canUpdate.value },
+                onSelect: () => navigateTo(`/dashboard/billing/${row.original.id}`),
+              },
+              {
+                label: "Delete",
+                icon: "i-lucide-trash",
+                color: "error",
+                class: { hidden: canDelete.value },
+                onSelect: () => {
+                  selectedBill.value = row.original;
+                  isDeleteModalOpen.value = true;
+                },
+              },
+            ],
+          },
+          () =>
+            h(UButton, {
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
+            })
+        ),
       ]),
   },
-]
+];
 </script>
 
 <template>
@@ -166,7 +213,7 @@ const columns: TableColumn<Bill>[] = [
             :page="pagination.page"
             :items-per-page="pagination.perPage"
             :total="data?.pagination?.total || 0"
-            @update:page="(p) => pagination.page = p"
+            @update:page="(p) => (pagination.page = p)"
           />
         </div>
 

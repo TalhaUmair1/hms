@@ -180,7 +180,7 @@ cta:
     - label: Request a Demo
       to: '/signup'
       trailingIcon: i-lucide-arrow-right
-    - label: Contact Sales
-      to: '/contact'
-      variant: subtle
-      icon: i-lucide-phone
+    # - label: Contact Sales
+    #   to: '/contact'
+    #   variant: subtle
+    #   icon: i-lucide-phone

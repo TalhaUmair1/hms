@@ -7,7 +7,7 @@ export default eventHandler(async (event) => {
   const user = currentUser as any
 
   const patientUser = alias(tables.users, 'patient_user')
-console.log(patientUser,'this from me patientuser');
+// console.log(patientUser,'this from me patientuser');
 
   // ✅ Get pagination query params from request
   const { page = '1', perPage = '10' } = getQuery(event)
@@ -16,7 +16,7 @@ console.log(patientUser,'this from me patientuser');
   const offset = (pageNum - 1) * perPageNum
 
   // ✅ Base query with optional filter
-  let query = db
+  const query = db
     .select({
       id: tables.patients.id,
       user_id: tables.patients.user_id,
@@ -27,31 +27,15 @@ console.log(patientUser,'this from me patientuser');
     })
     .from(tables.patients)
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
-
-  // Apply filter conditionally
-  if (user.role === 'patient') {
-    query = query.where(eq(tables.patients.user_id, user.id))
-  }
+    .where(user.role === 'patient' ? eq(tables.patients.user_id, user.id) : sql`1=1`)
 
   // ✅ Total count for pagination (with same filter as main query)
-  let total = 0;
-  
-  if (user.role === 'patient') {
-    // If user is a patient, count only their records
-    const totalResult = await db
-      .select({ count: sql<number>`count(*)`.as('count') })
-      .from(tables.patients)
-      .where(eq(tables.patients.user_id, user.id))
-      .get();
-    total = totalResult?.count || 0;
-  } else {
-    // If user is not a patient, count all records
-    const totalResult = await db
-      .select({ count: sql<number>`count(*)`.as('count') })
-      .from(tables.patients)
-      .get();
-    total = totalResult?.count || 0;
-  }
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)`.as('count') })
+    .from(tables.patients)
+    .where(user.role === 'patient' ? eq(tables.patients.user_id, user.id) : sql`1=1`)
+    .get();
+  const total = totalResult?.count || 0;
 
   // ✅ Fetch paginated data
   const patients = await query

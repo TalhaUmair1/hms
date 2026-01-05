@@ -8,7 +8,7 @@ export default eventHandler(async (event) => {
   const db = useDatabase()
 
   // ✅ Pagination defaults
-  const { page = '1', perPage = '2' } = getQuery(event)
+  const { page = '1', perPage = '10' } = getQuery(event)
   const currentPage = Number(page)
   const limit = Number(perPage)
   const offset = (currentPage - 1) * limit
@@ -71,7 +71,7 @@ export default eventHandler(async (event) => {
       totalPages: Math.ceil(total / limit),
     },
   }
- console.log(result,'checking result pagination from appointments');
+ // console.log(result,'checking result pagination from appointments');
  
   return result
 })

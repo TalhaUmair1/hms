@@ -9,7 +9,7 @@ export default eventHandler(async (event) => {
   const db = useDatabase()
 
   // ✅ Pagination defaults
-  const { page = '1', perPage = '2' } = getQuery(event)
+  const { page = '1', perPage = '10' } = getQuery(event)
 
   const currentPage = Number(page)
   const limit = Number(perPage)
@@ -38,7 +38,7 @@ export default eventHandler(async (event) => {
   if (q) {
     baseQuery.where(sql`UPPER(${patientUser.name}) LIKE ${`%${q}%`.toUpperCase()}`)
   }
-console.log(baseQuery,'its from searchqurey');
+// console.log(baseQuery,'its from searchqurey');
 
   // ✅ Get paginated data
   const patients = await baseQuery
@@ -52,7 +52,7 @@ console.log(baseQuery,'its from searchqurey');
       total: sql<number>`count(${tables.patients.id}) as total`,
     })
     .from(tables.patients)
-console.log(total,'total count of patients');
+// console.log(total,'total count of patients');
 
   // ✅ Final response
   const result = {
@@ -64,7 +64,7 @@ console.log(total,'total count of patients');
       totalPages: Math.ceil(total / limit),
     },
   }
-console.log(result,'geting patients from pateint api as result');
+// console.log(result,'geting patients from pateint api as result');
 
   return result
 })

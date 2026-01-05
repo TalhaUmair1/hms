@@ -8,12 +8,12 @@ export default eventHandler(async (event) => {
 
   const { user: currentUser } = await requireUserSession(event) as any
   const userId = Number(currentUser.id)
-  console.log('Prescriptions /me endpoint - Current user ID:', userId, 'Role:', currentUser?.role);
+  // console.log('Prescriptions /me endpoint - Current user ID:', userId, 'Role:', currentUser?.role);
 
   // await authorize(event, canReadPrescription) // Not needed for /me endpoint
 
   // ✅ Pagination defaults (SAME AS WORKING API)
-  const { page = '1', perPage = '2' } = getQuery(event)
+  const { page = '1', perPage = '10' } = getQuery(event)
   const currentPage = Number(page)
   const limit = Number(perPage)
   const offset = (currentPage - 1) * limit
@@ -58,10 +58,10 @@ export default eventHandler(async (event) => {
     .limit(limit)
     .offset(offset)
     .all()
-  console.log('Prescriptions retrieved:', prescriptions, 'Count:', prescriptions.length);
+  // console.log('Prescriptions retrieved:', prescriptions, 'Count:', prescriptions.length);
 
   // ✅ Total count (same filter!)
-  console.log('Getting total count for userId:', userId);
+  // console.log('Getting total count for userId:', userId);
   const countResult = await db
     .select({
       total: sql<number>`count(${tables.prescriptions.id}) as total`,
@@ -72,10 +72,10 @@ export default eventHandler(async (event) => {
       eq(tables.prescriptions.patient_id, tables.patients.id)
     )
     .where(eq(tables.patients.user_id, userId));
-  console.log('Count result:', countResult);
+  // console.log('Count result:', countResult);
   const total = countResult[0]?.total || 0;
 
-  console.log('Final result - prescriptions:', prescriptions.length, 'total:', total);
+  // console.log('Final result - prescriptions:', prescriptions.length, 'total:', total);
   return {
     data: prescriptions,
     pagination: {

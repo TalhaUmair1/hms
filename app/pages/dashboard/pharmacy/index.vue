@@ -1,137 +1,150 @@
 <script setup lang="ts">
-import { ref, computed, h, resolveComponent, onMounted } from 'vue'
-import { navigateTo, useFetch } from '#app'
-import type { TableColumn } from '@nuxt/ui'
-import DeletePharmacy from '~/components/pharmacy/DeletePharmacy.vue'
-import { canCreatePharmacy, canUpdatePharmacy, canDeletePharmacy } from '#shared/abilities/pharmacy'
+import { ref, computed, h, resolveComponent, onMounted } from "vue";
+import { navigateTo, useFetch } from "#app";
+import type { TableColumn } from "@nuxt/ui";
+import DeletePharmacy from "~/components/pharmacy/DeletePharmacy.vue";
+import {
+  canCreatePharmacy,
+  canUpdatePharmacy,
+  canDeletePharmacy,
+} from "#shared/abilities/pharmacy";
 
 // Nuxt UI components
-const UButton = resolveComponent('UButton')
-const UDropdownMenu = resolveComponent('UDropdownMenu')
+const UButton = resolveComponent("UButton");
+const UDropdownMenu = resolveComponent("UDropdownMenu");
 
 // 💊 Pharmacy type
 type Pharmacy = {
-  id: number
-  name: string
-  quantity: number
-  price: number
-  expiry_date: string | null
-}
+  id: number;
+  name: string;
+  quantity: number;
+  price: number;
+  expiry_date: string | null;
+};
 
 // 🗑 Delete modal state
-const isDeleteModalOpen = ref(false)
-const selectedPharmacy = ref<Pharmacy | null>(null)
+const isDeleteModalOpen = ref(false);
+const selectedPharmacy = ref<Pharmacy | null>(null);
 
 // 🔗 Pagination State
 const pagination = ref({
   page: 1,
-  perPage: 2
-})
+  perPage: 10,
+});
 
 // 📦 Fetch pharmacies with pagination
 const { data, status, refresh } = await useFetch<{
-  data: Pharmacy[]
+  data: Pharmacy[];
   pagination: {
-    page: number
-    perPage: number
-    total: number
-    totalPages: number
-  }
-}>('/api/pharmacy', {
-  key: 'table-pharmacy',
+    page: number;
+    perPage: number;
+    total: number;
+    totalPages: number;
+  };
+}>("/api/pharmacy", {
+  key: "table-pharmacy",
   query: {
     page: computed(() => pagination.value.page),
-    perPage: computed(() => pagination.value.perPage)
+    perPage: computed(() => pagination.value.perPage),
   },
   transform: (data) => ({
     data: data?.data || [],
-    pagination: data?.pagination || { page: 1, perPage: 5, total: 0, totalPages: 0 }
+    pagination: data?.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0 },
   }),
   lazy: true,
-})
+});
 
 // Permissions
-const canDelete = ref(true)
-const canUpdate = ref(true)
+const canDelete = ref(true);
+const canUpdate = ref(true);
 onMounted(async () => {
-  try { canDelete.value = Boolean(await Promise.resolve(denies(canDeletePharmacy))) } catch { canDelete.value = true }
-  try { canUpdate.value = Boolean(await Promise.resolve(denies(canUpdatePharmacy))) } catch { canUpdate.value = true }
-})
+  try {
+    canDelete.value = Boolean(await Promise.resolve(denies(canDeletePharmacy)));
+  } catch {
+    canDelete.value = true;
+  }
+  try {
+    canUpdate.value = Boolean(await Promise.resolve(denies(canUpdatePharmacy)));
+  } catch {
+    canUpdate.value = true;
+  }
+});
 
 // 🔍 Search
-const search = ref('')
+const search = ref("");
 
 // 🔢 Filtered Data
 const filteredPharmacy = computed(() => {
-  if (!data.value) return []
-  if (!search.value) return data.value.data
+  if (!data.value) return [];
+  if (!search.value) return data.value.data;
   return data.value.data.filter((p) =>
     p.name.toLowerCase().includes(search.value.trim().toLowerCase())
-  )
-})
+  );
+});
 
 // 🧩 Table Columns
 const columns: TableColumn<Pharmacy>[] = [
-  { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'quantity', header: 'Quantity' },
+  { accessorKey: "id", header: "ID" },
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "quantity", header: "Quantity" },
   {
-    accessorKey: 'price',
-    header: 'Price',
+    accessorKey: "price",
+    header: "Price",
     cell: ({ row }) => `Rs. ${row.original.price.toFixed(2)}`,
   },
   {
-    accessorKey: 'expiryDate',
-    header: 'Expiry Date',
+    accessorKey: "expiryDate",
+    header: "Expiry Date",
     cell: ({ row }) =>
       row.original.expiry_date
         ? new Date(row.original.expiry_date).toLocaleDateString()
-        : 'N/A',
+        : "N/A",
   },
   {
-    id: 'actions',
-    header: 'Actions',
+    id: "actions",
+    header: "Actions",
     cell: ({ row }) =>
-      h('div', { class: 'flex items-center gap-3' }, [
+      h("div", { class: "flex items-center gap-3" }, [
         h(
           UDropdownMenu,
           {
-            content: { align: 'end' },
+            content: { align: "end" },
             items: [
               {
-                label: 'Details',
-                icon: 'i-lucide-copy',
-                onSelect: () => navigateTo(`/dashboard/pharmacy/details/${row.original.id}`),
+                label: "Details",
+                icon: "i-lucide-copy",
+                onSelect: () =>
+                  navigateTo(`/dashboard/pharmacy/details/${row.original.id}`),
               },
               {
-                label: 'Edit',
-                icon: 'i-lucide-edit',
-                class: { 'hidden': canUpdate.value },
+                label: "Edit",
+                icon: "i-lucide-edit",
+                class: { hidden: canUpdate.value },
                 onSelect: () => navigateTo(`/dashboard/pharmacy/${row.original.id}`),
               },
               {
-                label: 'Delete',
-                icon: 'i-lucide-trash',
-                color: 'error',
-                class: { 'hidden': canDelete.value },
+                label: "Delete",
+                icon: "i-lucide-trash",
+                color: "error",
+                class: { hidden: canDelete.value },
                 onSelect: () => {
-                  selectedPharmacy.value = row.original
-                  isDeleteModalOpen.value = true
+                  selectedPharmacy.value = row.original;
+                  isDeleteModalOpen.value = true;
                 },
               },
             ],
           },
           () =>
             h(UButton, {
-              icon: 'i-lucide-ellipsis-vertical',
-              color: 'neutral',
-              variant: 'ghost',
-              class: 'ml-auto',
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
             })
         ),
       ]),
   },
-]
+];
 </script>
 
 <template>
@@ -183,7 +196,7 @@ const columns: TableColumn<Pharmacy>[] = [
             :page="pagination.page"
             :items-per-page="pagination.perPage"
             :total="data?.pagination?.total || 0"
-            @update:page="(p) => pagination.page = p"
+            @update:page="(p) => (pagination.page = p)"
           />
         </div>
 

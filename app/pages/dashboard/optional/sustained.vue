@@ -12,111 +12,116 @@
     <!-- Body -->
     <template #body>
       <UContainer class="space-y-12 py-6">
-
         <!-- Intro Section -->
         <UCard class="p-8">
-          <h2 class="text-3xl font-bold mb-4">How Shaukat Khanum Sustains Its Mission</h2>
+          <h2 class="text-3xl font-bold mb-4">Operational Sustainability Overview</h2>
           <p class="text-gray-700 leading-relaxed">
-            Shaukat Khanum Memorial Cancer Hospital & Research Centre (SKMCH&RC) operates on a unique, self-reinforcing model that ensures **high-quality cancer care is available to all, regardless of financial status**. 
-            This model integrates **donations, patient care, research, and education** into a sustainable cycle that maximizes impact and trust.
+            Shaukat Khanum Memorial Cancer Hospital & Research Centre (SKMCH&RC) sustains
+            its operations through a structured and carefully governed financial model.
+            Annual budgeting focuses on maintaining uninterrupted patient care, advanced
+            medical services, research activities, and workforce development, while
+            ensuring cost efficiency and accountability across all departments.
           </p>
         </UCard>
 
-        <!-- Donation Section -->
+        <!-- Budget Allocation Section -->
         <UCard class="p-8 bg-green-50">
-          <h3 class="text-2xl font-semibold mb-4">1. Donations: The Foundation of Our Care</h3>
+          <h3 class="text-2xl font-semibold mb-4">1. Annual Budget Allocation</h3>
           <p class="text-gray-700 leading-relaxed mb-4">
-            Donations from individuals, corporations, and charitable foundations form the backbone of SKMCH&RC. 
-            More than 70% of our patients receive **free treatment**, made possible entirely through the generosity of donors from Pakistan and around the world.
-          </p>
-          <p class="text-gray-700 leading-relaxed mb-4">
-            These funds are carefully managed to ensure **maximum transparency and accountability**. Donors are empowered to see exactly how their contributions help save lives, from providing chemotherapy sessions to funding advanced medical equipment.
+            The hospital operates with a multi-billion PKR annual budget, distributed
+            across essential operational domains. Financial planning is conducted annually
+            with strict internal controls and audits to ensure optimal utilization of
+            resources.
           </p>
           <ul class="list-disc pl-6 text-gray-700 space-y-2">
-            <li>Direct patient care and free treatment</li>
-            <li>Advanced diagnostic and treatment equipment</li>
-            <li>Funding clinical research and trials</li>
-            <li>Education and training for healthcare professionals</li>
+            <li>Medical treatment and patient services (largest allocation)</li>
+            <li>Medicines, chemotherapy drugs, and consumables</li>
+            <li>Diagnostic services and laboratory operations</li>
+            <li>Facility management and utilities</li>
           </ul>
         </UCard>
 
-        <!-- Patient Care Section -->
+        <!-- Patient Care Expenses -->
         <UCard class="p-8">
-          <h3 class="text-2xl font-semibold mb-4">2. Patient Care: Delivering Excellence</h3>
+          <h3 class="text-2xl font-semibold mb-4">
+            2. Patient Care & Clinical Operations
+          </h3>
           <p class="text-gray-700 leading-relaxed mb-4">
-            SKMCH&RC delivers **comprehensive, multidisciplinary cancer care** under one roof. Each patient receives a personalized treatment plan designed by a team of specialists, including oncologists, surgeons, radiologists, and supportive care staff.
-          </p>
-          <p class="text-gray-700 leading-relaxed mb-4">
-            By integrating care, research, and technology, the hospital ensures that every patient benefits from **the latest treatment protocols** while maintaining **dignity, compassion, and respect** throughout their journey.
+            A significant portion of the budget is dedicated to direct patient care. This
+            includes outpatient services, inpatient wards, surgical procedures, intensive
+            care units, radiology, and radiation oncology.
           </p>
           <p class="text-gray-700 leading-relaxed">
-            The hospital continuously monitors outcomes and patient satisfaction to ensure **continuous improvement**, ensuring that donations and resources have the greatest possible impact.
+            Costs also cover clinical staff salaries, nursing services, emergency response
+            teams, and continuous monitoring systems to ensure high-quality and safe
+            treatment standards.
           </p>
         </UCard>
 
-        <!-- Research Section -->
+        <!-- Equipment & Technology -->
         <UCard class="p-8 bg-green-50">
-          <h3 class="text-2xl font-semibold mb-4">3. Research: Advancing Cancer Care</h3>
+          <h3 class="text-2xl font-semibold mb-4">3. Medical Equipment & Technology</h3>
           <p class="text-gray-700 leading-relaxed mb-4">
-            Research is a core pillar of SKMCH&RC. The institution actively participates in **clinical trials, epidemiological studies, and outcome research**. These initiatives not only improve cancer treatment protocols locally but also contribute to global oncology knowledge.
+            Substantial financial resources are allocated to the procurement, maintenance,
+            and upgrading of advanced medical equipment. This includes linear
+            accelerators, imaging systems, laboratory analyzers, and specialized surgical
+            tools.
           </p>
-          <p class="text-gray-700 leading-relaxed mb-4">
-            Donations and funding directly support:
-          </p>
-          <ul class="list-disc pl-6 text-gray-700 space-y-2">
-            <li>Innovative research projects in oncology</li>
-            <li>Clinical trials to evaluate new treatments</li>
-            <li>Collaboration with international cancer research institutions</li>
-            <li>Publication of research findings to benefit the broader medical community</li>
-          </ul>
           <p class="text-gray-700 leading-relaxed">
-            By integrating research with patient care, the hospital ensures that every treatment is backed by **scientific evidence**, keeping SKMCH&RC at the forefront of oncology in the region.
+            Regular maintenance contracts and technology upgrades ensure uninterrupted
+            services and compliance with international medical standards.
           </p>
         </UCard>
 
-        <!-- Education Section -->
+        <!-- Research Expenses -->
         <UCard class="p-8">
-          <h3 class="text-2xl font-semibold mb-4">4. Education: Building the Future</h3>
+          <h3 class="text-2xl font-semibold mb-4">4. Research & Clinical Studies</h3>
           <p class="text-gray-700 leading-relaxed mb-4">
-            SKMCH&RC invests heavily in **education and training**. Programs include postgraduate education for doctors, nursing training, and workshops for allied health professionals. 
-            This ensures that **future leaders in oncology** are well-prepared to continue the mission.
+            A dedicated portion of the budget supports oncology research, clinical trials,
+            and data analysis. Expenditure includes research staffing, trial
+            infrastructure, ethical compliance, and collaboration with international
+            research bodies.
           </p>
-          <p class="text-gray-700 leading-relaxed mb-4">
-            Through education, the hospital not only sustains its own workforce but also **strengthens Pakistan’s healthcare system**, creating a ripple effect that extends well beyond the hospital walls.
+          <p class="text-gray-700 leading-relaxed">
+            Research spending directly contributes to improved treatment protocols and
+            evidence-based clinical practices.
           </p>
         </UCard>
 
-        <!-- Integration Section -->
+        <!-- Education & Workforce -->
         <UCard class="p-8 bg-green-50">
-          <h3 class="text-2xl font-semibold mb-4">5. The Self-Reinforcing Model</h3>
+          <h3 class="text-2xl font-semibold mb-4">
+            5. Education & Human Resource Development
+          </h3>
           <p class="text-gray-700 leading-relaxed mb-4">
-            The sustainability of SKMCH&RC comes from the **integration of donations, patient care, research, and education**. Each component supports and reinforces the others:
+            Budget allocations also cover medical education programs, postgraduate
+            training, nursing education, and continuous professional development for
+            staff.
           </p>
-          <ul class="list-disc pl-6 text-gray-700 space-y-2">
-            <li>Donations fund patient care and research</li>
-            <li>Patient care provides data and insights for research</li>
-            <li>Research improves treatment protocols and clinical outcomes</li>
-            <li>Education develops skilled healthcare professionals to maintain and expand impact</li>
-          </ul>
-          <p class="text-gray-700 leading-relaxed mt-4">
-            This cyclical model ensures that every contribution, effort, and resource continues to generate **maximum benefit**, creating a sustainable system of hope, healing, and impact.
+          <p class="text-gray-700 leading-relaxed">
+            Investment in human resources ensures long-term operational stability, skilled
+            workforce retention, and consistent quality of care.
           </p>
         </UCard>
 
-        <!-- CTA Section -->
-        <UCard class="text-center p-8">
-          <h3 class="text-2xl font-semibold mb-2">Join Us in Sustaining Hope</h3>
-          <p class="text-gray-700 mb-4 leading-relaxed">
-            Your support, whether through donations, volunteering, or spreading awareness, directly contributes to this sustainable cycle, helping us treat more patients, advance research, and educate the next generation of healthcare professionals.
+        <!-- Governance & Controls -->
+        <UCard class="p-8">
+          <h3 class="text-2xl font-semibold mb-4">6. Financial Governance & Oversight</h3>
+          <p class="text-gray-700 leading-relaxed mb-4">
+            Financial sustainability is reinforced through strong governance mechanisms.
+            Regular internal audits, external audits, and performance reviews ensure
+            transparency, compliance, and responsible expenditure.
           </p>
-          <UButton size="lg">Donate or Support Now</UButton>
+          <p class="text-gray-700 leading-relaxed">
+            This disciplined financial approach allows the hospital to manage rising
+            healthcare costs while maintaining service quality and operational continuity.
+          </p>
         </UCard>
-
       </UContainer>
     </template>
   </UDashboardPanel>
 </template>
 
 <script setup lang="ts">
-// No dynamic data required for this static dashboard panel
+// Static informational dashboard panel
 </script>
