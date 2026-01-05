@@ -121,7 +121,7 @@ pricing:
         label: View Profile
         color: neutral
         variant: outline
-        to: '/doctors/ayesha-khan'
+       
 
     - title: Dr. Hassan Malik
       description: Renowned Orthopedic Surgeon specializing in trauma and joint replacement surgeries.
@@ -134,7 +134,7 @@ pricing:
         - Member of AO Trauma International
       button:
         label: View Profile
-        to: '/doctors/hassan-malik'
+        
 
     - title: Dr. Sara Ahmed
       description: Pediatric specialist focused on child wellness, nutrition, and growth.
@@ -147,7 +147,7 @@ pricing:
       button:
         label: View Profile
         variant: subtle
-        to: '/doctors/sara-ahmed'
+     
 
 testimonials:
   title: Trusted by [leading]{.text-primary} healthcare providers

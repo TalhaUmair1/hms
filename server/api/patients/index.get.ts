@@ -18,6 +18,9 @@ export default eventHandler(async (event) => {
   // ✅ Alias for user table
   const patientUser = alias(tables.users, 'patient_user')
 
+  // ✅ Get query parameters
+  const { q } = getQuery(event)
+  
   // ✅ Base query
   const baseQuery = db
     .select({
@@ -30,6 +33,12 @@ export default eventHandler(async (event) => {
     })
     .from(tables.patients)
     .leftJoin(patientUser, eq(tables.patients.user_id, patientUser.id))
+    
+  // ✅ Apply search filter if query parameter exists
+  if (q) {
+    baseQuery.where(sql`UPPER(${patientUser.name}) LIKE ${`%${q}%`.toUpperCase()}`)
+  }
+console.log(baseQuery,'its from searchqurey');
 
   // ✅ Get paginated data
   const patients = await baseQuery
@@ -43,10 +52,11 @@ export default eventHandler(async (event) => {
       total: sql<number>`count(${tables.patients.id}) as total`,
     })
     .from(tables.patients)
+console.log(total,'total count of patients');
 
   // ✅ Final response
   const result = {
-    data: patients as Patient[],
+    data: patients as any[],
     pagination: {
       page: currentPage,
       perPage: limit,

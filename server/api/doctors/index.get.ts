@@ -14,6 +14,9 @@ export default eventHandler(async (event) => {
   const limit = Number(perPage)
   const offset = (currentPage - 1) * limit
 
+  // ✅ Get query parameters
+  const { q } = getQuery(event)
+  
   // ✅ Base query
   const baseQuery = db
     .select({
@@ -30,6 +33,11 @@ export default eventHandler(async (event) => {
       tables.users,
       eq(tables.doctors.user_id, tables.users.id)
     )
+    
+  // ✅ Apply search filter if query parameter exists
+  if (q) {
+    baseQuery.where(sql`UPPER(${tables.users.name}) LIKE ${`%${q}%`.toUpperCase()}`)
+  }
 
   // ✅ Get paginated data
   const doctors = await baseQuery
@@ -44,7 +52,7 @@ export default eventHandler(async (event) => {
 
   // ✅ Prepare response
   const result = {
-    data: doctors as Doctor[],
+    data: doctors as any[],
     pagination: {
       page: currentPage,
       perPage: limit,
