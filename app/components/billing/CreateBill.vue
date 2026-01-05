@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useFetch } from '#app'
 import { useToast } from '#imports'
+import { refDebounced } from '@vueuse/core'
 
 const props = defineProps({
   billing: {
@@ -12,18 +13,30 @@ const props = defineProps({
   }
 })
 
+// ✅ Search terms
+const searchTermPatient = ref('')
+const searchTermPatientDebounced = refDebounced(searchTermPatient, 200)
+const searchTermAppointment = ref('')
+const searchTermAppointmentDebounced = refDebounced(searchTermAppointment, 200)
+
 // 📋 Fetch patients and appointments lists
 const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
-  lazy: true
+  lazy: true,
+  params: {
+    q: searchTermPatientDebounced
+  },
+  transform: (res: any) => res.data || []
 })
 // console.log(patients, "this get from patients");
 
 const { data: appointments, pending: loadingAppointments } = useFetch('/api/appointments', {
   key: 'appointments-list',
   lazy: true,
-  transform: (data) =>
-    (data as any[]).map((appt) => ({
+  params: {
+    q: searchTermAppointmentDebounced
+  },
+  transform: (res: any) => (res.data || []).map((appt: any) => ({
       ...appt,
       label: `#${appt.id} - ${appt.date} (${appt.patient_name})`
     }))
@@ -82,7 +95,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 // ✅ Reset form
-const resetForm = () => Object.assign(state, initialState)
+const resetForm = (event: Event) => {
+  event.preventDefault()
+  Object.assign(state, initialState)
+}
 
 // ✅ Options
 const statuses = ['paid', 'pending', 'failed']
@@ -101,10 +117,12 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
         <UFormField label="Appointment" name="appointment_id">
           <USelectMenu
             v-model="state.appointment_id"
+            v-model:search-term="searchTermAppointment"
             :items="appointments"
             value-key="id"
             label-key="label"
             :loading="loadingAppointments"
+            ignore-filter
             placeholder="Select appointment"
             class="w-full"
             size="xl"
@@ -115,10 +133,12 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
         <UFormField label="Patient" name="patient_id">
           <USelectMenu
             v-model="state.patient_id"
+            v-model:search-term="searchTermPatient"
             :items="patients"
             value-key="id"
             label-key="patient_name"
             :loading="loadingPatients"
+            ignore-filter
             placeholder="Select patient"
             class="w-full"
             size="xl"
@@ -138,14 +158,7 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
             placeholder="Select status"
             class="w-full"
             size="xl"
-          >
-            <template #option="{ option }">
-              <span class="capitalize">{{ option }}</span>
-            </template>
-            <template #label>
-              <span class="capitalize">{{ state.status || 'Select status' }}</span>
-            </template>
-          </USelectMenu>
+          />
         </UFormField>
 
         <!-- Payment Method -->
@@ -156,21 +169,12 @@ const paymentMethods = ['cash', 'credit_card', 'bank_transfer']
             placeholder="Select payment method"
             class="w-full"
             size="xl"
-          >
-            <template #option="{ option }">
-              <span class="capitalize">{{ option.replace('_', ' ') }}</span>
-            </template>
-            <template #label>
-              <span class="capitalize">
-                {{ state.payment_method ? state.payment_method.replace('_', ' ') : 'Select method' }}
-              </span>
-            </template>
-          </USelectMenu>
+          />
         </UFormField>
 
         <!-- Buttons -->
         <div class="flex justify-end gap-3 pt-4">
-          <UButton label="Reset" color="error" variant="ghost" @click="resetForm" />
+          <UButton label="Reset" color="error" variant="ghost" @click="() => resetForm({} as Event)" />
           <UButton
             :label="state.id ? 'Update Bill' : 'Create Bill'"
             type="submit"

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useFetch } from '#app'
 import { useToast } from '#imports'
+import { refDebounced } from '@vueuse/core'
 import type { prescriptions } from '~~/server/database/schema'
 
 const props = defineProps({
@@ -13,10 +14,21 @@ const props = defineProps({
   }
 })
 
+// ✅ Search terms
+const searchTermPatient = ref('')
+const searchTermPatientDebounced = refDebounced(searchTermPatient, 200)
+const searchTermDoctor = ref('')
+const searchTermDoctorDebounced = refDebounced(searchTermDoctor, 200)
+const searchTermAppointment = ref('')
+const searchTermAppointmentDebounced = refDebounced(searchTermAppointment, 200)
+
 // ✅ Fetch lists (for selection)
 const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true,
+  params: {
+    q: searchTermPatientDebounced
+  },
   transform: (res: any) => res.data || []
 })
 // console.log(patients,'patients in prescription');
@@ -25,16 +37,21 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
 
 const { data: doctors, pending: loadingDoctors } = useFetch('/api/doctors', {
   key: 'table-doctors',
-  lazy: true
+  lazy: true,
+  params: {
+    q: searchTermDoctorDebounced
+  }
 })
-const doctorItems = computed(() => doctors.value?.data ?? [])
 
 const { data: appointments, pending: loadingAppointments } =  useFetch('/api/appointments', {
   key: 'appointments-list',
   lazy: true,
+  params: {
+    q: searchTermAppointmentDebounced
+  },
   transform: (res: any) => (res.data || []).map((item: any) => ({ ...item, label: `#${item.id} - ${item.patient_name} - ${item.date}` }))
 })
-console.log(appointments,'appointments in prescription');
+// console.log(appointments,'appointments in prescription');
 
 // ✅ Zod validation schema
 const schema = z.object({
@@ -83,7 +100,10 @@ console.log(event.data);
   }
 }
 
-const resetForm = () => Object.assign(state, initialState)
+const resetForm = (event: Event) => {
+  event.preventDefault()
+  Object.assign(state, initialState)
+}
 </script>
 
 <template>
@@ -98,10 +118,12 @@ const resetForm = () => Object.assign(state, initialState)
         <UFormField label="Appointment" name="appointment_id">
           <USelectMenu
             v-model="state.appointment_id"
+            v-model:search-term="searchTermAppointment"
             :items="appointments"
             value-key="id"
             label-key="label"
             :loading="loadingAppointments"
+            ignore-filter
             placeholder="Select appointment"
             class="w-full"
             size="xl"
@@ -112,10 +134,12 @@ const resetForm = () => Object.assign(state, initialState)
         <UFormField label="Doctor" name="doctor_id">
           <USelectMenu
             v-model="state.doctor_id"
-            :items="doctorItems"
+            v-model:search-term="searchTermDoctor"
+            :items="doctors?.data || []"
             value-key="id"
             label-key="name"
             :loading="loadingDoctors"
+            ignore-filter
             placeholder="Select doctor"
             class="w-full"
             size="xl"
@@ -126,10 +150,12 @@ const resetForm = () => Object.assign(state, initialState)
         <UFormField label="Patient" name="patient_id">
           <USelectMenu
             v-model="state.patient_id"
+            v-model:search-term="searchTermPatient"
             :items="patients"
             value-key="id"
             label-key="patient_name"
             :loading="loadingPatients"
+            ignore-filter
             placeholder="Select patient"
             class="w-full"
             size="xl"
@@ -158,7 +184,7 @@ const resetForm = () => Object.assign(state, initialState)
 
         <!-- Buttons -->
         <div class="flex justify-end gap-2 ">
-          <UButton label="Reset" color="error" variant="ghost" @click="resetForm" />
+          <UButton label="Reset" color="error" variant="ghost" @click="() => resetForm({} as Event)" />
           <UButton
             :label="state.id ? 'Update Record' : 'Create Record'"
             type="submit"

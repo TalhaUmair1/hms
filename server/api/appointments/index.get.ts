@@ -13,6 +13,9 @@ export default eventHandler(async (event) => {
   const limit = Number(perPage)
   const offset = (currentPage - 1) * limit
 
+  // ✅ Get query parameters
+  const { q } = getQuery(event)
+  
   // ✅ Aliases
   const patientUser = alias(tables.users, 'patient_user')
   const doctorUser = alias(tables.users, 'doctor_user')
@@ -39,6 +42,11 @@ export default eventHandler(async (event) => {
       eq(tables.appointments.doctor_id, tables.doctors.id)
     )
     .leftJoin(doctorUser, eq(tables.doctors.user_id, doctorUser.id))
+    
+  // ✅ Apply search filter if query parameter exists
+  if (q) {
+    baseQuery.where(sql`UPPER(${patientUser.name}) LIKE ${`%${q}%`.toUpperCase()} OR UPPER(${doctorUser.name}) LIKE ${`%${q}%`.toUpperCase()}`)
+  }
 
   // ✅ Get paginated data
   const appointments = await baseQuery
