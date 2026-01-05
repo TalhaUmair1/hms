@@ -21,7 +21,7 @@ const links = [[{
 }], [{
   label: 'About S-k Hospital',
   icon: 'i-lucide-book-open',
-  to: '/dashboard/about',
+  to: '/dashboard/optional/about',
 }]] satisfies NavigationMenuItem[][]
 </script>
 
