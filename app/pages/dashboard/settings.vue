@@ -10,14 +10,14 @@ const links = [[{
   label: 'Members',
   icon: 'i-lucide-users',
   to: '/dashboard/settings/members'
-}, {
-  label: 'Notifications',
-  icon: 'i-lucide-bell',
-  to: '/dashboard/settings/notifications'
-}, {
-  label: 'Security',
-  icon: 'i-lucide-shield',
-  to: '/dashboard/settings/security'
+// }, {
+//   label: 'Notifications',
+//   icon: 'i-lucide-bell',
+//   to: '/dashboard/settings/notifications'
+// }, {
+//   label: 'Security',
+//   icon: 'i-lucide-shield',
+//   to: '/dashboard/settings/security'
 }], [{
   label: 'About S-k Hospital',
   icon: 'i-lucide-book-open',

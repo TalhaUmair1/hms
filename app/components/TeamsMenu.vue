@@ -14,11 +14,11 @@ const teams = ref([{
 }, {
   label: 'About Us',
    icon:'i-lucide-newspaper',
-    to: '/dashboard/about'
+    to: '/dashboard/optional/about'
 }, {
   label: 'How It’s Sustained',
    icon:'i-lucide-hand-heart',
-    to: '/dashboard/sustained'
+    to: '/dashboard/optional/sustained'
 }])
 const selectedTeam = ref(teams.value[0])
 
@@ -31,11 +31,11 @@ const items = computed<DropdownMenuItem[][]>(() => {
   })), [{
     label: 'Medical & Staff',
     icon: 'i-lucide-store',
-    to: '/dashboard/store'
+    to: '/dashboard/optional/store'
   }, {
     label: 'Cleaing',
     icon: 'i-lucide-brush-cleaning',
-    to: '/dashboard/cleaning'
+    to: '/dashboard/optional/cleaning'
   }]]
 })
 </script>

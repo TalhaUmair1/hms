@@ -59,26 +59,17 @@ const links = computed(() => [
         open.value = false
       },
     },
-    {
-      id: 'inbox',
-      label: 'Inbox',
-      icon: 'i-lucide-inbox',
-      to: '/dashboard/inbox',
-      badge: '4',
-      onSelect: () => {
-        open.value = false
-      },
-    },
-    {
-      id: 'customers',
-      label: 'Customers',
-      icon: 'i-lucide-users',
-      to: '/dashboard/customers',
-      onSelect: () => {
-        open.value = false
-      },
-      hidden: perms.users,
-    },
+    // {
+    //   id: 'inbox',
+    //   label: 'Inbox',
+    //   icon: 'i-lucide-inbox',
+    //   to: '/dashboard/inbox',
+    //   badge: '4',
+    //   onSelect: () => {
+    //     open.value = false
+    //   },
+    // },
+    
     {
       id: 'doctors',
       label: 'Doctors',
@@ -89,6 +80,17 @@ const links = computed(() => [
         open.value = false
       },
     },
+     {
+      id: 'patients',
+      label: 'Patients',
+      icon: 'i-lucide-person-standing',
+      to: '/dashboard/patients',
+      hidden: perms.patients,
+      onSelect: () => {
+        open.value = false
+      },
+    },
+
     {
       id: 'appointments',
       label: 'Appointments',
@@ -99,16 +101,7 @@ const links = computed(() => [
         open.value = false
       },
     },
-    {
-      id: 'patients',
-      label: 'Patients',
-      icon: 'i-lucide-person-standing',
-      to: '/dashboard/patients',
-      hidden: perms.patients,
-      onSelect: () => {
-        open.value = false
-      },
-    },
+   
     {
       id: 'prescriptions',
       label: 'prescriptions',
@@ -164,22 +157,22 @@ const links = computed(() => [
             open.value = false
           },
         },
-        {
-          id: 'settings-notifications',
-          label: 'Notifications',
-          to: '/dashboard/settings/notifications',
-          onSelect: () => {
-            open.value = false
-          },
-        },
-        {
-          id: 'settings-security',
-          label: 'Security',
-          to: '/dashboard/settings/security',
-          onSelect: () => {
-            open.value = false
-          },
-        },
+        // {
+        //   id: 'settings-notifications',
+        //   label: 'Notifications',
+        //   to: '/dashboard/settings/notifications',
+        //   onSelect: () => {
+        //     open.value = false
+        //   },
+        // },
+        // {
+        //   id: 'settings-security',
+        //   label: 'Security',
+        //   to: '/dashboard/settings/security',
+        //   onSelect: () => {
+        //     open.value = false
+        //   },
+        // },
       ],
     },
   ],
