@@ -19,7 +19,7 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   lazy: true,
   transform: (res: any) => res.data || []
 })
-console.log(patients,'patients in prescription');
+// console.log(patients,'patients in prescription');
 
 
 

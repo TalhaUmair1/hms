@@ -35,7 +35,7 @@ const fetchDataFromAPI = async () => {
       amount: item.amount
     }))
   } catch (error) {
-    console.error('Error fetching data from API:', error)
+    // console.error('Error fetching data from API:', error)
     
     // Fallback to mock data if API call fails
     const dates = ({

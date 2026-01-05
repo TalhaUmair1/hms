@@ -76,7 +76,7 @@ watchEffect(async () => {
 
   loadingPatients.value = false
 })
-console.log(patients.value,'fhdsjk');
+// console.log(patients.value,'fhdsjk');
 
 
 const toast = useToast()

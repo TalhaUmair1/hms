@@ -9,7 +9,7 @@ console.log(id);
 
 
 
-const { data, pending, error, refresh } = useFetch('/api/oppointments/' + id, {
+const { data, pending, error, refresh } = useFetch('/api/appointments/' + id, {
   key: 'typicode-doctor',
   'method': 'GET',
   transform: (data) => ({ ...data, patient: { id: data.patient_id, name: data.patient_name }, doctor: { id: data.doctor_id, name: data.doctor_name } }),

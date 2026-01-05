@@ -17,7 +17,7 @@ const { data: patients, pending: loadingPatients } = useFetch('/api/patients', {
   key: 'patients-list',
   lazy: true
 })
-console.log(patients, "this get from patients");
+// console.log(patients, "this get from patients");
 
 const { data: appointments, pending: loadingAppointments } = useFetch('/api/appointments', {
   key: 'appointments-list',
@@ -28,7 +28,7 @@ const { data: appointments, pending: loadingAppointments } = useFetch('/api/appo
       label: `#${appt.id} - ${appt.date} (${appt.patient_name})`
     }))
 })
-console.log(appointments, "this get from appointments");
+// console.log(appointments, "this get from appointments");
 // ✅ Validation schema
 const schema = z.object({
   appointment_id: z.coerce.number().min(1, 'Appointment is required'),
