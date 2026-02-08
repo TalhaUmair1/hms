@@ -30,7 +30,7 @@ const { data: doctors, pending: loadingDoctors } = useFetch("/api/doctors", {
     q: searchTermDoctorDebounced,
   },
 });
-// console.log(doctors, "Doctors List  in CreateAppointment.vue");
+console.log(doctors, "Doctors List  in CreateAppointment.vue");
 
 const schema = z.object({
   patient_id: z.coerce.number().min(1, "Patient is required"),
@@ -149,13 +149,29 @@ const statuses = ["pending", "confirmed", "completed", "canceled"];
             v-model:search-term="searchTermDoctor"
             :items="doctors?.data || []"
             value-key="id"
-            label-key="name"
             :loading="loadingDoctors"
             ignore-filter
             placeholder="Select doctor"
             class="w-full"
             size="xl"
-          />
+          >
+            <template #label>
+              <span v-if="state.doctor_id">
+                {{ (doctors?.data || []).find((d) => d.id === state.doctor_id)?.name }} —
+                {{
+                  (doctors?.data || []).find((d) => d.id === state.doctor_id)
+                    ?.specialization
+                }}
+              </span>
+              <span v-else> Select doctor </span>
+            </template>
+            <template #item="{ item }">
+              <div class="flex flex-col">
+                <span class="font-medium">{{ item.name }}</span>
+                <span class="text-sm text-gray-500">{{ item.specialization }}</span>
+              </div>
+            </template>
+          </USelectMenu>
         </UFormField>
 
         <!-- Date -->
