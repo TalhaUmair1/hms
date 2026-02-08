@@ -8,7 +8,7 @@ import * as schema from '../database/schema'
 console.log('env url', process.env.DB_FILE_NAME)
 const db = createDatabase(
   sqlite({
-    path: process.env.DB_FILE_NAME,
+    path: 'hms.db',
   })
 )
 

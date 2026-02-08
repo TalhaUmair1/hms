@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       openAPI: true,
       tasks: true,
     },
+    externals: {
+      external: ['better-sqlite3'],
+    },
     // database: {
     //   default: {
     //     connector: 'sqlite',
